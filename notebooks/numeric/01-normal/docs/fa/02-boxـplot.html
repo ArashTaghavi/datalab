@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+<h1>
+    تحلیل و مقایسه نمودار Box Plot برای توزیع‌های نرمال با واریانس‌های مختلف
+</h1>
+
+<!-- ===================================================== -->
+<!-- اجزای اصلی Box Plot -->
+<!-- ===================================================== -->
+
+<table>
+    <thead>
+        <tr>
+            <th>جزء</th>
+            <th>نام انگلیسی</th>
+            <th>مفهوم</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td><strong>خط وسط جعبه</strong></td>
+            <td>Median</td>
+            <td>مقدار میانه داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>لبه پایین جعبه</strong></td>
+            <td>Q1</td>
+            <td>صدک ۲۵ام داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>لبه بالای جعبه</strong></td>
+            <td>Q3</td>
+            <td>صدک ۷۵ام داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>ارتفاع جعبه</strong></td>
+            <td>IQR</td>
+            <td>پراکندگی ۵۰٪ میانی داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>خطوط بیرون جعبه</strong></td>
+            <td>Whiskers</td>
+            <td>محدوده معمول داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>نقاط بیرون از Whisker</strong></td>
+            <td>Outliers</td>
+            <td>مقادیر غیرمعمول یا دور از بخش اصلی داده‌ها</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- 1 -->
+<!-- ===================================================== -->
+
+<h2>۱. مقدمه: Box Plot چیست؟</h2>
+
+<p>
+    Box Plot یا
+    <strong>نمودار جعبه‌ای</strong>
+    یکی از نمودارهای مهم برای نمایش خلاصه آماری
+    یک متغیر عددی است.
+</p>
+
+<p>
+    برخلاف نمودار KDE که شکل کامل توزیع را به صورت یک منحنی
+    نمایش می‌دهد، Box Plot تلاش می‌کند توزیع داده را با چند
+    مقدار کلیدی خلاصه کند:
+    <strong>Q1، Median، Q3، IQR و Outlierها</strong>.
+</p>
+
+<p>
+    به زبان ساده، Box Plot به ما کمک می‌کند در یک نگاه بفهمیم:
+</p>
+
+<ul>
+    <li>مرکز داده‌ها تقریباً کجاست.</li>
+    <li>۵۰٪ میانی داده‌ها چقدر پراکنده هستند.</li>
+    <li>داده‌ها در چه محدوده‌ای قرار دارند.</li>
+    <li>آیا Outlier وجود دارد یا خیر.</li>
+    <li>توزیع تا چه حد متقارن یا نامتقارن است.</li>
+</ul>
+
+<div class="note">
+    <strong>نکته مهم:</strong>
+    Box Plot شکل کامل توزیع را نشان نمی‌دهد.
+    بنابراین برخلاف KDE، از روی Box Plot نمی‌توانیم
+    جزئیات دقیق شکل توزیع، مانند وجود چند قله
+    (Multimodality) را به‌خوبی مشاهده کنیم.
+    در عوض، Box Plot برای مقایسه سریع
+    <strong>مرکز، پراکندگی و Outlierها</strong>
+    بسیار مناسب است.
+</div>
+
+<!-- ===================================================== -->
+<!-- 2 -->
+<!-- ===================================================== -->
+
+<h2>۲. اجزای Box Plot را چگونه بخوانیم؟</h2>
+
+<h3>۲.۱. Median → مرکز داده‌ها</h3>
+
+<p>
+    خطی که داخل جعبه قرار دارد،
+    <strong>Median</strong>
+    یا میانه است.
+</p>
+
+<p>
+    Median مقداری است که داده‌ها را به دو قسمت مساوی تقسیم می‌کند؛
+    یعنی تقریباً ۵۰٪ داده‌ها پایین‌تر و ۵۰٪ داده‌ها بالاتر از آن قرار دارند.
+</p>
+
+<h3>۲.۲. Q1 → مرز ۲۵٪ پایین داده‌ها</h3>
+
+<p>
+    لبه پایین جعبه برابر با
+    <strong>Q1 (First Quartile)</strong>
+    است.
+</p>
+
+<p>
+    Q1 مقداری است که تقریباً ۲۵٪ داده‌ها پایین‌تر از آن
+    و ۷۵٪ داده‌ها بالاتر از آن قرار دارند.
+</p>
+
+<h3>۲.۳. Q3 → مرز ۷۵٪ داده‌ها</h3>
+
+<p>
+    لبه بالای جعبه برابر با
+    <strong>Q3 (Third Quartile)</strong>
+    است.
+</p>
+
+<p>
+    Q3 مقداری است که تقریباً ۷۵٪ داده‌ها پایین‌تر از آن
+    و ۲۵٪ داده‌ها بالاتر از آن قرار دارند.
+</p>
+
+<h3>۲.۴. IQR → پراکندگی ۵۰٪ میانی</h3>
+
+<p>
+    فاصله بین Q1 و Q3 را
+    <strong>IQR (Interquartile Range)</strong>
+    می‌نامیم.
+</p>
+
+<div class="formula">
+    IQR = Q3 − Q1
+</div>
+
+<p>
+    بنابراین ارتفاع جعبه نشان می‌دهد که
+    <strong>۵۰٪ میانی داده‌ها</strong>
+    در چه محدوده‌ای قرار گرفته‌اند.
+</p>
+
+<p>
+    جعبه کوچک‌تر یعنی ۵۰٪ میانی داده‌ها
+    فشرده‌تر هستند و جعبه بزرگ‌تر یعنی این بخش
+    از داده‌ها پراکندگی بیشتری دارد.
+</p>
+
+<!-- ===================================================== -->
+<!-- 3 -->
+<!-- ===================================================== -->
+
+<h2>۳. Whisker و Outlier چه چیزی را نشان می‌دهند؟</h2>
+
+<h3>۳.۱. Whiskers</h3>
+
+<p>
+    خطوطی که از دو طرف جعبه خارج می‌شوند،
+    <strong>Whisker</strong>
+    نام دارند.
+</p>
+
+<p>
+    در تعریف رایج Box Plot، انتهای Whiskerها معمولاً
+    تا آخرین داده‌ای ادامه پیدا می‌کند که در محدوده زیر قرار دارد:
+</p>
+
+<div class="formula">
+    Lower Bound = Q1 − 1.5 × IQR
+    <br><br>
+    Upper Bound = Q3 + 1.5 × IQR
+</div>
+
+<p>
+    بنابراین Whiskerها الزاماً Min و Max واقعی دیتاست نیستند.
+    آن‌ها معمولاً آخرین مقادیر موجود در محدوده قابل قبول
+    بر اساس قانون
+    <strong>1.5 × IQR</strong>
+    را نشان می‌دهند.
+</p>
+
+<h3>۳.۲. Outlier</h3>
+
+<p>
+    هر داده‌ای که خارج از این محدوده قرار بگیرد،
+    معمولاً به صورت یک نقطه جداگانه روی نمودار نمایش داده می‌شود
+    و به آن
+    <strong>Outlier</strong>
+    گفته می‌شود.
+</p>
+
+<p>
+    Outlier لزوماً به معنی «داده اشتباه» نیست.
+    ممکن است یک مقدار کاملاً واقعی باشد که نسبت به
+    بخش اصلی داده‌ها فاصله زیادی دارد.
+</p>
+
+<div class="warning">
+    <strong>نکته مهم:</strong>
+    قانون 1.5 × IQR یک معیار آماری برای شناسایی
+    مقادیر غیرمعمول است، نه یک قانون قطعی برای حذف داده.
+    قبل از حذف Outlier باید علت وجود آن بررسی شود.
+</div>
+
+<!-- ===================================================== -->
+<!-- 4 -->
+<!-- ===================================================== -->
+
+<h2>۴. داده‌های مورد بررسی</h2>
+
+<p>
+    در این تحلیل، چهار دیتاست با توزیع نرمال
+    (Normal Distribution) و پارامترهای زیر تولید شده‌اند:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>میانگین (loc)</th>
+            <th>انحراف معیار (scale / SD)</th>
+            <th>تعداد نمونه</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Low Variance</td>
+            <td>۱۷۰</td>
+            <td>۳</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>Moderate Variance</td>
+            <td>۱۷۰</td>
+            <td>۱۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>High Variance</td>
+            <td>۱۷۰</td>
+            <td>۲۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>Different Mean</td>
+            <td>۱۸۵</td>
+            <td>۱۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    سه دیتاست اول میانگین یکسان
+    <strong>۱۷۰</strong>
+    دارند و فقط SD آن‌ها تغییر کرده است.
+    بنابراین می‌توانیم اثر افزایش پراکندگی
+    را مستقیماً روی Box Plot مشاهده کنیم.
+</p>
+
+<p>
+    دیتاست چهارم همان SD دیتاست
+    <code>Moderate Variance</code>
+    را دارد اما میانگین آن از ۱۷۰ به ۱۸۵ تغییر کرده است.
+    بنابراین برای بررسی اثر
+    <strong>Mean Shift</strong>
+    استفاده می‌شود.
+</p>
+
+<!-- ===================================================== -->
+<!-- 5 -->
+<!-- ===================================================== -->
+
+<h2>۵. رابطه‌ی انحراف معیار (SD) با Box Plot</h2>
+
+<p>
+    حالا می‌توانیم ببینیم افزایش SD چگونه روی اجزای
+    Box Plot تأثیر می‌گذارد.
+</p>
+
+<h3>۵.۱. حالت SD پایین → جعبه کوچک و فشرده</h3>
+
+<p>
+    در دیتاست
+    <code>Low Variance</code>
+    مقدار SD برابر با ۳ است.
+    بنابراین داده‌ها در اطراف میانگین ۱۷۰
+    بسیار متمرکز هستند.
+</p>
+
+<p>
+    در نتیجه فاصله بین Q1 و Q3 کوچک خواهد بود
+    و جعبه ارتفاع کمی خواهد داشت.
+</p>
+
+<p>
+    Whiskerها نیز معمولاً محدوده نسبتاً کوچکی را پوشش می‌دهند
+    و بیشتر داده‌ها در اطراف مرکز توزیع قرار دارند.
+</p>
+
+<p>
+    بنابراین Box Plot ظاهری
+    <strong>فشرده و کوتاه</strong>
+    خواهد داشت.
+</p>
+
+<h3>۵.۲. حالت SD متوسط → جعبه بزرگ‌تر</h3>
+
+<p>
+    در دیتاست
+    <code>Moderate Variance</code>
+    مقدار SD برابر با ۱۰ است.
+</p>
+
+<p>
+    با افزایش SD، داده‌ها در محدوده وسیع‌تری پخش می‌شوند.
+    در نتیجه Q1 و Q3 از یکدیگر فاصله بیشتری پیدا می‌کنند
+    و مقدار IQR افزایش می‌یابد.
+</p>
+
+<p>
+    بنابراین جعبه نسبت به حالت SD پایین
+    <strong>بزرگ‌تر</strong>
+    خواهد شد.
+</p>
+
+<h3>۵.۳. حالت SD بالا → جعبه بسیار بزرگ‌تر</h3>
+
+<p>
+    در دیتاست
+    <code>High Variance</code>
+    مقدار SD برابر با ۲۰ است.
+</p>
+
+<p>
+    در این حالت پراکندگی داده‌ها بسیار بیشتر است.
+    بنابراین فاصله Q1 تا Q3 افزایش پیدا می‌کند
+    و جعبه بخش وسیع‌تری از محور را پوشش می‌دهد.
+</p>
+
+<p>
+    Whiskerها نیز معمولاً طول بیشتری خواهند داشت،
+    زیرا محدوده کلی داده‌ها گسترده‌تر شده است.
+</p>
+
+<p>
+    بنابراین در مقایسه سه دیتاست اول می‌توانیم انتظار داشته باشیم:
+</p>
+
+<div class="formula">
+    SD ↑
+    &nbsp;&nbsp;→&nbsp;&nbsp;
+    IQR ↑
+    &nbsp;&nbsp;→&nbsp;&nbsp;
+    Box Size ↑
+</div>
+
+<h3>۵.۴. جمع‌بندی رابطه‌ی SD و Box Plot</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>SD پایین</th>
+            <th>SD بالا</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>اندازه جعبه</td>
+            <td>کوچک</td>
+            <td>بزرگ</td>
+        </tr>
+
+        <tr>
+            <td>IQR</td>
+            <td>کم</td>
+            <td>زیاد</td>
+        </tr>
+
+        <tr>
+            <td>پراکندگی ۵۰٪ میانی</td>
+            <td>کم</td>
+            <td>زیاد</td>
+        </tr>
+
+        <tr>
+            <td>محدوده کلی داده</td>
+            <td>کوچک‌تر</td>
+            <td>بزرگ‌تر</td>
+        </tr>
+
+        <tr>
+            <td>طول Whiskerها</td>
+            <td>معمولاً کوتاه‌تر</td>
+            <td>معمولاً بلندتر</td>
+        </tr>
+
+        <tr>
+            <td>تمرکز داده‌ها</td>
+            <td>زیاد</td>
+            <td>کم</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="warning">
+    <strong>نکته مهم:</strong>
+    افزایش SD به این معنی نیست که تمام اجزای Box Plot
+    دقیقاً به یک نسبت بزرگ می‌شوند.
+    Box Plot بر اساس Quantileها ساخته می‌شود و
+    شکل دقیق آن به توزیع داده، نمونه‌گیری و وجود Outlierها
+    نیز بستگی دارد.
+</div>
+
+<!-- ===================================================== -->
+<!-- 6 -->
+<!-- ===================================================== -->
+
+<h2>۶. تشخیص شکل توزیع از روی Box Plot</h2>
+
+<p>
+    Box Plot فقط برای اندازه‌گیری پراکندگی نیست.
+    موقعیت Median در داخل جعبه و طول Whiskerها نیز
+    می‌توانند اطلاعاتی درباره‌ی
+    <strong>تقارن یا چولگی توزیع</strong>
+    به ما بدهند.
+</p>
+
+<h3>۶.۱. توزیع تقریباً متقارن</h3>
+
+<p>
+    اگر Median تقریباً در مرکز جعبه قرار داشته باشد
+    و Whiskerهای بالا و پایین نیز طول مشابهی داشته باشند،
+    می‌توانیم نشانه‌هایی از یک توزیع نسبتاً متقارن ببینیم.
+</p>
+
+<h3>۶.۲. چولگی به راست (Right Skew)</h3>
+
+<p>
+    اگر Median به سمت پایین جعبه نزدیک باشد
+    و Whisker بالایی طولانی‌تر باشد،
+    می‌تواند نشانه‌ای از
+    <strong>Right Skewness</strong>
+    باشد.
+</p>
+
+<p>
+    در این حالت بخش بالایی توزیع کشیده‌تر است
+    و داده‌های بزرگ‌تر فاصله بیشتری از مرکز دارند.
+</p>
+
+<h3>۶.۳. چولگی به چپ (Left Skew)</h3>
+
+<p>
+    برعکس، اگر Median به سمت بالای جعبه نزدیک باشد
+    و Whisker پایینی طولانی‌تر باشد،
+    می‌تواند نشانه‌ای از
+    <strong>Left Skewness</strong>
+    باشد.
+</p>
+
+<div class="note">
+    <strong>نکته:</strong>
+    Box Plot می‌تواند نشانه‌هایی از Skewness نشان دهد،
+    اما برای مشاهده دقیق شکل توزیع، KDE یا Histogram
+    اطلاعات کامل‌تری ارائه می‌کنند.
+</div>
+
+<!-- ===================================================== -->
+<!-- 7 -->
+<!-- ===================================================== -->
+
+<h2>۷. اثر تغییر میانگین (Mean Shift)</h2>
+
+<p>
+    دیتاست
+    <code>Different Mean</code>
+    با
+    <code>loc = 185</code>
+    و
+    <code>scale = 10</code>
+    تولید شده است.
+</p>
+
+<p>
+    این دیتاست همان انحراف معیار دیتاست
+    <code>Moderate Variance</code>
+    را دارد، اما میانگین آن ۱۵ واحد بیشتر است.
+</p>
+
+<p>
+    بنابراین اگر دو Box Plot را با یک مقیاس یکسان
+    مقایسه کنیم، انتظار داریم جعبه و Whiskerها
+    تقریباً همان اندازه و شکل را داشته باشند،
+    اما کل Box Plot به سمت راست منتقل شود.
+</p>
+
+<ul>
+    <li>
+        اندازه جعبه تقریباً مشابه است.
+    </li>
+
+    <li>
+        IQR تقریباً مشابه است.
+    </li>
+
+    <li>
+        Median به سمت راست منتقل می‌شود.
+    </li>
+
+    <li>
+        Q1 و Q3 نیز به سمت راست منتقل می‌شوند.
+    </li>
+</ul>
+
+<p>
+    بنابراین می‌توانیم مفهوم اصلی را به صورت زیر خلاصه کنیم:
+</p>
+
+<div class="formula">
+    Mean → Location
+    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    Standard Deviation → Spread
+</div>
+
+<p>
+    یعنی میانگین بیشتر روی
+    <strong>مکان Box Plot</strong>
+    تأثیر می‌گذارد، در حالی که SD روی
+    <strong>اندازه و پراکندگی Box Plot</strong>
+    تأثیر دارد.
+</p>
+
+<!-- ===================================================== -->
+<!-- 8 -->
+<!-- ===================================================== -->
+
+<h2>۸. Box Plot در مقایسه با KDE</h2>
+
+<p>
+    KDE و Box Plot هر دو برای بررسی توزیع یک متغیر عددی
+    استفاده می‌شوند، اما اطلاعات متفاوتی را در اختیار ما قرار می‌دهند.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>KDE</th>
+            <th>Box Plot</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>نمایش شکل کامل توزیع</td>
+            <td>بسیار خوب</td>
+            <td>محدود</td>
+        </tr>
+
+        <tr>
+            <td>نمایش Median</td>
+            <td>مستقیم نیست</td>
+            <td>بسیار واضح</td>
+        </tr>
+
+        <tr>
+            <td>نمایش Q1 و Q3</td>
+            <td>خیر</td>
+            <td>بله</td>
+        </tr>
+
+        <tr>
+            <td>نمایش IQR</td>
+            <td>مستقیم نیست</td>
+            <td>بله</td>
+        </tr>
+
+        <tr>
+            <td>تشخیص Outlier</td>
+            <td>محدود</td>
+            <td>بسیار خوب</td>
+        </tr>
+
+        <tr>
+            <td>مقایسه چند دیتاست</td>
+            <td>خوب</td>
+            <td>بسیار خوب</td>
+        </tr>
+
+        <tr>
+            <td>نمایش چند قله‌ای بودن</td>
+            <td>خوب</td>
+            <td>ضعیف</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    بنابراین اگر هدف ما بررسی شکل کلی توزیع باشد،
+    KDE انتخاب مناسبی است؛ اما اگر هدف ما مقایسه
+    <strong>Median، IQR، Spread و Outlierها</strong>
+    بین چند گروه باشد، Box Plot معمولاً انتخاب بهتری است.
+</p>
+
+<!-- ===================================================== -->
+<!-- 9 -->
+<!-- ===================================================== -->
+
+<h2>۹. جمع‌بندی نهایی</h2>
+
+<div class="summary">
+
+    <ul>
+
+        <li>
+            <strong>Median</strong>
+            → مرکز داده‌ها را نشان می‌دهد.
+        </li>
+
+        <li>
+            <strong>Q1 و Q3</strong>
+            → محدوده ۵۰٪ میانی داده‌ها را مشخص می‌کنند.
+        </li>
+
+        <li>
+            <strong>IQR</strong>
+            → میزان پراکندگی ۵۰٪ میانی داده‌ها را نشان می‌دهد.
+        </li>
+
+        <li>
+            <strong>SD کوچک‌تر</strong>
+            → معمولاً Box Plot فشرده‌تر و IQR کوچک‌تر.
+        </li>
+
+        <li>
+            <strong>SD بزرگ‌تر</strong>
+            → معمولاً Box Plot گسترده‌تر و IQR بزرگ‌تر.
+        </li>
+
+        <li>
+            <strong>Whiskerها</strong>
+            → محدوده معمول داده‌ها را نشان می‌دهند و الزاماً Min و Max نیستند.
+        </li>
+
+        <li>
+            <strong>Outlierها</strong>
+            → داده‌هایی هستند که خارج از محدوده معمول
+            بر اساس قانون 1.5 × IQR قرار گرفته‌اند.
+        </li>
+
+        <li>
+            <strong>تغییر Mean</strong>
+            → جابه‌جایی Box Plot روی محور بدون تغییر بنیادی
+            در پراکندگی، در صورتی که SD ثابت بماند.
+        </li>
+
+        <li>
+            <strong>Median و Whiskerها</strong>
+            → می‌توانند نشانه‌هایی از Skewness ارائه دهند،
+            اما برای مشاهده کامل شکل توزیع، KDE و Histogram مناسب‌تر هستند.
+        </li>
+
+    </ul>
+
+</div>
+</div>
+
+</body>
+</html>

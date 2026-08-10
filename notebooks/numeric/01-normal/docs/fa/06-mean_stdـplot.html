@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Mean ± Standard Deviation
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. نمودار Mean ± Standard Deviation چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Mean ± Standard Deviation</strong>
+        یکی از روش‌های ساده و کاربردی برای نمایش هم‌زمان
+        <strong>مرکز داده‌ها</strong>
+        و
+        <strong>میزان پراکندگی آن‌ها</strong>
+        است.
+    </p>
+
+    <p>
+        در این نمودار، برای هر دیتاست یک نقطه روی مقدار
+        <strong>Mean</strong>
+        قرار می‌گیرد و یک خط عمودی در اطراف آن رسم می‌شود
+        که میزان
+        <strong>Standard Deviation (SD)</strong>
+        را نشان می‌دهد.
+    </p>
+
+    <p>
+        بنابراین با نگاه کردن به یک نقطه و خط عمودی مربوط به آن،
+        می‌توان هم‌زمان دو ویژگی مهم توزیع را مشاهده کرد:
+    </p>
+
+    <ul>
+        <li>
+            <strong>Mean</strong>
+            → مرکز یا مقدار متوسط داده‌ها
+        </li>
+
+        <li>
+            <strong>Standard Deviation</strong>
+            → میزان پراکندگی داده‌ها حول Mean
+        </li>
+    </ul>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        این نمودار توزیع کامل داده‌ها را نشان نمی‌دهد.
+        فقط یک خلاصه‌ی آماری از هر دیتاست ارائه می‌کند:
+        مقدار میانگین به‌عنوان مرکز و انحراف معیار به‌عنوان میزان پراکندگی.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. محورهای نمودار چه چیزی را نشان می‌دهند؟</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش نمودار</th>
+                <th>معنی</th>
+                <th>توضیح</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Distribution</td>
+                <td>
+                    نام یا برچسب هر دیتاست
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Value</td>
+                <td>
+                    مقدار عددی متغیر مورد بررسی
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Point</strong></td>
+                <td>Mean</td>
+                <td>
+                    میانگین داده‌های هر دیتاست
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Error Bar</strong></td>
+                <td>± Standard Deviation</td>
+                <td>
+                    میزان پراکندگی داده‌ها در اطراف Mean
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین محور
+        <strong>X</strong>
+        در این نمودار یک محور عددی برای اندازه‌گیری نیست؛
+        بلکه فقط مشخص می‌کند هر نقطه مربوط به کدام دیتاست است.
+    </p>
+
+    <p>
+        محور
+        <strong>Y</strong>
+        مقدار واقعی متغیر را نشان می‌دهد و Mean و محدوده‌ی
+        Mean ± SD روی همین محور قرار می‌گیرند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. Mean چیست و در نمودار چه چیزی را نشان می‌دهد؟</h2>
+
+    <p>
+        <strong>Mean</strong>
+        یا میانگین، یکی از مهم‌ترین معیارهای
+        <strong>Central Tendency</strong>
+        است و محل مرکزی داده‌ها را نشان می‌دهد.
+    </p>
+
+    <p>
+        برای یک ستون داده، Mean از رابطه‌ی زیر به دست می‌آید:
+    </p>
+
+    <div class="formula">
+        Mean = (x₁ + x₂ + ... + xₙ) / n
+    </div>
+
+    <p>
+        در نمودار
+        <code>MeanStdPlot</code>
+        نقطه‌ی اصلی هر دیتاست دقیقاً روی مقدار Mean قرار دارد.
+        بنابراین اگر نقطه‌ی یک دیتاست در مقدار ۱۷۰ قرار گرفته باشد،
+        یعنی میانگین آن دیتاست برابر با ۱۷۰ است.
+    </p>
+
+    <p>
+        اگر Mean دو دیتاست متفاوت باشد، موقعیت نقاط آن‌ها روی محور
+        <strong>Y</strong>
+        نیز متفاوت خواهد بود.
+        هرچه نقطه بالاتر باشد، میانگین آن دیتاست بیشتر است.
+    </p>
+
+    <div class="note">
+        <strong>Mean → Location</strong>
+        <br>
+        Mean بیشتر از هر چیز به ما می‌گوید داده‌ها از نظر مقدار مرکزی
+        در چه موقعیتی قرار دارند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. Standard Deviation چیست؟</h2>
+
+    <p>
+        <strong>Standard Deviation (SD)</strong>
+        یا انحراف معیار، میزان پراکندگی داده‌ها را نسبت به Mean اندازه‌گیری می‌کند.
+    </p>
+
+    <p>
+        اگر SD کوچک باشد، یعنی داده‌ها معمولاً نزدیک Mean قرار گرفته‌اند.
+        اگر SD بزرگ باشد، یعنی داده‌ها در محدوده‌ی وسیع‌تری اطراف Mean پخش شده‌اند.
+    </p>
+
+    <p>
+        به همین دلیل در این نمودار، طول خط عمودی اطراف نقطه‌ی Mean
+        اطلاعات مهمی درباره‌ی پراکندگی داده‌ها ارائه می‌دهد.
+    </p>
+
+    <ul>
+
+        <li>
+            <strong>SD کوچک</strong>
+            → خط عمودی کوتاه‌تر
+            → داده‌ها متمرکزتر
+        </li>
+
+        <li>
+            <strong>SD بزرگ</strong>
+            → خط عمودی بلندتر
+            → داده‌ها پراکنده‌تر
+        </li>
+
+    </ul>
+
+    <div class="formula">
+        SD ↓ → Concentration ↑
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        SD ↑ → Spread ↑
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. Mean ± SD در نمودار چه معنایی دارد؟</h2>
+
+    <p>
+        در کد این نمودار، مقدار خطای عمودی با
+        <code>yerr=stds</code>
+        مشخص شده است.
+        بنابراین برای هر دیتاست، دو مرز در اطراف Mean ایجاد می‌شود:
+    </p>
+
+    <div class="formula">
+        Lower Bound = Mean − SD
+        <br><br>
+        Upper Bound = Mean + SD
+    </div>
+
+    <p>
+        در نتیجه خط عمودی از
+        <strong>Mean − SD</strong>
+        تا
+        <strong>Mean + SD</strong>
+        امتداد پیدا می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>قسمت</th>
+                <th>فرمول</th>
+                <th>معنی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>پایین خط</td>
+                <td>Mean − SD</td>
+                <td>
+                    یک انحراف معیار پایین‌تر از Mean
+                </td>
+            </tr>
+
+            <tr>
+                <td>مرکز خط</td>
+                <td>Mean</td>
+                <td>
+                    مقدار میانگین
+                </td>
+            </tr>
+
+            <tr>
+                <td>بالای خط</td>
+                <td>Mean + SD</td>
+                <td>
+                    یک انحراف معیار بالاتر از Mean
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین وقتی روی نمودار مثلاً نوشته می‌شود:
+        <code>Mean = 170</code>
+        و
+        <code>SD = 10</code>،
+        دو مقدار دیگر برابر خواهند بود با:
+    </p>
+
+    <div class="formula">
+        Mean − SD = 170 − 10 = 160
+        <br><br>
+        Mean + SD = 170 + 10 = 180
+    </div>
+
+    <p>
+        در نتیجه خط عمودی این دیتاست از ۱۶۰ تا ۱۸۰ امتداد پیدا می‌کند
+        و نقطه‌ی Mean در ۱۷۰ قرار می‌گیرد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. حالت SD پایین → داده‌های متمرکز</h2>
+
+    <p>
+        فرض کنیم Mean یک دیتاست برابر با ۱۷۰ و SD آن برابر با ۳ باشد.
+    </p>
+
+    <div class="formula">
+        Mean = 170
+        <br>
+        SD = 3
+        <br><br>
+        Mean − SD = 167
+        <br>
+        Mean + SD = 173
+    </div>
+
+    <p>
+        در این حالت، خط عمودی اطراف Mean کوتاه خواهد بود.
+        این موضوع نشان می‌دهد که پراکندگی داده‌ها نسبت به Mean کم است.
+    </p>
+
+    <p>
+        بنابراین در نمودار:
+    </p>
+
+    <ul>
+
+        <li>
+            نقطه‌ی Mean در مقدار ۱۷۰ قرار دارد.
+        </li>
+
+        <li>
+            خطای عمودی کوتاه است.
+        </li>
+
+        <li>
+            فاصله‌ی Mean − SD و Mean + SD از Mean کم است.
+        </li>
+
+        <li>
+            داده‌ها نسبتاً متمرکز هستند.
+        </li>
+
+    </ul>
+
+    <div class="note">
+        <strong>نتیجه:</strong>
+        کوتاه بودن Error Bar به معنی کم بودن پراکندگی داده‌هاست،
+        نه کم بودن مقدار Mean.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. حالت SD متوسط → پراکندگی متوسط</h2>
+
+    <p>
+        اگر Mean همچنان برابر با ۱۷۰ باشد اما SD به ۱۰ افزایش پیدا کند،
+        محدوده‌ی Mean ± SD نیز بزرگ‌تر می‌شود.
+    </p>
+
+    <div class="formula">
+        Mean = 170
+        <br>
+        SD = 10
+        <br><br>
+        Mean − SD = 160
+        <br>
+        Mean + SD = 180
+    </div>
+
+    <p>
+        بنابراین خط عمودی از ۱۶۰ تا ۱۸۰ امتداد پیدا می‌کند.
+        نسبت به حالت SD = 3، خط بسیار بلندتر است.
+    </p>
+
+    <p>
+        نکته‌ی مهم این است که
+        <strong>Mean تغییر نکرده است</strong>؛
+        فقط میزان پراکندگی داده‌ها افزایش یافته است.
+    </p>
+
+    <p>
+        در نتیجه اگر دو دیتاست Mean یکسان ولی SD متفاوت داشته باشند،
+        نقاط آن‌ها تقریباً در یک ارتفاع قرار می‌گیرند،
+        اما طول Error Bar آن‌ها متفاوت خواهد بود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. حالت SD بالا → پراکندگی زیاد</h2>
+
+    <p>
+        اگر Mean برابر با ۱۷۰ و SD برابر با ۲۰ باشد،
+        محدوده‌ی Mean ± SD به شکل زیر خواهد بود:
+    </p>
+
+    <div class="formula">
+        Mean = 170
+        <br>
+        SD = 20
+        <br><br>
+        Mean − SD = 150
+        <br>
+        Mean + SD = 190
+    </div>
+
+    <p>
+        در این حالت Error Bar بسیار بلندتر از دو حالت قبلی است.
+        این موضوع نشان می‌دهد که داده‌ها نسبت به Mean پراکندگی بیشتری دارند.
+    </p>
+
+    <p>
+        بنابراین با مقایسه‌ی سه دیتاستی که Mean یکسان دارند:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Mean</th>
+                <th>SD</th>
+                <th>Mean − SD</th>
+                <th>Mean + SD</th>
+                <th>پراکندگی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Low Variance</td>
+                <td>۱۷۰</td>
+                <td>۳</td>
+                <td>۱۶۷</td>
+                <td>۱۷۳</td>
+                <td>کم</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Variance</td>
+                <td>۱۷۰</td>
+                <td>۱۰</td>
+                <td>۱۶۰</td>
+                <td>۱۸۰</td>
+                <td>متوسط</td>
+            </tr>
+
+            <tr>
+                <td>High Variance</td>
+                <td>۱۷۰</td>
+                <td>۲۰</td>
+                <td>۱۵۰</td>
+                <td>۱۹۰</td>
+                <td>زیاد</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        این مقایسه بسیار واضح نشان می‌دهد که با ثابت ماندن Mean،
+        افزایش SD باعث افزایش طول Error Bar می‌شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. اثر تغییر Mean</h2>
+
+    <p>
+        حالا دیتاست
+        <code>Different Mean</code>
+        را در نظر بگیریم.
+        این دیتاست دارای:
+    </p>
+
+    <div class="formula">
+        Mean = 185
+        <br>
+        SD = 10
+    </div>
+
+    <p>
+        بنابراین:
+    </p>
+
+    <div class="formula">
+        Mean − SD = 175
+        <br>
+        Mean + SD = 195
+    </div>
+
+    <p>
+        اگر آن را با دیتاست
+        <code>Moderate Variance</code>
+        مقایسه کنیم:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Mean</th>
+                <th>SD</th>
+                <th>Mean − SD</th>
+                <th>Mean + SD</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Moderate Variance</td>
+                <td>۱۷۰</td>
+                <td>۱۰</td>
+                <td>۱۶۰</td>
+                <td>۱۸۰</td>
+            </tr>
+
+            <tr>
+                <td>Different Mean</td>
+                <td>۱۸۵</td>
+                <td>۱۰</td>
+                <td>۱۷۵</td>
+                <td>۱۹۵</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        در این دو دیتاست، SD یکسان است؛ بنابراین طول Error Bar تقریباً یکسان خواهد بود.
+        تفاوت اصلی در موقعیت Mean روی محور Y است.
+    </p>
+
+    <p>
+        بنابراین با تغییر Mean، کل نقطه و محدوده‌ی Mean ± SD
+        به سمت بالا یا پایین منتقل می‌شود،
+        در حالی که اندازه‌ی پراکندگی ثابت باقی می‌ماند.
+    </p>
+
+    <div class="formula">
+        Mean → Location
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        SD → Spread
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. چگونه نمودار را بخوانیم؟</h2>
+
+    <p>
+        برای تحلیل این نمودار بهتر است همیشه سه سؤال از خودمان بپرسیم:
+    </p>
+
+    <h3>۱۰.۱. نقطه کجاست؟</h3>
+
+    <p>
+        موقعیت نقطه روی محور Y مقدار
+        <strong>Mean</strong>
+        را نشان می‌دهد.
+        نقطه‌ی بالاتر یعنی Mean بزرگ‌تر.
+    </p>
+
+    <h3>۱۰.۲. خط چقدر بلند است؟</h3>
+
+    <p>
+        طول خط عمودی نشان‌دهنده‌ی میزان
+        <strong>Standard Deviation</strong>
+        است.
+        خط بلندتر یعنی پراکندگی بیشتر.
+    </p>
+
+    <h3>۱۰.۳. دو دیتاست چه تفاوتی دارند؟</h3>
+
+    <p>
+        اگر نقاط آن‌ها در ارتفاع متفاوتی باشند،
+        Mean آن‌ها متفاوت است.
+        اگر طول Error Bar آن‌ها متفاوت باشد،
+        SD آن‌ها متفاوت است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>مشاهده در نمودار</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>نقطه بالاتر</td>
+                <td>Mean بزرگ‌تر</td>
+            </tr>
+
+            <tr>
+                <td>نقطه پایین‌تر</td>
+                <td>Mean کوچک‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Error Bar کوتاه</td>
+                <td>SD کم و داده‌های متمرکزتر</td>
+            </tr>
+
+            <tr>
+                <td>Error Bar بلند</td>
+                <td>SD زیاد و داده‌های پراکنده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Mean یکسان + SD متفاوت</td>
+                <td>مرکز یکسان، پراکندگی متفاوت</td>
+            </tr>
+
+            <tr>
+                <td>Mean متفاوت + SD یکسان</td>
+                <td>مرکز متفاوت، پراکندگی مشابه</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. یک نکته مهم درباره‌ی Error Bar</h2>
+
+    <div class="warning">
+
+        <strong>
+            Mean ± SD را نباید با Confidence Interval اشتباه گرفت.
+        </strong>
+
+        <p>
+            در این نمودار، خط عمودی مستقیماً با
+            <strong>Standard Deviation</strong>
+            ساخته شده است.
+            بنابراین این خط
+            <strong>Confidence Interval</strong>
+            یا
+            <strong>Standard Error</strong>
+            نیست.
+        </p>
+
+        <p>
+            به‌عنوان مثال، برای یک توزیع نرمال، تقریباً ۶۸٪ داده‌ها
+            در محدوده‌ی یک SD از Mean قرار می‌گیرند:
+        </p>
+
+        <div class="formula">
+            Mean − SD ≤ X ≤ Mean + SD
+            <br>
+            ≈ 68% of observations
+        </div>
+
+        <p>
+            البته این تفسیر حدود ۶۸٪ به فرض نرمال بودن توزیع مربوط است.
+            برای توزیع‌های غیرنرمال، نمی‌توان بدون اطلاعات بیشتر گفت
+            چه درصدی از داده‌ها دقیقاً داخل Mean ± SD قرار دارند.
+        </p>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 12 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۲. محدودیت‌های Mean ± SD Plot</h2>
+
+    <p>
+        این نمودار برای مقایسه‌ی سریع Mean و SD بسیار مناسب است،
+        اما اطلاعات کامل توزیع داده‌ها را در اختیار ما قرار نمی‌دهد.
+    </p>
+
+    <p>
+        دو دیتاست ممکن است Mean و SD یکسانی داشته باشند،
+        اما توزیع کاملاً متفاوتی داشته باشند.
+    </p>
+
+    <p>
+        برای مثال ممکن است یکی از آن‌ها توزیع نرمال داشته باشد
+        و دیگری دارای Outlier، Skewness یا حتی چند قله باشد،
+        ولی Mean و SD آن‌ها تقریباً مشابه باشد.
+    </p>
+
+    <p>
+        بنابراین این نمودار به ما نمی‌گوید:
+    </p>
+
+    <ul>
+
+        <li>
+            توزیع داده متقارن است یا چوله.
+        </li>
+
+        <li>
+            Outlier وجود دارد یا خیر.
+        </li>
+
+        <li>
+            توزیع یک قله دارد یا چند قله.
+        </li>
+
+        <li>
+            داده‌ها دقیقاً در چه محدوده‌ای قرار گرفته‌اند.
+        </li>
+
+    </ul>
+
+    <div class="note">
+        <strong>نتیجه:</strong>
+        Mean ± SD یک
+        <strong>summary plot</strong>
+        است، نه یک نمودار کامل از توزیع.
+        برای دیدن شکل واقعی داده‌ها بهتر است در کنار آن از
+        Histogram، KDE، Box Plot، Violin Plot یا CDF استفاده شود.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 13 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۳. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>نقطه‌ی روی نمودار</strong>
+                → مقدار Mean را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>موقعیت نقطه روی محور Y</strong>
+                → محل مرکزی داده‌ها را مشخص می‌کند.
+            </li>
+
+            <li>
+                <strong>طول Error Bar</strong>
+                → میزان Standard Deviation را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>Mean − SD</strong>
+                → یک SD پایین‌تر از Mean.
+            </li>
+
+            <li>
+                <strong>Mean + SD</strong>
+                → یک SD بالاتر از Mean.
+            </li>
+
+            <li>
+                <strong>SD کوچک‌تر</strong>
+                → داده‌های متمرکزتر و Error Bar کوتاه‌تر.
+            </li>
+
+            <li>
+                <strong>SD بزرگ‌تر</strong>
+                → داده‌های پراکنده‌تر و Error Bar بلندتر.
+            </li>
+
+            <li>
+                <strong>Mean بزرگ‌تر</strong>
+                → نقطه و محدوده‌ی Error Bar به سمت بالاتر منتقل می‌شوند.
+            </li>
+
+            <li>
+                <strong>Mean متفاوت + SD یکسان</strong>
+                → موقعیت متفاوت، اما میزان پراکندگی مشابه.
+            </li>
+
+            <li>
+                <strong>Mean یکسان + SD متفاوت</strong>
+                → موقعیت یکسان، اما میزان پراکندگی متفاوت.
+            </li>
+
+            <li>
+                Mean ± SD اطلاعات خلاصه ارائه می‌کند و
+                شکل کامل توزیع داده را نشان نمی‌دهد.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+ 
+
+</body>
+</html>

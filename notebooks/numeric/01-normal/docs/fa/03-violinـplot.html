@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+    <!-- ===================================================== -->
+<!-- Violin Plot -->
+<!-- ===================================================== -->
+
+<h1>
+    تحلیل و مقایسه نمودار Violin Plot برای توزیع‌های نرمال با واریانس‌های مختلف
+</h1>
+
+<!-- ===================================================== -->
+<!-- 1 -->
+<!-- ===================================================== -->
+
+<h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+<p>
+    <strong>Violin Plot</strong>
+    یک نمودار آماری برای نمایش و مقایسه‌ی
+    <strong>توزیع داده‌ها</strong>
+    است که دو مفهوم را هم‌زمان در یک نمودار نشان می‌دهد:
+    اطلاعات خلاصه‌ی آماری شبیه
+    <strong>Box Plot</strong>
+    و شکل توزیع داده شبیه
+    <strong>KDE</strong>.
+</p>
+
+<p>
+    در واقع، بخش بیرونی و پهنای Violin بر اساس
+    <strong>Kernel Density Estimation (KDE)</strong>
+    ساخته می‌شود.
+    بنابراین هرچه داده‌ها در یک محدوده بیشتر متمرکز باشند،
+    Violin در آن محدوده پهن‌تر می‌شود و هرچه داده‌ها در یک محدوده
+    کمتر باشند، Violin باریک‌تر می‌شود.
+</p>
+
+<p>
+    به زبان ساده، می‌توان Violin Plot را ترکیبی از
+    <strong>Box Plot + KDE</strong>
+    در نظر گرفت.
+    Box Plot اطلاعاتی مانند میانه و چارک‌ها را خلاصه می‌کند،
+    در حالی که Violin Plot علاوه بر این اطلاعات،
+    <strong>شکل کامل‌تری از توزیع داده</strong>
+    را نیز نمایش می‌دهد.
+</p>
+
+<div class="note">
+    <strong>نکته مهم:</strong>
+    پهنای Violin در هر نقطه نشان‌دهنده‌ی
+    <strong>چگالی داده</strong>
+    در آن مقدار است، نه تعداد مستقیم داده‌ها.
+    بنابراین قسمت‌های پهن‌تر یعنی داده‌ها در آن محدوده
+    متراکم‌تر هستند و قسمت‌های باریک‌تر یعنی تراکم کمتر است.
+</div>
+
+<!-- ===================================================== -->
+<!-- 2 -->
+<!-- ===================================================== -->
+
+<h2>۲. اجزای اصلی Violin Plot</h2>
+
+<p>
+    برای تفسیر درست Violin Plot ابتدا باید بدانیم هر قسمت از آن
+    چه مفهومی دارد.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>جزء نمودار</th>
+            <th>مفهوم</th>
+            <th>تفسیر</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td><strong>Violin Shape</strong></td>
+            <td>توزیع داده</td>
+            <td>شکل کلی و تراکم داده‌ها را نشان می‌دهد</td>
+        </tr>
+
+        <tr>
+            <td><strong>Width</strong></td>
+            <td>Density</td>
+            <td>هرچه پهن‌تر باشد، تراکم داده بیشتر است</td>
+        </tr>
+
+        <tr>
+            <td><strong>Median</strong></td>
+            <td>میانه</td>
+            <td>نقطه‌ای که ۵۰٪ داده‌ها پایین‌تر و ۵۰٪ بالاتر هستند</td>
+        </tr>
+
+        <tr>
+            <td><strong>Q1</strong></td>
+            <td>چارک اول</td>
+            <td>۲۵٪ داده‌ها پایین‌تر از این مقدار قرار دارند</td>
+        </tr>
+
+        <tr>
+            <td><strong>Q3</strong></td>
+            <td>چارک سوم</td>
+            <td>۷۵٪ داده‌ها پایین‌تر از این مقدار قرار دارند</td>
+        </tr>
+
+        <tr>
+            <td><strong>Whiskers</strong></td>
+            <td>محدوده داده</td>
+            <td>در صورت فعال بودن، محدوده‌ی داده را نمایش می‌دهد</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    نکته مهم این است که
+    <strong>ارتفاع Violin</strong>
+    با مقدار متغیر روی محور عمودی مرتبط است،
+    اما
+    <strong>عرض Violin</strong>
+    نشان‌دهنده‌ی میزان Density در آن مقدار است.
+</p>
+
+<!-- ===================================================== -->
+<!-- 3 -->
+<!-- ===================================================== -->
+
+<h2>۳. محورهای نمودار Violin Plot</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>محور / بخش</th>
+            <th>عنوان</th>
+            <th>مفهوم</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td><strong>X</strong></td>
+            <td>Category / Dataset</td>
+            <td>
+                گروه یا دیتاستی که داده‌ها به آن تعلق دارند
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>Y</strong></td>
+            <td>Value</td>
+            <td>
+                مقدار واقعی متغیر مورد بررسی
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>Width</strong></td>
+            <td>Density</td>
+            <td>
+                میزان تراکم داده در هر مقدار از محور Y
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    بنابراین در یک Violin Plot معمولی، برخلاف نمودار KDE،
+    محور X معمولاً خودِ مقدار متغیر نیست.
+    محور X برای مشخص کردن
+    <strong>گروه‌ها یا دیتاست‌های مختلف</strong>
+    استفاده می‌شود.
+</p>
+
+<p>
+    برای مثال اگر چهار دیتاست داشته باشیم،
+    ممکن است چهار Violin روی محور X قرار بگیرند:
+</p>
+
+<div class="formula">
+    Low Variance
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    Moderate Variance
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    High Variance
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    Different Mean
+</div>
+
+<p>
+    سپس محور Y مقدار واقعی داده را نشان می‌دهد و
+    پهنای هر Violin در ارتفاع‌های مختلف،
+    میزان Density را نمایش می‌دهد.
+</p>
+
+<div class="note">
+    <strong>نکته:</strong>
+    در Violin Plot، عرض نمودار یک محور عددی مستقل نیست.
+    پهنا صرفاً برای نمایش چگالی توزیع استفاده می‌شود.
+    بنابراین نباید مقدار Width را مانند یک مقدار عددی مستقل
+    از محور Y تفسیر کرد.
+</div>
+
+<!-- ===================================================== -->
+<!-- 4 -->
+<!-- ===================================================== -->
+
+<h2>۴. داده‌های مورد بررسی</h2>
+
+<p>
+    برای بررسی اثر واریانس و میانگین روی شکل Violin Plot،
+    چهار دیتاست با توزیع نرمال در نظر گرفته شده‌اند:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>میانگین (loc)</th>
+            <th>انحراف معیار (scale / SD)</th>
+            <th>تعداد نمونه</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Low Variance</td>
+            <td>۱۷۰</td>
+            <td>۳</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>Moderate Variance</td>
+            <td>۱۷۰</td>
+            <td>۱۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>High Variance</td>
+            <td>۱۷۰</td>
+            <td>۲۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+
+        <tr>
+            <td>Different Mean</td>
+            <td>۱۸۵</td>
+            <td>۱۰</td>
+            <td>۱۰۰۰</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    سه دیتاست اول میانگین یکسانی برابر با ۱۷۰ دارند،
+    اما SD آن‌ها متفاوت است.
+    بنابراین می‌توانیم اثر مستقیم
+    <strong>افزایش پراکندگی</strong>
+    را روی شکل Violin بررسی کنیم.
+</p>
+
+<p>
+    دیتاست چهارم همان SD دیتاست
+    <code>Moderate Variance</code>
+    را دارد، اما میانگین آن از ۱۷۰ به ۱۸۵ تغییر کرده است.
+    بنابراین برای بررسی اثر
+    <strong>Mean Shift</strong>
+    مناسب است.
+</p>
+
+<!-- ===================================================== -->
+<!-- 5 -->
+<!-- ===================================================== -->
+
+<h2>۵. رابطه‌ی انحراف معیار (SD) با شکل Violin</h2>
+
+<p>
+    مهم‌ترین چیزی که در این مقایسه باید مشاهده کنیم،
+    تغییر
+    <strong>عرض و ارتفاع Violin</strong>
+    در اثر تغییر SD است.
+</p>
+
+<h3>۵.۱. حالت SD پایین → Violin باریک و متمرکز</h3>
+
+<p>
+    در دیتاست
+    <code>Low Variance</code>
+    مقدار
+    <code>scale = 3</code>
+    است.
+    بنابراین داده‌ها در اطراف میانگین ۱۷۰
+    بسیار فشرده هستند.
+</p>
+
+<p>
+    چون بیشتر داده‌ها در یک محدوده‌ی کوچک اطراف ۱۷۰ قرار دارند،
+    KDE نیز چگالی بیشتری را در همان محدوده تخمین می‌زند.
+    در نتیجه Violin در اطراف ۱۷۰
+    <strong>پهن‌تر</strong>
+    و در قسمت‌های دورتر
+    <strong>باریک‌تر</strong>
+    خواهد بود.
+</p>
+
+<p>
+    از طرف دیگر، چون کل محدوده‌ی داده کوچک است،
+    ارتفاع کلی Violin نیز کمتر است.
+    بنابراین شکل کلی آن معمولاً
+    <strong>کوتاه، فشرده و متمرکز</strong>
+    دیده می‌شود.
+</p>
+
+<p>
+    در نتیجه، SD پایین نشان می‌دهد که مقادیر داده
+    فاصله‌ی زیادی از میانگین ندارند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 6 -->
+<!-- ===================================================== -->
+
+<h3>۵.۲. حالت SD متوسط → Violin متعادل‌تر</h3>
+
+<p>
+    در دیتاست
+    <code>Moderate Variance</code>
+    مقدار
+    <code>scale = 10</code>
+    است.
+</p>
+
+<p>
+    افزایش SD باعث می‌شود داده‌ها در محدوده‌ی وسیع‌تری
+    نسبت به حالت قبل پخش شوند.
+    بنابراین Violin از نظر عمودی
+    <strong>کشیده‌تر</strong>
+    می‌شود.
+</p>
+
+<p>
+    در عین حال، چگالی در اطراف میانگین نسبت به حالت SD پایین
+    کمتر می‌شود؛ بنابراین قسمت مرکزی Violin دیگر به اندازه‌ی
+    حالت قبل فشرده نیست.
+</p>
+
+<p>
+    نتیجه یک Violin با
+    <strong>پراکندگی بیشتر و ارتفاع بیشتر</strong>
+    است.
+</p>
+
+<!-- ===================================================== -->
+<!-- 7 -->
+<!-- ===================================================== -->
+
+<h3>۵.۳. حالت SD بالا → Violin کشیده و پراکنده</h3>
+
+<p>
+    در دیتاست
+    <code>High Variance</code>
+    مقدار
+    <code>scale = 20</code>
+    است.
+</p>
+
+<p>
+    در این حالت داده‌ها فاصله‌ی بیشتری از میانگین ۱۷۰ دارند
+    و در یک محدوده‌ی بسیار وسیع‌تر پخش شده‌اند.
+</p>
+
+<p>
+    بنابراین Violin از نظر عمودی
+    <strong>کشیده‌تر و بلندتر</strong>
+    می‌شود.
+    در مقابل، چگالی در هر نقطه نسبت به حالت SD پایین
+    معمولاً کمتر است و شکل Violin در بخش‌های مختلف
+    باریک‌تر دیده می‌شود.
+</p>
+
+<p>
+    بنابراین افزایش SD عمدتاً باعث افزایش
+    <strong>Spread</strong>
+    و گسترش Violin در امتداد محور Y می‌شود.
+</p>
+
+<!-- ===================================================== -->
+<!-- 8 -->
+<!-- ===================================================== -->
+
+<h3>۵.۴. جمع‌بندی رابطه‌ی SD و شکل Violin</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>SD پایین</th>
+            <th>SD بالا</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>پراکندگی روی محور Y</td>
+            <td>کم</td>
+            <td>زیاد</td>
+        </tr>
+
+        <tr>
+            <td>ارتفاع Violin</td>
+            <td>کمتر</td>
+            <td>بیشتر</td>
+        </tr>
+
+        <tr>
+            <td>تمرکز حول میانگین</td>
+            <td>زیاد</td>
+            <td>کم</td>
+        </tr>
+
+        <tr>
+            <td>محدوده داده</td>
+            <td>کوچک‌تر</td>
+            <td>بزرگ‌تر</td>
+        </tr>
+
+        <tr>
+            <td>پهنای Density در مرکز</td>
+            <td>بیشتر</td>
+            <td>کمتر</td>
+        </tr>
+
+        <tr>
+            <td>Spread</td>
+            <td>کم</td>
+            <td>زیاد</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="warning">
+    <strong>نکته مهم:</strong>
+    در Violin Plot نباید فقط به پهن یا باریک بودن
+    کل Violin نگاه کرد و آن را مستقیماً به SD نسبت داد.
+    پهنای Violin در هر ارتفاع نشان‌دهنده‌ی
+    <strong>Density</strong>
+    است و شکل آن به توزیع داده و همچنین روش KDE وابسته است.
+    SD بیشتر عمدتاً باعث افزایش Spread روی محور Y می‌شود،
+    نه این‌که صرفاً کل Violin را به یک اندازه پهن کند.
+</div>
+
+<!-- ===================================================== -->
+<!-- 9 -->
+<!-- ===================================================== -->
+
+<h2>۶. ارتباط Violin Plot با KDE</h2>
+
+<p>
+    یکی از مهم‌ترین نکات در فهم Violin Plot این است که
+    شکل بیرونی آن مستقیماً از یک تخمین KDE به دست می‌آید.
+</p>
+
+<p>
+    اگر KDE را برای یک دیتاست رسم کنیم،
+    یک منحنی چگالی داریم.
+    در Violin Plot همین چگالی به صورت افقی
+    در دو طرف محور مرکزی متقارن می‌شود.
+</p>
+
+<div class="formula">
+    KDE
+    &nbsp;&nbsp;→&nbsp;&nbsp;
+    Density Estimation
+    &nbsp;&nbsp;→&nbsp;&nbsp;
+    Mirroring
+    &nbsp;&nbsp;→&nbsp;&nbsp;
+    Violin Shape
+</div>
+
+<p>
+    بنابراین هر چیزی که روی شکل KDE تأثیر بگذارد،
+    می‌تواند روی شکل Violin نیز تأثیر بگذارد.
+    برای مثال اگر داده‌ها در یک محدوده خاص متمرکز باشند،
+    Violin در همان محدوده پهن‌تر می‌شود.
+</p>
+
+<p>
+    همچنین اگر توزیع چند قله داشته باشد،
+    ممکن است Violin نیز چند قسمت پهن‌تر داشته باشد.
+    این ویژگی یکی از مزیت‌های مهم Violin Plot نسبت به
+    Box Plot است؛ زیرا Box Plot معمولاً چنین جزئیاتی
+    از شکل توزیع را نشان نمی‌دهد.
+</p>
+
+<!-- ===================================================== -->
+<!-- 10 -->
+<!-- ===================================================== -->
+
+<h2>۷. اثر تغییر میانگین (Mean Shift)</h2>
+
+<p>
+    دیتاست
+    <code>Different Mean</code>
+    با
+    <code>loc = 185</code>
+    و
+    <code>scale = 10</code>
+    تولید شده است.
+</p>
+
+<p>
+    این دیتاست دقیقاً همان SD دیتاست
+    <code>Moderate Variance</code>
+    را دارد، اما میانگین آن ۱۵ واحد افزایش پیدا کرده است.
+</p>
+
+<p>
+    بنابراین انتظار داریم شکل و پراکندگی Violin تقریباً یکسان
+    باقی بماند، اما کل آن روی محور Y به سمت بالا منتقل شود.
+</p>
+
+<ul>
+    <li>
+        <strong>Spread</strong>
+        تقریباً ثابت باقی می‌ماند.
+    </li>
+
+    <li>
+        <strong>شکل توزیع</strong>
+        تقریباً یکسان باقی می‌ماند.
+    </li>
+
+    <li>
+        <strong>Median</strong>
+        نیز تقریباً به اندازه‌ی Mean جابه‌جا می‌شود.
+    </li>
+
+    <li>
+        کل Violin به سمت مقادیر بزرگ‌تر محور Y منتقل می‌شود.
+    </li>
+</ul>
+
+<p>
+    بنابراین در Violin Plot:
+</p>
+
+<div class="formula">
+    Mean → Location
+    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    Standard Deviation → Scale / Spread
+</div>
+
+<p>
+    یعنی میانگین محل قرارگیری توزیع را روی محور Y تعیین می‌کند،
+    در حالی که انحراف معیار میزان کشیدگی و پراکندگی آن
+    در امتداد محور Y را کنترل می‌کند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 11 -->
+<!-- ===================================================== -->
+
+<h2>۸. چرا Violin Plot از Box Plot اطلاعات بیشتری می‌دهد؟</h2>
+
+<p>
+    Box Plot عمدتاً یک خلاصه‌ی آماری از داده ارائه می‌دهد:
+    Median، Q1، Q3 و Whiskers.
+    اما Violin Plot علاوه بر این اطلاعات،
+    <strong>شکل توزیع</strong>
+    را نیز در اختیار ما قرار می‌دهد.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>Box Plot</th>
+            <th>Violin Plot</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Median</td>
+            <td>دارد</td>
+            <td>دارد / قابل نمایش</td>
+        </tr>
+
+        <tr>
+            <td>Q1 و Q3</td>
+            <td>دارد</td>
+            <td>قابل نمایش</td>
+        </tr>
+
+        <tr>
+            <td>Spread</td>
+            <td>دارد</td>
+            <td>دارد</td>
+        </tr>
+
+        <tr>
+            <td>شکل توزیع</td>
+            <td>محدود</td>
+            <td><strong>دارد</strong></td>
+        </tr>
+
+        <tr>
+            <td>چند قله‌ای بودن توزیع</td>
+            <td>معمولاً مشخص نیست</td>
+            <td><strong>قابل مشاهده</strong></td>
+        </tr>
+
+        <tr>
+            <td>Density</td>
+            <td>ندارد</td>
+            <td><strong>دارد</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    به همین دلیل Violin Plot زمانی بسیار مفید است که علاوه بر
+    مقایسه‌ی Median و Spread،
+    بخواهیم بدانیم داده‌ها
+    <strong>چگونه در محدوده‌ی خود توزیع شده‌اند.</strong>
+</p>
+
+<!-- ===================================================== -->
+<!-- 12 -->
+<!-- ===================================================== -->
+
+<h2>۹. نکته مهم درباره‌ی شکل Violin و Kurtosis</h2>
+
+<p>
+    همانند KDE، نباید صرفاً بر اساس
+    <strong>بلند یا کوتاه بودن Violin</strong>
+    درباره‌ی Kurtosis قضاوت کنیم.
+</p>
+
+<p>
+    در این مثال، هر چهار دیتاست از توزیع نرمال ساخته شده‌اند.
+    بنابراین تغییر SD باعث تغییر بنیادی در Kurtosis نظری
+    توزیع نمی‌شود.
+</p>
+
+<p>
+    چیزی که در Violin به‌وضوح تغییر می‌کند،
+    <strong>مقیاس و Spread</strong>
+    توزیع است.
+    وقتی SD افزایش پیدا می‌کند،
+    توزیع روی محور Y گسترده‌تر می‌شود.
+</p>
+
+<div class="warning">
+    <strong>نکته مهم درباره Kurtosis:</strong>
+    Violin بلندتر یا کوتاه‌تر لزوماً به معنی
+    Kurtosis بیشتر یا کمتر نیست.
+    برای تحلیل Kurtosis باید از معیار آماری مربوط به
+    کشیدگی توزیع استفاده کرد، نه صرفاً از ارتفاع یا شکل ظاهری Violin.
+</div>
+
+<!-- ===================================================== -->
+<!-- 13 -->
+<!-- ===================================================== -->
+
+<h2>۱۰. جمع‌بندی نهایی</h2>
+
+<div class="summary">
+
+    <ul>
+
+        <li>
+            <strong>Violin Plot</strong>
+            ترکیبی از خلاصه‌ی آماری و نمایش شکل توزیع داده است.
+        </li>
+
+        <li>
+            <strong>محور X</strong>
+            معمولاً گروه یا دیتاست را مشخص می‌کند.
+        </li>
+
+        <li>
+            <strong>محور Y</strong>
+            مقدار واقعی متغیر را نشان می‌دهد.
+        </li>
+
+        <li>
+            <strong>پهنای Violin</strong>
+            نشان‌دهنده‌ی Density در هر مقدار از محور Y است.
+        </li>
+
+        <li>
+            <strong>SD کوچک‌تر</strong>
+            → داده‌ها متمرکزتر و Violin در محدوده‌ی کوچک‌تری قرار می‌گیرد.
+        </li>
+
+        <li>
+            <strong>SD بزرگ‌تر</strong>
+            → داده‌ها پراکنده‌تر و Violin در امتداد محور Y کشیده‌تر می‌شود.
+        </li>
+
+        <li>
+            <strong>تغییر Mean</strong>
+            → جابه‌جایی کل توزیع روی محور Y،
+            در حالی که با ثابت بودن SD، Spread تقریباً ثابت می‌ماند.
+        </li>
+
+        <li>
+            Violin Plot برخلاف Box Plot می‌تواند
+            <strong>شکل توزیع و چندقله‌ای بودن داده‌ها</strong>
+            را نیز نشان دهد.
+        </li>
+
+        <li>
+            پهنای Violin یک مقدار عددی مستقل نیست؛
+            این پهنا برای نمایش
+            <strong>Density</strong>
+            استفاده می‌شود.
+        </li>
+
+        <li>
+            تغییر SD در توزیع نرمال به‌تنهایی باعث تغییر واقعی
+            <strong>Kurtosis</strong>
+            نمی‌شود.
+        </li>
+
+    </ul>
+
+</div>
+</div>
+</body>
+</html>
