@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "datalab"
+version = "0.1.0"
+description = "Educational datasets and notebooks for learning data patterns, distributions, and Exploratory Data Analysis (EDA) concepts."
+readme = "README.md"
+requires-python = ">=3.9"
+
+authors = [
+    { name = "Arash Taghavi", email = "arash.taghavi69@gmail.com" }
+]
+
+dependencies = [
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "seaborn",
+    "scikit-learn",
+    "scipy",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/ArashTaghavi/datalab"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
