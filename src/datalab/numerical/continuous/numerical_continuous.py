@@ -1,4 +1,3 @@
-from .dataset import NormalDistributionDataset
 from .statistics import (
     NormalDistributionPlotStatistics,
     NormalBoxPlotStatistics,
@@ -11,10 +10,9 @@ from .plots import DistributionPlot, BoxPlot, ViolinPlot, CDFPlot, QQPlot, MeanS
 
 
 class NumericalContinuous:
-    def __init__(self) -> None:
-        self.dataset = NormalDistributionDataset()
-        self.columns = self.dataset.columns
-        self.titles = self.dataset.titles
+    def __init__(self, dataset) -> None:
+        self.columns = dataset.columns
+        self.titles = dataset.titles
 
     def distribution(self):
         DistributionPlot(columns=self.columns, titles=self.titles).draw()

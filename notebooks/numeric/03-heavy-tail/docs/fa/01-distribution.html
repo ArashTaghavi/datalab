@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودارهای KDE برای توزیع‌های Heavy-Tailed
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- معرفی محورها -->
+    <!-- ===================================================== -->
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش نمودار</th>
+                <th>نام</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Value</td>
+                <td>مقدار واقعی متغیر</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Density</td>
+                <td>چگالی احتمال در اطراف هر مقدار</td>
+            </tr>
+
+            <tr>
+                <td><strong>Area under curve</strong></td>
+                <td>Total Probability</td>
+                <td>تقریباً برابر با ۱ یا ۱۰۰٪</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Heavy Tail چیست؟</h2>
+
+    <p>
+        در یک توزیع
+        <strong>Heavy-Tailed</strong>
+        بخش قابل‌توجهی از احتمال در نواحی دور از مرکز توزیع قرار دارد.
+        به عبارت ساده، احتمال مشاهده‌ی مقادیر بسیار دور از میانگین
+        نسبت به یک توزیع نرمال بیشتر است.
+    </p>
+
+    <p>
+        در یک توزیع نرمال، با فاصله گرفتن از میانگین،
+        چگالی خیلی سریع کاهش پیدا می‌کند.
+        اما در یک توزیع Heavy-Tailed،
+        <strong>دم‌های توزیع با سرعت کمتری به صفر نزدیک می‌شوند</strong>.
+        بنابراین احتمال مشاهده‌ی مقادیر بسیار بزرگ یا بسیار کوچک
+        بیشتر است.
+    </p>
+
+    <p>
+        در این مثال از
+        <strong>Student's t-distribution</strong>
+        برای ساخت دیتاست‌ها استفاده شده است.
+        پارامتر مهم این توزیع
+        <code>df</code>
+        یا
+        <strong>Degrees of Freedom</strong>
+        است.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        در توزیع t، هرچه مقدار
+        <code>df</code>
+        کوچک‌تر باشد، دم‌های توزیع سنگین‌تر می‌شوند.
+        بنابراین در این تحلیل، کاهش
+        <code>df</code>
+        به معنی افزایش شدت Heavy Tail است.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با استفاده از
+        <strong>Student's t-distribution</strong>
+        تولید شده‌اند.
+        تمام دیتاست‌ها حول مقدار
+        <code>170</code>
+        ساخته شده‌اند و مقیاس پایه‌ی آن‌ها
+        <code>8</code>
+        است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Distribution</th>
+                <th>df</th>
+                <th>Location</th>
+                <th>Scale</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Mild Heavy Tail</td>
+                <td>Student's t</td>
+                <td>15</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Heavy Tail</td>
+                <td>Student's t</td>
+                <td>8</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Strong Heavy Tail</td>
+                <td>Student's t</td>
+                <td>5</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Heavy Tail</td>
+                <td>Student's t</td>
+                <td>3</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Heavy Tail + Outliers</td>
+                <td>Student's t</td>
+                <td>8</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        چهار دیتاست اول فقط در مقدار
+        <code>df</code>
+        با یکدیگر تفاوت دارند.
+        بنابراین می‌توان اثر مستقیم کاهش
+        <strong>Degrees of Freedom</strong>
+        و سنگین‌تر شدن دم‌ها را روی شکل KDE بررسی کرد.
+    </p>
+
+    <p>
+        دیتاست پنجم علاوه بر Heavy Tail،
+        پنج مقدار بسیار بزرگ را نیز به صورت دستی اضافه می‌کند:
+    </p>
+
+    <div class="formula">
+        215 &nbsp; | &nbsp; 225 &nbsp; | &nbsp; 240 &nbsp; | &nbsp; 255 &nbsp; | &nbsp; 275
+    </div>
+
+    <p>
+        بنابراین این دیتاست برای بررسی تفاوت بین
+        <strong>Heavy Tails</strong>
+        و
+        <strong>Outliers شدید</strong>
+        مناسب است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. رابطه‌ی Degrees of Freedom با شکل KDE</h2>
+
+    <p>
+        مهم‌ترین پارامتر در این مقایسه
+        <code>df</code>
+        است.
+        با کاهش این مقدار، احتمال مشاهده‌ی مقادیر دور از مرکز
+        افزایش پیدا می‌کند و دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.1 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۱. Heavy Tail ملایم → df = 15</h3>
+
+    <p>
+        در دیتاست
+        <strong>Mild Heavy Tail</strong>
+        مقدار
+        <code>df = 15</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت، توزیع هنوز ظاهری نسبتاً نزدیک به توزیع نرمال دارد،
+        اما دم‌ها نسبت به نرمال کمی سنگین‌تر هستند.
+    </p>
+
+    <p>
+        بنابراین بیشتر داده‌ها همچنان در اطراف مرکز قرار دارند،
+        ولی احتمال مشاهده‌ی مقادیر دورتر از مرکز کمی بیشتر از حالت نرمال است.
+    </p>
+
+    <p>
+        در نمودار KDE، بخش مرکزی نسبتاً مشخص است و دم‌ها
+        با سرعت کمتری نسبت به یک توزیع نرمال کاهش پیدا می‌کنند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.2 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۲. Heavy Tail متوسط → df = 8</h3>
+
+    <p>
+        در دیتاست
+        <strong>Moderate Heavy Tail</strong>
+        مقدار
+        <code>df = 8</code>
+        است.
+    </p>
+
+    <p>
+        با کاهش
+        <code>df</code>
+        از ۱۵ به ۸،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+        در نتیجه احتمال مشاهده‌ی مقادیر دور از مرکز افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        در KDE، این موضوع بیشتر در قسمت‌های انتهایی منحنی قابل مشاهده است.
+        چگالی در فاصله‌های دور از مرکز نسبت به حالت قبلی
+        دیرتر کاهش پیدا می‌کند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.3 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۳. Heavy Tail قوی → df = 5</h3>
+
+    <p>
+        در دیتاست
+        <strong>Strong Heavy Tail</strong>
+        مقدار
+        <code>df = 5</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت، دم‌های توزیع به شکل محسوسی سنگین‌تر شده‌اند.
+        بنابراین مقادیر بسیار دور از مرکز نسبت به دو حالت قبلی
+        احتمال بیشتری دارند.
+    </p>
+
+    <p>
+        KDE در این حالت دیگر فقط یک قله‌ی مرکزی را نشان نمی‌دهد،
+        بلکه بخش‌های انتهایی منحنی نیز اهمیت بیشتری پیدا می‌کنند.
+    </p>
+
+    <p>
+        نکته مهم این است که
+        <strong>Heavy Tail به معنی وجود Outlier نیست</strong>.
+        این مقادیر دور از مرکز بخشی از ساختار طبیعی خود توزیع هستند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.4 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۴. Heavy Tail شدید → df = 3</h3>
+
+    <p>
+        در دیتاست
+        <strong>Extreme Heavy Tail</strong>
+        مقدار
+        <code>df = 3</code>
+        است.
+    </p>
+
+    <p>
+        این مقدار پایین
+        <code>df</code>
+        باعث ایجاد دم‌های بسیار سنگین می‌شود.
+        بنابراین احتمال مشاهده‌ی مقادیر بسیار دور از مرکز
+        به شکل محسوسی افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        در KDE، تفاوت اصلی با توزیع‌های قبلی
+        در نواحی انتهایی منحنی دیده می‌شود.
+        دم‌ها دیرتر به صفر نزدیک می‌شوند و توزیع
+        احتمال بیشتری را در مقادیر دور از مرکز نگه می‌دارد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        در این مثال نباید صرفاً ارتفاع قله‌ی KDE را معیار
+        Heavy Tail بودن قرار داد.
+        ویژگی اصلی Heavy Tail در
+        <strong>رفتار دم‌های توزیع</strong>
+        قرار دارد، نه فقط شکل قله.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.5 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۵. Heavy Tail همراه با Outliers</h3>
+
+    <p>
+        دیتاست
+        <strong>Heavy Tail + Outliers</strong>
+        از همان توزیع با
+        <code>df = 8</code>
+        ساخته شده است،
+        اما پنج مقدار بسیار بزرگ به آن اضافه شده‌اند.
+    </p>
+
+    <p>
+        این مقادیر عبارت‌اند از:
+    </p>
+
+    <div class="formula">
+        215 &nbsp; | &nbsp; 225 &nbsp; | &nbsp; 240 &nbsp; | &nbsp; 255 &nbsp; | &nbsp; 275
+    </div>
+
+    <p>
+        در نتیجه، این دیتاست دو پدیده‌ی متفاوت را هم‌زمان دارد:
+    </p>
+
+    <ul>
+        <li>
+            <strong>Heavy Tail:</strong>
+            ساختار طبیعی توزیع باعث ایجاد مقادیر دور از مرکز می‌شود.
+        </li>
+
+        <li>
+            <strong>Outliers:</strong>
+            چند مقدار بسیار دور به صورت مصنوعی به داده اضافه شده‌اند.
+        </li>
+    </ul>
+
+    <p>
+        بنابراین دم راست KDE در این دیتاست می‌تواند بسیار کشیده‌تر
+        از حالت Heavy Tail معمولی دیده شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. مقایسه‌ی شدت Heavy Tail</h2>
+
+    <p>
+        با کاهش
+        <code>df</code>
+        شدت Heavy Tail افزایش پیدا می‌کند.
+        بنابراین ترتیب شدت در این دیتاست‌ها به شکل زیر است:
+    </p>
+
+    <div class="formula">
+        df = 15
+        &nbsp;&lt;&nbsp;
+        df = 8
+        &nbsp;&lt;&nbsp;
+        df = 5
+        &nbsp;&lt;&nbsp;
+        df = 3
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>df بالا</th>
+                <th>df پایین</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>شدت Heavy Tail</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>احتمال مقادیر دور از مرکز</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>طول دم‌ها</td>
+                <td>کوتاه‌تر</td>
+                <td>کشیده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>کاهش چگالی در دم‌ها</td>
+                <td>سریع‌تر</td>
+                <td>کندتر</td>
+            </tr>
+
+            <tr>
+                <td>حساسیت به مقادیر شدید</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. تفاوت Heavy Tail و Outlier</h2>
+
+    <p>
+        یکی از مهم‌ترین نکات این تحلیل، تفاوت بین
+        <strong>Heavy Tail</strong>
+        و
+        <strong>Outlier</strong>
+        است.
+    </p>
+
+    <p>
+        Heavy Tail یک ویژگی ساختاری توزیع است.
+        یعنی مقادیر دور از مرکز به صورت طبیعی بخشی از توزیع هستند.
+        بنابراین مشاهده‌ی مقادیر بزرگ در یک توزیع Heavy-Tailed
+        لزوماً به معنی وجود داده‌ی خراب یا غیرعادی نیست.
+    </p>
+
+    <p>
+        در مقابل، Outlier یک یا چند مشاهده‌ی بسیار دور از
+        بخش اصلی داده‌هاست که می‌تواند نسبت به ساختار غالب توزیع
+        غیرمعمول باشد.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Heavy Tail</th>
+                <th>Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>ماهیت</td>
+                <td>ویژگی توزیع</td>
+                <td>مشاهده‌ی خاص</td>
+            </tr>
+
+            <tr>
+                <td>تعداد مقادیر دور</td>
+                <td>می‌تواند زیاد باشد</td>
+                <td>معمولاً کم</td>
+            </tr>
+
+            <tr>
+                <td>رفتار دم</td>
+                <td>به صورت ساختاری سنگین است</td>
+                <td>ممکن است چند نقطه‌ی منفرد ایجاد کند</td>
+            </tr>
+
+            <tr>
+                <td>لزوم حذف</td>
+                <td>خیر</td>
+                <td>وابسته به علت ایجاد مقدار</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        در داده‌های واقعی، Heavy Tail نباید به صورت خودکار
+        با Outlier اشتباه گرفته شود.
+        اگر مقادیر شدید بخشی از فرآیند واقعی تولید داده باشند،
+        حذف آن‌ها می‌تواند اطلاعات مهمی را از بین ببرد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. اثر Heavy Tail روی Mean و Standard Deviation</h2>
+
+    <p>
+        توزیع‌های Heavy-Tailed معمولاً نسبت به مقادیر شدید
+        حساس‌تر هستند.
+        این موضوع می‌تواند روی معیارهای آماری مانند
+        <strong>Mean</strong>
+        و
+        <strong>Standard Deviation</strong>
+        اثر قابل‌توجهی داشته باشد.
+    </p>
+
+    <p>
+        وقتی مقادیر بسیار بزرگ یا بسیار کوچک در داده وجود داشته باشند،
+        میانگین می‌تواند به سمت آن مقادیر کشیده شود.
+        همچنین Standard Deviation به دلیل استفاده از فاصله‌ی
+        مربعی از میانگین، نسبت به مقادیر شدید حساس است.
+    </p>
+
+    <p>
+        بنابراین در توزیع‌های Heavy-Tailed،
+        استفاده‌ی صرف از Mean و Standard Deviation
+        ممکن است تصویر کاملی از پراکندگی داده ارائه ندهد.
+    </p>
+
+    <p>
+        معیارهای مقاوم‌تر مانند
+        <strong>Median</strong>
+        و
+        <strong>IQR</strong>
+        می‌توانند برای توصیف مرکز و پراکندگی
+        در چنین داده‌هایی مفیدتر باشند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. نکته مهم درباره Kurtosis</h2>
+
+    <p>
+        Heavy Tail ارتباط مستقیمی با مفهوم
+        <strong>Kurtosis</strong>
+        دارد.
+        یکی از ویژگی‌های مهم توزیع‌های Heavy-Tailed این است که
+        می‌توانند احتمال بیشتری برای رخدادهای شدید
+        در مقایسه با توزیع نرمال داشته باشند.
+    </p>
+
+    <p>
+        با کاهش
+        <code>df</code>
+        در توزیع t،
+        شدت دم‌ها افزایش پیدا می‌کند و رفتار توزیع
+        بیشتر تحت تأثیر مقادیر شدید قرار می‌گیرد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Kurtosis را نباید صرفاً به عنوان «تیزی قله» تفسیر کرد.
+        در تحلیل Heavy Tail، رفتار دم‌ها اهمیت بسیار زیادی دارد.
+        ممکن است شکل قله بین دو توزیع چندان متفاوت نباشد،
+        اما یکی از آن‌ها دم‌های بسیار سنگین‌تری داشته باشد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>df بزرگ‌تر</strong>
+                → دم‌های سبک‌تر و نزدیک‌تر به رفتار نرمال.
+            </li>
+
+            <li>
+                <strong>df کوچک‌تر</strong>
+                → دم‌های سنگین‌تر و احتمال بیشتر مقادیر شدید.
+            </li>
+
+            <li>
+                ویژگی اصلی Heavy Tail در
+                <strong>دم‌های توزیع</strong>
+                دیده می‌شود، نه صرفاً در ارتفاع قله.
+            </li>
+
+            <li>
+                Heavy Tail یک ویژگی ساختاری توزیع است و
+                لزوماً به معنی وجود Outlier نیست.
+            </li>
+
+            <li>
+                Outlier می‌تواند به صورت چند مشاهده‌ی بسیار دور
+                از ساختار غالب داده ظاهر شود.
+            </li>
+
+            <li>
+                Heavy-Tailed بودن می‌تواند Mean و Standard Deviation
+                را نسبت به مقادیر شدید حساس‌تر کند.
+            </li>
+
+            <li>
+                Median و IQR در بسیاری از تحلیل‌های
+                Heavy-Tailed معیارهای مقاوم‌تری هستند.
+            </li>
+
+            <li>
+                در این دیتاست،
+                <code>df = 15</code>
+                ملایم‌ترین و
+                <code>df = 3</code>
+                شدیدترین Heavy Tail را ایجاد می‌کند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

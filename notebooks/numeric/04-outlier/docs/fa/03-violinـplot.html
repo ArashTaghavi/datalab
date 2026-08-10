@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Violin Plot برای توزیع‌های دارای Outlier
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Violin Plot</strong>
+        یکی از ابزارهای بصری برای نمایش و مقایسه‌ی
+        <strong>توزیع داده‌های عددی</strong>
+        است.
+        این نمودار ترکیبی از اطلاعات
+        <strong>KDE</strong>
+        و ویژگی‌های آماری مشابه Box Plot را در یک نمایش واحد ارائه می‌دهد.
+    </p>
+
+    <p>
+        برخلاف Box Plot که عمدتاً بر اساس
+        <strong>Quartileها، Median و Whiskerها</strong>
+        ساخته می‌شود، Violin Plot شکل توزیع داده را نیز نشان می‌دهد.
+        پهنای Violin در هر مقدار، بیانگر میزان
+        <strong>Density</strong>
+        داده در اطراف آن مقدار است.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Violin Plot به ما اجازه می‌دهد همزمان دو جنبه‌ی مهم داده را ببینیم:
+        <strong>شکل توزیع</strong>
+        و
+        <strong>موقعیت مرکزی و پراکندگی داده</strong>.
+        بنابراین برای مقایسه‌ی چند دیتاست، ابزار بسیار مناسبی است.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. اجزای اصلی Violin Plot</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>مفهوم</th>
+                <th>نحوه‌ی تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td><strong>Vertical Axis</strong></td>
+                <td>مقدار متغیر</td>
+                <td>مقادیر واقعی داده روی این محور قرار می‌گیرند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Width</strong></td>
+                <td>Density</td>
+                <td>پهنای بیشتر یعنی تراکم بیشتر داده در آن ناحیه</td>
+            </tr>
+
+            <tr>
+                <td><strong>Center</strong></td>
+                <td>مرکز توزیع</td>
+                <td>محل قرارگیری بخش مرکزی داده را نشان می‌دهد</td>
+            </tr>
+
+            <tr>
+                <td><strong>Shape</strong></td>
+                <td>Distribution Shape</td>
+                <td>شکل کلی، تمرکز، کشیدگی و دم‌های توزیع را نشان می‌دهد</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tail</strong></td>
+                <td>Extreme Values</td>
+                <td>گسترش توزیع به سمت مقادیر دورتر را نشان می‌دهد</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        مهم‌ترین نکته در خواندن Violin این است که
+        <strong>عرض Violin را با مقدار داده اشتباه نگیریم.</strong>
+    </p>
+
+    <p>
+        محور عمودی مقدار واقعی متغیر را نشان می‌دهد،
+        اما پهنای Violin در هر نقطه نشان‌دهنده‌ی
+        <strong>چگالی داده</strong>
+        در همان نقطه است.
+    </p>
+
+    <div class="formula">
+        Width → Density
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        Vertical Position → Value
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. داده‌های مورد بررسی</h2>
+
+    <p>
+        تمام دیتاست‌های این تحلیل از یک توزیع پایه‌ی نرمال ساخته شده‌اند:
+    </p>
+
+    <div class="formula">
+        Mean = 170
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        SD = 8
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        N = 1000
+    </div>
+
+    <p>
+        سپس در هر دیتاست نوع متفاوتی از Outlier به داده‌ها اضافه شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Outlier</th>
+                <th>الگو</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>No Outliers</td>
+                <td>ندارد</td>
+                <td>توزیع پایه</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>۳ مقدار</td>
+                <td>چند مقدار بزرگ در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>۱۰ مقدار</td>
+                <td>تعداد زیادی مقدار بزرگ در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>۱۰ مقدار</td>
+                <td>Outlier در هر دو طرف</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>۱ مقدار</td>
+                <td>یک مقدار بسیار دور از مرکز</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین هدف اصلی این مقایسه این است که ببینیم
+        <strong>Outlierها چگونه شکل Violin را تغییر می‌دهند.</strong>
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. حالت بدون Outlier</h2>
+
+    <h3>۴.۱. No Outliers</h3>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        هیچ مقدار مصنوعی خارج از توزیع پایه اضافه نشده است.
+    </p>
+
+    <p>
+        بنابراین Violin شکل نسبتاً متقارن و زنگوله‌ای خواهد داشت.
+        بیشترین پهنا در اطراف ناحیه‌ای قرار می‌گیرد که داده‌ها بیشترین
+        تراکم را دارند.
+    </p>
+
+    <p>
+        از آنجا که داده‌ی پایه از یک توزیع نرمال تولید شده است،
+        انتظار داریم مرکز Violin در اطراف
+        <strong>۱۷۰</strong>
+        قرار داشته باشد.
+    </p>
+
+    <p>
+        این حالت، مرجع مناسبی برای مقایسه‌ی چهار دیتاست دیگر است.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اضافه شدن تعداد کمی Outlier</h2>
+
+    <h3>۵.۱. Few Outliers</h3>
+
+    <p>
+        در این حالت سه مقدار بزرگ به انتهای سمت راست داده اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        205 &nbsp;&nbsp; 215 &nbsp;&nbsp; 225
+    </div>
+
+    <p>
+        این مقادیر فاصله‌ی زیادی از بخش مرکزی داده دارند.
+        در نتیجه، توزیع یک دم نسبتاً بلندتر در سمت راست خواهد داشت.
+    </p>
+
+    <p>
+        نکته مهم این است که Outlierها فقط تعداد کمی از مشاهدات را تشکیل می‌دهند.
+        بنابراین بخش اصلی Violin همچنان شکل مشابهی با توزیع پایه دارد.
+    </p>
+
+    <p>
+        در نتیجه می‌توان انتظار داشت که:
+    </p>
+
+    <ul>
+
+        <li>
+            بخش مرکزی Violin تقریباً بدون تغییر اساسی باقی بماند.
+        </li>
+
+        <li>
+            دم سمت راست کشیده‌تر شود.
+        </li>
+
+        <li>
+            تراکم اصلی همچنان در اطراف مرکز داده باقی بماند.
+        </li>
+
+    </ul>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. افزایش تعداد Outlierها</h2>
+
+    <h3>۶.۱. Many Outliers</h3>
+
+    <p>
+        در این دیتاست تعداد Outlierهای سمت راست به ۱۰ مقدار افزایش پیدا کرده است.
+        این مقادیر از ۱۹۵ تا ۲۲۲ قرار دارند.
+    </p>
+
+    <p>
+        در مقایسه با
+        <code>Few Outliers</code>،
+        اکنون تعداد بیشتری از داده‌ها در ناحیه‌ی دور از مرکز قرار گرفته‌اند.
+    </p>
+
+    <p>
+        بنابراین اثر این مقادیر روی تخمین Density می‌تواند بیشتر شود و
+        دم سمت راست Violin واضح‌تر دیده شود.
+    </p>
+
+    <p>
+        این مثال نشان می‌دهد که تعداد Outlierها نیز مهم است؛
+        زیرا وقتی تعداد بیشتری از داده‌ها در ناحیه‌ی دور از مرکز قرار بگیرند،
+        شکل کلی تخمین توزیع می‌تواند بیشتر تحت تأثیر قرار بگیرد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Violin Plot بر اساس KDE ساخته می‌شود؛ بنابراین شکل و پهنای آن
+        به روش تخمین چگالی و پارامترهای آن نیز وابسته است.
+        به همین دلیل نباید هر تغییر کوچک در شکل Violin را مستقیماً
+        به تغییر واقعی در توزیع داده نسبت داد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. Outlierهای متقارن</h2>
+
+    <h3>۷.۱. Symmetric Outliers</h3>
+
+    <p>
+        در این حالت Outlierها در هر دو طرف توزیع قرار گرفته‌اند.
+    </p>
+
+    <p>
+        مقادیر سمت چپ عبارت‌اند از:
+    </p>
+
+    <div class="formula">
+        135 &nbsp;&nbsp; 140 &nbsp;&nbsp; 145 &nbsp;&nbsp; 150 &nbsp;&nbsp; 155
+    </div>
+
+    <p>
+        و مقادیر سمت راست:
+    </p>
+
+    <div class="formula">
+        185 &nbsp;&nbsp; 190 &nbsp;&nbsp; 195 &nbsp;&nbsp; 200 &nbsp;&nbsp; 205
+    </div>
+
+    <p>
+        بنابراین هر دو طرف توزیع دارای مقادیر دور از مرکز هستند.
+    </p>
+
+    <p>
+        در Violin Plot این حالت می‌تواند باعث شود دم‌های دو طرف
+        بیشتر از حالت پایه گسترش پیدا کنند.
+    </p>
+
+    <p>
+        نکته مهم این است که وجود Outlier در دو طرف به خودی خود
+        به معنی Skewness نیست.
+        اگر گسترش دو طرف تقریباً متقارن باشد،
+        ممکن است توزیع همچنان رفتار متقارنی داشته باشد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. یک Outlier بسیار شدید</h2>
+
+    <h3>۸.۱. One Extreme Outlier</h3>
+
+    <p>
+        در این حالت فقط یک مقدار به شدت از مرکز فاصله گرفته است:
+    </p>
+
+    <div class="formula">
+        300
+    </div>
+
+    <p>
+        این مقدار بسیار دورتر از بخش اصلی داده قرار دارد.
+        بنابراین می‌تواند یک دم بسیار طولانی در سمت راست ایجاد کند.
+    </p>
+
+    <p>
+        با این حال باید توجه کرد که این مقدار فقط
+        <strong>یک مشاهده از ۱۰۰۰ مشاهده</strong>
+        است.
+        بنابراین بخش عمده‌ی Density همچنان توسط داده‌های اصلی تعیین می‌شود.
+    </p>
+
+    <p>
+        این موضوع یک ویژگی مهم Violin Plot را نشان می‌دهد:
+        یک مقدار بسیار شدید می‌تواند دامنه‌ی نمایش را به شدت گسترش دهد،
+        اما لزوماً شکل بخش مرکزی توزیع را تغییر نمی‌دهد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. مقایسه‌ی شکل Violinها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>مرکز</th>
+                <th>دم راست</th>
+                <th>دم چپ</th>
+                <th>ویژگی اصلی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>No Outliers</td>
+                <td>تقریباً ۱۷۰</td>
+                <td>طبیعی</td>
+                <td>طبیعی</td>
+                <td>توزیع پایه</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>تقریباً ثابت</td>
+                <td>کشیده‌تر</td>
+                <td>طبیعی</td>
+                <td>چند مقدار دور در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>تقریباً ثابت</td>
+                <td>کشیده‌تر</td>
+                <td>طبیعی</td>
+                <td>تعداد بیشتر مقادیر دور</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>تقریباً ثابت</td>
+                <td>کشیده‌تر</td>
+                <td>کشیده‌تر</td>
+                <td>گسترش دوطرفه</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>تقریباً ثابت</td>
+                <td>بسیار کشیده</td>
+                <td>طبیعی</td>
+                <td>یک مقدار بسیار شدید</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. تفاوت Violin Plot و Box Plot در این مثال</h2>
+
+    <p>
+        هر دو نمودار برای بررسی Outlierها و پراکندگی داده مفید هستند،
+        اما اطلاعات متفاوتی را برجسته می‌کنند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Box Plot</th>
+                <th>Violin Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Median</td>
+                <td>به‌وضوح قابل مشاهده</td>
+                <td>بسته به تنظیمات نمودار</td>
+            </tr>
+
+            <tr>
+                <td>Q1 / Q3</td>
+                <td>به‌وضوح قابل مشاهده</td>
+                <td>به صورت مستقیم محور اصلی نمودار نیست</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>بسیار واضح</td>
+                <td>به صورت مستقیم نمایش داده نمی‌شود</td>
+            </tr>
+
+            <tr>
+                <td>Density</td>
+                <td>نمایش نمی‌دهد</td>
+                <td>به‌صورت شکل Violin نمایش می‌دهد</td>
+            </tr>
+
+            <tr>
+                <td>شکل توزیع</td>
+                <td>محدود</td>
+                <td>واضح‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Outlier</td>
+                <td>به‌صورت مشخص</td>
+                <td>بسته به تنظیمات و شکل KDE</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین در این دیتاست، Box Plot برای پاسخ به این سؤال مناسب‌تر است که
+        <strong>کدام داده‌ها طبق قانون IQR به عنوان Outlier شناخته می‌شوند؟</strong>
+        در حالی که Violin Plot بیشتر برای پاسخ به این سؤال مناسب است که
+        <strong>شکل و تراکم توزیع در بخش‌های مختلف چگونه است؟</strong>
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. نکته مهم درباره Outlier و KDE</h2>
+
+    <p>
+        Violin Plot در اصل شکل یک KDE را نمایش می‌دهد.
+        بنابراین Outlierها در Violin Plot دقیقاً همان رفتاری را ندارند
+        که در Box Plot دارند.
+    </p>
+
+    <p>
+        در Box Plot، Outlier بر اساس یک قانون مشخص یعنی
+        <strong>1.5 × IQR</strong>
+        تعریف می‌شود.
+    </p>
+
+    <p>
+        اما KDE یک تابع چگالی را تخمین می‌زند و هر مشاهده در شکل نهایی
+        Density سهمی دارد.
+        بنابراین یک مقدار بسیار دور می‌تواند یک دم کم‌تراکم ایجاد کند،
+        حتی اگر بخش عمده‌ی داده‌ها همچنان در اطراف مرکز متمرکز باشند.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        مشاهده‌ی یک دم بلند در Violin Plot الزاماً به این معنی نیست
+        که تمام نقاط موجود در آن دم طبق قانون IQR Outlier هستند.
+        برای تشخیص رسمی Outlier بهتر است از معیار مشخصی مانند
+        IQR استفاده شود.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 12 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۲. آیا Violin Plot برای تشخیص Outlier کافی است؟</h2>
+
+    <p>
+        Violin Plot برای مشاهده‌ی شکل کلی توزیع بسیار مناسب است،
+        اما به تنهایی بهترین ابزار برای شناسایی دقیق Outlier نیست.
+    </p>
+
+    <p>
+        دلیل این موضوع این است که Violin بیشتر روی
+        <strong>Density</strong>
+        تمرکز دارد.
+        بنابراین ممکن است یک مقدار بسیار دور در شکل KDE فقط به صورت
+        یک دم بسیار باریک دیده شود.
+    </p>
+
+    <p>
+        در چنین شرایطی استفاده‌ی همزمان از
+        <strong>Violin Plot و Box Plot</strong>
+        تصویر کامل‌تری ارائه می‌دهد:
+    </p>
+
+    <ul>
+
+        <li>
+            Violin Plot → شکل و تراکم توزیع
+        </li>
+
+        <li>
+            Box Plot → Median، Quartile، IQR و Outlier
+        </li>
+
+        <li>
+            KDE → جزئیات چگالی توزیع
+        </li>
+
+    </ul>
+
+    <!-- ===================================================== -->
+    <!-- 13 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۳. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Violin Plot</strong>
+                شکل و چگالی توزیع داده را نمایش می‌دهد.
+            </li>
+
+            <li>
+                <strong>پهنای Violin</strong>
+                نشان‌دهنده‌ی Density داده در آن مقدار است.
+            </li>
+
+            <li>
+                در حالت
+                <strong>No Outliers</strong>
+                شکل اصلی توزیع نرمال تقریباً بدون دم‌های غیرعادی دیده می‌شود.
+            </li>
+
+            <li>
+                اضافه شدن چند Outlier باعث ایجاد دم‌های کشیده‌تر
+                در سمت مربوطه می‌شود.
+            </li>
+
+            <li>
+                افزایش تعداد Outlierها می‌تواند تأثیر بیشتری روی
+                تخمین Density و شکل Violin داشته باشد.
+            </li>
+
+            <li>
+                Outlierهای متقارن می‌توانند باعث گسترش هر دو دم شوند
+                بدون اینکه الزاماً توزیع را Skewed کنند.
+            </li>
+
+            <li>
+                حتی یک Outlier بسیار شدید می‌تواند دامنه‌ی Violin را
+                به شدت افزایش دهد.
+            </li>
+
+            <li>
+                بخش مرکزی Violin همچنان عمدتاً توسط داده‌های اصلی
+                تعیین می‌شود.
+            </li>
+
+            <li>
+                برای تشخیص دقیق Outlier بهتر است Violin Plot را
+                در کنار Box Plot استفاده کنیم.
+            </li>
+
+            <li>
+                <strong>Violin Plot → Distribution</strong>
+                و
+                <strong>Box Plot → Quartiles / IQR / Outliers</strong>.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

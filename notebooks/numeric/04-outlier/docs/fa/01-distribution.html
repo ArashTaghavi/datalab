@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه توزیع داده‌ها در حضور Outlierهای مختلف
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Outlier چیست؟</h2>
+
+    <p>
+        Outlier یا <strong>داده پرت</strong> مقداری است که فاصله‌ی قابل‌توجهی
+        با بخش اصلی داده‌ها دارد و خارج از الگوی معمول توزیع قرار می‌گیرد.
+        وجود Outlierها می‌تواند روی شکل توزیع و همچنین بسیاری از شاخص‌های
+        آماری تأثیر بگذارد.
+    </p>
+
+    <p>
+        در این تحلیل، یک توزیع نرمال پایه با
+        <code>Mean = 170</code>
+        و
+        <code>SD = 8</code>
+        ساخته شده و سپس در پنج حالت مختلف، Outlierها به آن اضافه شده‌اند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        هدف این تحلیل این است که ببینیم وقتی Outlierها را به یک توزیع نسبتاً
+        نرمال اضافه می‌کنیم، شکل توزیع، مرکز داده، پراکندگی و دامنه‌ی مقادیر
+        چگونه تغییر می‌کنند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        تمام دیتاست‌ها از یک توزیع نرمال پایه با پارامترهای زیر شروع شده‌اند:
+    </p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>مقدار</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Distribution</td>
+                <td>Normal</td>
+            </tr>
+
+            <tr>
+                <td>Mean</td>
+                <td>۱۷۰</td>
+            </tr>
+
+            <tr>
+                <td>Standard Deviation</td>
+                <td>۸</td>
+            </tr>
+
+            <tr>
+                <td>Sample Size</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <p>
+        سپس پنج سناریوی مختلف ایجاد شده است:
+    </p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>نوع تغییر</th>
+                <th>تعداد Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>No Outliers</td>
+                <td>بدون Outlier</td>
+                <td>۰</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>چند Outlier در سمت راست</td>
+                <td>۳</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>تعداد زیادی Outlier در سمت راست</td>
+                <td>۱۰</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>Outlier در دو طرف توزیع</td>
+                <td>۱۰</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>یک Outlier بسیار شدید</td>
+                <td>۱</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. توزیع پایه بدون Outlier</h2>
+
+    <h3>۳.۱. حالت No Outliers</h3>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        هیچ مقداری به‌صورت مصنوعی از توزیع اصلی حذف یا اضافه نشده است.
+        بنابراین داده‌ها همان توزیع نرمال پایه با میانگین حدود ۱۷۰ و
+        انحراف معیار حدود ۸ را تشکیل می‌دهند.
+    </p>
+
+    <p>
+        در این حالت، انتظار داریم بیشتر داده‌ها در اطراف میانگین متمرکز
+        باشند و با فاصله گرفتن از مرکز، تعداد داده‌ها کاهش پیدا کند.
+    </p>
+
+    <p>
+        این دیتاست به‌عنوان
+        <strong>Baseline</strong>
+        برای مقایسه با چهار حالت دیگر استفاده می‌شود.
+    </p>
+
+    <div class="formula">
+        Base Distribution → Mean ≈ 170 &nbsp; | &nbsp; SD ≈ 8
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. اثر چند Outlier</h2>
+
+    <h3>۴.۱. حالت Few Outliers</h3>
+
+    <p>
+        در این حالت فقط سه مقدار به انتهای سمت راست توزیع منتقل شده‌اند:
+    </p>
+
+    <div class="formula">
+        205 &nbsp;&nbsp; 215 &nbsp;&nbsp; 225
+    </div>
+
+    <p>
+        تعداد این مقادیر در مقایسه با حجم کل داده بسیار کم است؛
+        بنابراین بخش اصلی توزیع همچنان تقریباً مشابه حالت اولیه باقی می‌ماند.
+    </p>
+
+    <p>
+        با این حال، همین چند مقدار می‌توانند دامنه‌ی داده را به شکل قابل‌توجهی
+        افزایش دهند، زیرا بیشینه‌ی داده از محدوده‌ی معمول توزیع فاصله می‌گیرد.
+    </p>
+
+    <p>
+        از طرف دیگر، چون Outlierها در سمت راست قرار گرفته‌اند،
+        ممکن است میانگین را کمی به سمت راست منتقل کنند.
+    </p>
+
+    <div class="note">
+        <strong>نتیجه:</strong>
+        تعداد کم Outlier لزوماً شکل اصلی توزیع را کاملاً خراب نمی‌کند،
+        اما می‌تواند روی شاخص‌هایی مانند Mean، Standard Deviation و Range
+        اثر بگذارد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اثر افزایش تعداد Outlierها</h2>
+
+    <h3>۵.۱. حالت Many Outliers</h3>
+
+    <p>
+        در این حالت تعداد Outlierهای سمت راست از ۳ مقدار به ۱۰ مقدار افزایش
+        پیدا کرده است.
+    </p>
+
+    <p>
+        مقادیر Outlier از
+        <code>195</code>
+        تا
+        <code>222</code>
+        قرار گرفته‌اند.
+    </p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>تعداد Outlier</th>
+                <th>کمینه Outlier</th>
+                <th>بیشینه Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>۱۰</td>
+                <td>۱۹۵</td>
+                <td>۲۲۲</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <p>
+        در مقایسه با حالت
+        <code>Few Outliers</code>،
+        تعداد بیشتری از داده‌ها در سمت راست توزیع قرار گرفته‌اند.
+        بنابراین تأثیر آن‌ها روی شاخص‌های آماری نیز بیشتر خواهد بود.
+    </p>
+
+    <p>
+        افزایش تعداد Outlierها باعث می‌شود:
+    </p>
+
+    <ul>
+
+        <li>
+            <strong>Mean</strong>
+            بیشتر تحت تأثیر مقادیر بزرگ قرار گیرد.
+        </li>
+
+        <li>
+            <strong>Standard Deviation</strong>
+            افزایش پیدا کند.
+        </li>
+
+        <li>
+            <strong>Range</strong>
+            افزایش قابل‌توجهی پیدا کند.
+        </li>
+
+        <li>
+            بخش سمت راست توزیع کشیده‌تر شود.
+        </li>
+
+    </ul>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. Outlierهای متقارن</h2>
+
+    <h3>۶.۱. حالت Symmetric Outliers</h3>
+
+    <p>
+        در این حالت Outlierها در هر دو طرف توزیع قرار گرفته‌اند.
+    </p>
+
+    <p>
+        پنج مقدار پایین‌تر از توزیع اصلی و پنج مقدار بالاتر از آن قرار داده
+        شده‌اند:
+    </p>
+
+    <div class="formula">
+        Lower Outliers:
+        135, 140, 145, 150, 155
+        <br>
+        Upper Outliers:
+        185, 190, 195, 200, 205
+    </div>
+
+    <p>
+        نکته مهم این است که Outlierها در هر دو جهت قرار گرفته‌اند.
+        بنابراین اثر آن‌ها روی Mean تا حدی یکدیگر را خنثی می‌کند.
+    </p>
+
+    <p>
+        در نتیجه ممکن است میانگین همچنان نزدیک به مقدار مرکزی اولیه باقی بماند،
+        اما پراکندگی داده‌ها افزایش پیدا کند.
+    </p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>اثر Outlierهای متقارن</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Mean</td>
+                <td>تغییر نسبتاً محدود</td>
+            </tr>
+
+            <tr>
+                <td>Standard Deviation</td>
+                <td>افزایش</td>
+            </tr>
+
+            <tr>
+                <td>Range</td>
+                <td>افزایش زیاد</td>
+            </tr>
+
+            <tr>
+                <td>تقارن</td>
+                <td>تا حد زیادی حفظ می‌شود</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="warning">
+        <strong>نکته:</strong>
+        متقارن بودن Outlierها به این معنی نیست که آن‌ها بی‌اثر هستند.
+        حتی اگر Mean تقریباً ثابت بماند، مقادیر دور از مرکز می‌توانند
+        Standard Deviation و Range را به‌شدت افزایش دهند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. یک Outlier بسیار شدید</h2>
+
+    <h3>۷.۱. حالت One Extreme Outlier</h3>
+
+    <p>
+        در این حالت تنها یک مقدار تغییر داده شده و مقدار آن برابر با
+        <code>300</code>
+        قرار گرفته است.
+    </p>
+
+    <p>
+        نکته جالب این سناریو این است که فقط
+        <strong>یک داده از ۱۰۰۰ داده</strong>
+        تغییر کرده است، اما فاصله‌ی آن از بخش اصلی داده بسیار زیاد است.
+    </p>
+
+    <p>
+        بنابراین تعداد Outlier به‌تنهایی معیار مناسبی برای سنجش اثر آن نیست؛
+        <strong>شدت فاصله‌ی Outlier از مرکز داده</strong>
+        نیز اهمیت زیادی دارد.
+    </p>
+
+    <div class="formula">
+        1 Extreme Outlier → Value = 300
+    </div>
+
+    <p>
+        این مقدار می‌تواند دامنه‌ی داده را به‌شدت افزایش دهد و همچنین
+        Standard Deviation را تحت تأثیر قرار دهد.
+        Mean نیز به سمت مقدار بزرگ‌تر کشیده خواهد شد، هرچند تنها یک
+        مشاهده تغییر کرده است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. مقایسه‌ی اثر انواع Outlier</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>سناریو</th>
+                <th>تعداد Outlier</th>
+                <th>جهت</th>
+                <th>شدت</th>
+                <th>اثر اصلی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>No Outliers</td>
+                <td>۰</td>
+                <td>—</td>
+                <td>—</td>
+                <td>Baseline</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>۳</td>
+                <td>راست</td>
+                <td>متوسط تا زیاد</td>
+                <td>افزایش جزئی پراکندگی</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>۱۰</td>
+                <td>راست</td>
+                <td>متوسط تا زیاد</td>
+                <td>افزایش محسوس پراکندگی و کشیدگی راست</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>۱۰</td>
+                <td>دو طرف</td>
+                <td>متوسط</td>
+                <td>افزایش پراکندگی با حفظ نسبی تقارن</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>۱</td>
+                <td>راست</td>
+                <td>بسیار زیاد</td>
+                <td>اثر شدید روی Range و SD</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. Mean و Standard Deviation در حضور Outlier</h2>
+
+    <p>
+        یکی از مهم‌ترین نکات این مثال، تفاوت رفتار
+        <strong>Mean</strong>
+        و
+        <strong>Standard Deviation</strong>
+        در برابر Outlier است.
+    </p>
+
+    <p>
+        Mean از تمام مقادیر برای محاسبه‌ی مرکز استفاده می‌کند.
+        بنابراین مقادیر بسیار بزرگ یا بسیار کوچک می‌توانند آن را
+        به سمت خود بکشند.
+    </p>
+
+    <p>
+        Standard Deviation نیز نسبت به مقادیر دور از Mean حساس است؛
+        زیرا فاصله‌ی هر مقدار از میانگین در محاسبه‌ی پراکندگی نقش دارد
+        و این فاصله‌ها به‌صورت توان دوم وارد محاسبه می‌شوند.
+    </p>
+
+    <div class="formula">
+        Outlier ↑
+        &nbsp;&nbsp;→&nbsp;&nbsp;
+        Distance from Mean ↑
+        &nbsp;&nbsp;→&nbsp;&nbsp;
+        Standard Deviation ↑
+    </div>
+
+    <p>
+        به همین دلیل ممکن است حتی یک Outlier بسیار شدید، تأثیر بیشتری
+        از چند Outlier متوسط روی Standard Deviation داشته باشد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. آیا Outlier همیشه شکل توزیع را تغییر می‌دهد؟</h2>
+
+    <p>
+        الزاماً نه.
+    </p>
+
+    <p>
+        اگر تعداد Outlierها کم باشد، بخش عمده‌ی داده‌ها همچنان همان الگوی
+        اصلی را حفظ می‌کنند. در چنین حالتی ممکن است مرکز اصلی توزیع
+        تقریباً دست‌نخورده باقی بماند، در حالی که Range و Standard Deviation
+        تغییر قابل‌توجهی داشته باشند.
+    </p>
+
+    <p>
+        اما وقتی تعداد Outlierها افزایش پیدا کند یا Outlierها بسیار دور
+        از مرکز باشند، اثر آن‌ها روی شکل کلی توزیع نیز بیشتر می‌شود.
+    </p>
+
+    <div class="note">
+        <strong>اصل مهم:</strong>
+        برای بررسی Outlier فقط به تعداد آن‌ها نگاه نکنید.
+        باید همزمان
+        <strong>تعداد، فاصله از مرکز و جهت Outlierها</strong>
+        را بررسی کنید.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>No Outliers</strong>
+                → توزیع پایه تقریباً نرمال با
+                Mean ≈ 170 و SD ≈ 8.
+            </li>
+
+            <li>
+                <strong>Few Outliers</strong>
+                → چند مقدار دور از مرکز، با اثر محدودتر روی شکل اصلی
+                اما اثر قابل مشاهده روی Range و شاخص‌های حساس.
+            </li>
+
+            <li>
+                <strong>Many Outliers</strong>
+                → افزایش تعداد مقادیر دور از مرکز و در نتیجه افزایش
+                محسوس پراکندگی و کشیدگی توزیع.
+            </li>
+
+            <li>
+                <strong>Symmetric Outliers</strong>
+                → افزایش پراکندگی در دو جهت، در حالی که Mean می‌تواند
+                نسبتاً نزدیک به مرکز باقی بماند.
+            </li>
+
+            <li>
+                <strong>One Extreme Outlier</strong>
+                → حتی یک مقدار بسیار دور می‌تواند روی
+                Range و Standard Deviation اثر شدیدی بگذارد.
+            </li>
+
+            <li>
+                <strong>Mean</strong>
+                → نسبت به Outlier حساس است و می‌تواند به سمت آن کشیده شود.
+            </li>
+
+            <li>
+                <strong>Standard Deviation</strong>
+                → نسبت به مقادیر دور از مرکز حساس است و با افزایش
+                Outlierهای شدید معمولاً افزایش پیدا می‌کند.
+            </li>
+
+            <li>
+                برای تحلیل Outlier باید همزمان
+                <strong>تعداد، شدت و جهت</strong>
+                آن‌ها بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Mean ± Standard Deviation
+        برای توزیع‌های دارای Outlier
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: نمودار Mean ± Standard Deviation چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Mean ± Standard Deviation</strong>
+        برای نمایش هم‌زمان
+        <strong>مرکز داده‌ها</strong>
+        و
+        <strong>میزان پراکندگی آن‌ها</strong>
+        استفاده می‌شود.
+    </p>
+
+    <p>
+        در این نمودار، نقطه‌ی اصلی نشان‌دهنده‌ی
+        <strong>Mean</strong>
+        است و خط عمودی اطراف آن محدوده‌ی
+        <strong>یک انحراف معیار در بالا و پایین میانگین</strong>
+        را نمایش می‌دهد.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Mean ± SD یک نمودار بسیار حساس به Outlier است.
+        دلیل آن این است که هم Mean و هم Standard Deviation
+        تحت تأثیر مقادیر بسیار دور از مرکز قرار می‌گیرند.
+        بنابراین این نمودار می‌تواند اثر Outlierها بر
+        مرکز و پراکندگی داده را به‌خوبی نشان دهد.
+    </div>
+
+    <h3>اجزای نمودار</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>مفهوم</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Point</strong></td>
+                <td>Mean</td>
+                <td>مرکز میانگین داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Upper Cap</strong></td>
+                <td>Mean + SD</td>
+                <td>یک SD بالاتر از میانگین</td>
+            </tr>
+
+            <tr>
+                <td><strong>Lower Cap</strong></td>
+                <td>Mean - SD</td>
+                <td>یک SD پایین‌تر از میانگین</td>
+            </tr>
+
+            <tr>
+                <td><strong>Vertical Line</strong></td>
+                <td>± SD</td>
+                <td>میزان پراکندگی اطراف Mean</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با یک توزیع نرمال پایه
+        ایجاد شده‌اند و در هرکدام رفتار متفاوتی از
+        <strong>Outlier</strong>
+        بررسی می‌شود.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>نوع Outlier</th>
+                <th>تعداد Outlier</th>
+                <th>محدوده تقریبی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>بدون Outlier</td>
+                <td>۰</td>
+                <td>توزیع پایه</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>چند Outlier سمت راست</td>
+                <td>۳</td>
+                <td>205 تا 225</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>Outlierهای متعدد سمت راست</td>
+                <td>۱۰</td>
+                <td>195 تا 222</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>Outlier در هر دو سمت</td>
+                <td>۱۰</td>
+                <td>135 تا 205</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>یک Outlier بسیار شدید</td>
+                <td>۱</td>
+                <td>300</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        توزیع پایه از یک توزیع نرمال با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        ساخته شده است.
+        بنابراین در حالت بدون Outlier انتظار داریم
+        Mean و SD تقریباً نزدیک به پارامترهای اصلی باشند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. حالت بدون Outlier</h2>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        تمام داده‌ها از همان توزیع نرمال پایه گرفته شده‌اند
+        و هیچ مقدار مصنوعی و دورافتاده‌ای به آن‌ها اضافه نشده است.
+    </p>
+
+    <p>
+        بنابراین Mean تقریباً در اطراف
+        <strong>۱۷۰</strong>
+        قرار می‌گیرد و SD نیز تقریباً نزدیک به
+        <strong>۸</strong>
+        خواهد بود.
+    </p>
+
+    <p>
+        در نمودار Mean ± SD، نقطه‌ی Mean تقریباً در مرکز
+        داده‌ها قرار می‌گیرد و خط عمودی نیز پراکندگی طبیعی
+        توزیع را نمایش می‌دهد.
+    </p>
+
+    <div class="summary">
+        <strong>نتیجه:</strong>
+        در نبود Outlier، Mean و SD نماینده‌ی مناسبی برای
+        مرکز و پراکندگی این توزیع نرمال هستند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. اثر Few Outliers</h2>
+
+    <p>
+        در دیتاست
+        <code>Few Outliers</code>
+        فقط سه مقدار بسیار بزرگ
+        <code>205</code>،
+        <code>215</code>
+        و
+        <code>225</code>
+        به انتهای توزیع اضافه شده‌اند.
+    </p>
+
+    <p>
+        اگرچه تعداد این مقادیر بسیار کم است،
+        اما فاصله‌ی آن‌ها از مرکز توزیع زیاد است.
+        بنابراین می‌توانند Mean و به‌خصوص SD را تحت تأثیر قرار دهند.
+    </p>
+
+    <h3>۴.۱. اثر بر Mean</h3>
+
+    <p>
+        مقادیر بسیار بزرگ باعث می‌شوند
+        <strong>Mean به سمت راست حرکت کند</strong>.
+        یعنی میانگین دیگر دقیقاً نماینده‌ی مرکز بخش اصلی داده‌ها نیست
+        و مقداری به سمت Outlierها کشیده می‌شود.
+    </p>
+
+    <h3>۴.۲. اثر بر Standard Deviation</h3>
+
+    <p>
+        از آن‌جایی که SD فاصله‌ی داده‌ها از Mean را اندازه‌گیری می‌کند،
+        مقادیر دورافتاده باعث افزایش قابل توجه پراکندگی می‌شوند.
+        بنابراین طول بازه‌ی
+        <strong>Mean ± SD</strong>
+        نیز افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        در نتیجه در نمودار انتظار داریم هم نقطه‌ی Mean کمی به سمت راست
+        جابه‌جا شود و هم خطای عمودی بلندتر شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اثر Many Outliers</h2>
+
+    <p>
+        در دیتاست
+        <code>Many Outliers</code>
+        تعداد Outlierهای سمت راست به ۱۰ مقدار افزایش پیدا کرده است.
+    </p>
+
+    <p>
+        این بار تأثیر Outlierها بسیار واضح‌تر خواهد بود؛
+        زیرا علاوه بر فاصله‌ی زیاد از مرکز،
+        تعداد بیشتری از داده‌ها نیز در ناحیه‌ی دور از مرکز قرار دارند.
+    </p>
+
+    <h3>۵.۱. Mean</h3>
+
+    <p>
+        تعداد زیاد مقادیر بزرگ باعث می‌شود Mean بیشتر به سمت راست
+        کشیده شود.
+        بنابراین فاصله‌ی Mean مشاهده‌شده از مرکز توزیع پایه
+        نسبت به حالت
+        <code>Few Outliers</code>
+        بیشتر خواهد بود.
+    </p>
+
+    <h3>۵.۲. Standard Deviation</h3>
+
+    <p>
+        وجود چندین مقدار دور از مرکز باعث افزایش شدیدتر SD می‌شود.
+        بنابراین محدوده‌ی
+        <code>Mean - SD</code>
+        تا
+        <code>Mean + SD</code>
+        گسترده‌تر خواهد شد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته:</strong>
+        افزایش SD در این حالت الزاماً به این معنی نیست که
+        بخش اصلی داده‌ها واقعاً پراکندگی بیشتری پیدا کرده است.
+        بخشی از این افزایش صرفاً ناشی از وجود Outlierها است.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. اثر Outlierهای متقارن</h2>
+
+    <p>
+        در دیتاست
+        <code>Symmetric Outliers</code>
+        Outlierها در هر دو سمت توزیع قرار گرفته‌اند.
+    </p>
+
+    <p>
+        در سمت پایین مقادیر
+        <code>135</code>
+        تا
+        <code>155</code>
+        و در سمت بالا مقادیر
+        <code>185</code>
+        تا
+        <code>205</code>
+        قرار دارند.
+    </p>
+
+    <h3>۶.۱. اثر بر Mean</h3>
+
+    <p>
+        از آن‌جایی که Outlierها تقریباً به شکل متقارن
+        در دو طرف مرکز قرار گرفته‌اند،
+        اثر آن‌ها روی Mean تا حد زیادی یکدیگر را خنثی می‌کند.
+    </p>
+
+    <p>
+        بنابراین Mean ممکن است همچنان نزدیک به
+        <strong>۱۷۰</strong>
+        باقی بماند.
+    </p>
+
+    <h3>۶.۲. اثر بر SD</h3>
+
+    <p>
+        با وجود این، SD همچنان افزایش پیدا می‌کند.
+        دلیل این است که SD به فاصله‌ی داده‌ها از Mean
+        حساس است و Outlier در هر دو طرف باعث افزایش
+        این فاصله‌ها می‌شود.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        این دیتاست یک مثال بسیار خوب برای تفاوت
+        Mean و SD است:
+        ممکن است Mean تقریباً ثابت بماند،
+        اما SD به دلیل وجود مقادیر دور از مرکز افزایش پیدا کند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. اثر یک Outlier بسیار شدید</h2>
+
+    <p>
+        در دیتاست
+        <code>One Extreme Outlier</code>
+        فقط یک مقدار اضافه شده است:
+        <code>300</code>.
+    </p>
+
+    <p>
+        این مثال نشان می‌دهد که برای تحت تأثیر قرار دادن
+        Mean و SD الزاماً به تعداد زیادی Outlier نیاز نداریم.
+        حتی یک مقدار بسیار دور از مرکز می‌تواند اثر قابل توجهی ایجاد کند.
+    </p>
+
+    <h3>۷.۱. اثر بر Mean</h3>
+
+    <p>
+        مقدار ۳۰۰ فاصله‌ی بسیار زیادی از مرکز تقریبی ۱۷۰ دارد.
+        بنابراین Mean به سمت راست کشیده می‌شود.
+    </p>
+
+    <h3>۷.۲. اثر بر SD</h3>
+
+    <p>
+        اثر این مقدار روی SD حتی می‌تواند شدیدتر باشد،
+        زیرا SD بر اساس فاصله‌ی داده‌ها از Mean و
+        <strong>مجذور این فاصله‌ها</strong>
+        محاسبه می‌شود.
+    </p>
+
+    <p>
+        بنابراین یک مقدار بسیار دور می‌تواند سهم بزرگی
+        در افزایش Variance و در نتیجه Standard Deviation داشته باشد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. مقایسه‌ی پنج دیتاست</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>اثر بر Mean</th>
+                <th>اثر بر SD</th>
+                <th>شکل Mean ± SD</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>تقریباً بدون تغییر</td>
+                <td>طبیعی</td>
+                <td>کوتاه و متعادل</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>کمی به راست</td>
+                <td>افزایش</td>
+                <td>بلندتر و نامتقارن</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>بیشتر به راست</td>
+                <td>افزایش قابل توجه</td>
+                <td>بازه بسیار گسترده</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>تغییر کم</td>
+                <td>افزایش</td>
+                <td>گسترده و نسبتاً متقارن</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>کشیده‌شده به راست</td>
+                <td>افزایش شدید</td>
+                <td>بازه بسیار گسترده</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. چرا Mean و SD برای Outlierها حساس هستند؟</h2>
+
+    <p>
+        Mean از تمام مقادیر برای محاسبه‌ی مرکز استفاده می‌کند.
+        بنابراین یک مقدار بسیار بزرگ یا بسیار کوچک
+        می‌تواند مرکز محاسبه‌شده را جابه‌جا کند.
+    </p>
+
+    <p>
+        Standard Deviation نیز به دلیل استفاده از
+        <strong>Squared Deviation</strong>
+        حساسیت بیشتری به مقادیر دور از Mean دارد.
+    </p>
+
+    <div class="formula">
+        Variance =
+        Σ(xᵢ - Mean)² / (n - 1)
+    </div>
+
+    <p>
+        به دلیل وجود توان دوم، هرچه فاصله‌ی یک مقدار از Mean بیشتر شود،
+        سهم آن در محاسبه‌ی Variance با سرعت بیشتری افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        بنابراین یک Outlier شدید می‌تواند هم Mean را جابه‌جا کند
+        و هم SD را به شکل قابل توجهی افزایش دهد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. Mean ± SD چه چیزی را نشان می‌دهد؟</h2>
+
+    <p>
+        در این نمودار باید به دو ویژگی اصلی توجه کرد:
+    </p>
+
+    <ul>
+        <li>
+            <strong>موقعیت نقطه:</strong>
+            نشان‌دهنده‌ی Mean و مرکز محاسبه‌شده‌ی داده‌ها است.
+        </li>
+
+        <li>
+            <strong>طول خط عمودی:</strong>
+            نشان‌دهنده‌ی Standard Deviation و میزان پراکندگی است.
+        </li>
+    </ul>
+
+    <p>
+        بنابراین اگر نقطه به سمت راست حرکت کند،
+        احتمالاً Mean تحت تأثیر مقادیر بزرگ قرار گرفته است.
+        اگر خط عمودی بلندتر شود،
+        احتمالاً پراکندگی محاسبه‌شده افزایش یافته است.
+    </p>
+
+    <p>
+        با این حال، این نمودار به‌تنهایی مشخص نمی‌کند
+        که افزایش SD ناشی از پراکندگی واقعی بخش اصلی داده‌هاست
+        یا به دلیل چند Outlier ایجاد شده است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. مقایسه با Median و IQR</h2>
+
+    <p>
+        یکی از نکات مهم در تحلیل Outlier این است که
+        Mean و SD معیارهای
+        <strong>حساس به Outlier</strong>
+        هستند.
+    </p>
+
+    <p>
+        در مقابل، Median و IQR نسبت به Outlierها
+        مقاومت بیشتری دارند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>معیار</th>
+                <th>حساسیت به Outlier</th>
+                <th>کاربرد</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mean</td>
+                <td>زیاد</td>
+                <td>مرکز داده در شرایط نسبتاً تمیز</td>
+            </tr>
+
+            <tr>
+                <td>Standard Deviation</td>
+                <td>زیاد</td>
+                <td>پراکندگی داده در شرایط نسبتاً تمیز</td>
+            </tr>
+
+            <tr>
+                <td>Median</td>
+                <td>کم</td>
+                <td>مرکز مقاوم در برابر Outlier</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>کم</td>
+                <td>پراکندگی مقاوم در برابر Outlier</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        به همین دلیل برای دیتاست‌هایی که Outlier زیادی دارند،
+        بهتر است Mean ± SD را در کنار
+        <strong>Box Plot</strong>
+        یا
+        <strong>Violin Plot</strong>
+        بررسی کنیم تا شکل واقعی توزیع نیز دیده شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 12 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۲. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>بدون Outlier</strong>
+                → Mean و SD رفتار طبیعی‌تری دارند.
+            </li>
+
+            <li>
+                <strong>Few Outliers</strong>
+                → Mean کمی جابه‌جا شده و SD افزایش پیدا می‌کند.
+            </li>
+
+            <li>
+                <strong>Many Outliers</strong>
+                → هم Mean و هم SD به شکل واضح‌تری تحت تأثیر قرار می‌گیرند.
+            </li>
+
+            <li>
+                <strong>Symmetric Outliers</strong>
+                → اثر Outlierها روی Mean تا حد زیادی خنثی می‌شود،
+                اما SD همچنان افزایش می‌یابد.
+            </li>
+
+            <li>
+                <strong>One Extreme Outlier</strong>
+                → حتی یک مقدار بسیار دور می‌تواند Mean و به‌خصوص SD
+                را به شدت تحت تأثیر قرار دهد.
+            </li>
+
+            <li>
+                Mean ± SD برای مشاهده‌ی سریع
+                <strong>مرکز و پراکندگی</strong>
+                مفید است، اما برای تشخیص Outlier به‌تنهایی کافی نیست.
+            </li>
+
+            <li>
+                برای داده‌های دارای Outlier،
+                Median و IQR معمولاً معیارهای مقاوم‌تری هستند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Violin Plot برای توزیع‌های Heavy-Tailed
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Violin Plot</strong>
+        یکی از ابزارهای مناسب برای بررسی و مقایسه‌ی توزیع داده‌های عددی است.
+        این نمودار ترکیبی از اطلاعات
+        <strong>توزیع داده، چگالی احتمال و آمارهای مرکزی</strong>
+        را در یک نمایش واحد ارائه می‌کند.
+    </p>
+
+    <p>
+        بخش اصلی Violin Plot از یک
+        <strong>KDE (Kernel Density Estimation)</strong>
+        ساخته می‌شود.
+        در واقع پهنای ویولن در هر مقدار از محور عمودی نشان می‌دهد
+        که داده‌ها در آن ناحیه چه میزان تراکمی دارند.
+    </p>
+
+    <p>
+        بنابراین برخلاف Box Plot که بیشتر روی
+        <strong>Quartileها، Median، IQR و Outlierها</strong>
+        تمرکز دارد،
+        Violin Plot شکل کامل‌تری از توزیع را نیز نمایش می‌دهد.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>نام</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Width</strong></td>
+                <td>Density</td>
+                <td>میزان تراکم داده در یک مقدار مشخص</td>
+            </tr>
+
+            <tr>
+                <td><strong>Center</strong></td>
+                <td>Location</td>
+                <td>محل قرارگیری بخش مرکزی توزیع</td>
+            </tr>
+
+            <tr>
+                <td><strong>Shape</strong></td>
+                <td>Distribution Shape</td>
+                <td>شکل کلی و رفتار توزیع داده</td>
+            </tr>
+
+            <tr>
+                <td><strong>Width Variation</strong></td>
+                <td>Density Variation</td>
+                <td>تغییر تراکم داده در مقادیر مختلف</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tails</strong></td>
+                <td>Tail Behavior</td>
+                <td>رفتار داده‌ها در فاصله‌های دور از مرکز</td>
+            </tr>
+
+            <tr>
+                <td><strong>Outliers</strong></td>
+                <td>Unusual Observations</td>
+                <td>مقادیر بسیار دور از بخش مرکزی</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Violin Plot در اصل یک نمایش بصری از KDE است.
+        بنابراین برخلاف Box Plot که اطلاعات آن مستقیماً بر اساس
+        Quartileها محاسبه می‌شود، شکل ویولن به
+        <strong>KDE و پارامترهای تخمین چگالی</strong>
+        نیز وابسته است.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با رفتار
+        <strong>Heavy-Tailed</strong>
+        بررسی می‌شوند.
+        این داده‌ها از توزیع
+        <strong>Student's t-distribution</strong>
+        تولید شده‌اند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>توزیع</th>
+                <th>Degree of Freedom</th>
+                <th>مکان</th>
+                <th>Scale</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Heavy Tail</td>
+                <td>Student's t</td>
+                <td>15</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Heavy Tail</td>
+                <td>Student's t</td>
+                <td>8</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Strong Heavy Tail</td>
+                <td>Student's t</td>
+                <td>5</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Heavy Tail</td>
+                <td>Student's t</td>
+                <td>3</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Heavy Tail + Outliers</td>
+                <td>Student's t</td>
+                <td>8</td>
+                <td>170</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        چهار دیتاست اول فقط در مقدار
+        <code>df</code>
+        تفاوت دارند.
+        با کاهش مقدار
+        <code>df</code>،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+    <p>
+        دیتاست پنجم نیز از
+        <code>df = 8</code>
+        ساخته شده، اما پنج مقدار بسیار بزرگ به انتهای آن اضافه شده‌اند
+        تا اثر Outlierها روی شکل Violin Plot بررسی شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. رابطه‌ی Heavy Tail با شکل Violin Plot</h2>
+
+    <p>
+        مهم‌ترین چیزی که در Violin Plot باید بررسی کنیم،
+        <strong>شکل ویولن در نواحی دور از مرکز</strong>
+        است.
+        از آنجا که شکل ویولن توسط KDE ساخته می‌شود،
+        Heavy Tail می‌تواند باعث شود بخش‌های انتهایی ویولن
+        نسبت به یک توزیع معمولی کشیده‌تر شوند.
+    </p>
+
+
+    <h3>۳.۱. حالت Mild Heavy Tail</h3>
+
+    <p>
+        در دیتاست
+        <code>Mild Heavy Tail</code>
+        مقدار
+        <code>df = 15</code>
+        است.
+        در این حالت دم‌ها نسبتاً سنگین هستند،
+        اما شدت آن‌ها هنوز زیاد نیست.
+    </p>
+
+    <p>
+        در Violin Plot، بخش مرکزی ویولن تراکم بیشتری دارد
+        و در قسمت‌های بالاتر و پایین‌تر، عرض ویولن کاهش پیدا می‌کند.
+        با این حال، دم‌ها همچنان قابل مشاهده هستند.
+    </p>
+
+    <p>
+        بنابراین شکل ویولن بیشتر روی بخش مرکزی متمرکز است
+        و کشیدگی انتهایی آن نسبتاً محدود باقی می‌ماند.
+    </p>
+
+
+    <h3>۳.۲. حالت Moderate Heavy Tail</h3>
+
+    <p>
+        با کاهش
+        <code>df</code>
+        از ۱۵ به ۸،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+    <p>
+        در Violin Plot این تغییر می‌تواند به صورت
+        <strong>کشیده‌تر شدن بخش‌های انتهایی ویولن</strong>
+        دیده شود.
+        یعنی چگالی در فاصله‌های بیشتری از مرکز همچنان قابل مشاهده است.
+    </p>
+
+    <p>
+        در نتیجه ویولن نسبت به حالت Mild،
+        ساختار گسترده‌تری در نواحی دور از مرکز خواهد داشت.
+    </p>
+
+
+    <h3>۳.۳. حالت Strong Heavy Tail</h3>
+
+    <p>
+        در حالت
+        <code>df = 5</code>
+        دم‌ها به شکل محسوسی سنگین‌تر می‌شوند.
+    </p>
+
+    <p>
+        یکی از ویژگی‌هایی که در Violin Plot می‌توان مشاهده کرد،
+        وجود تراکم قابل توجه در فاصله‌های دورتر از مرکز است.
+        بنابراین ویولن ممکن است در قسمت‌های انتهایی
+        کشیدگی بیشتری داشته باشد.
+    </p>
+
+    <p>
+        این موضوع نشان می‌دهد که مقادیر دور از مرکز
+        در این توزیع صرفاً موارد بسیار نادر نیستند،
+        بلکه بخشی از رفتار طبیعی توزیع محسوب می‌شوند.
+    </p>
+
+
+    <h3>۳.۴. حالت Extreme Heavy Tail</h3>
+
+    <p>
+        در دیتاست
+        <code>Extreme Heavy Tail</code>
+        مقدار
+        <code>df = 3</code>
+        است.
+        این حالت سنگین‌ترین دم را در میان چهار توزیع اصلی دارد.
+    </p>
+
+    <p>
+        در Violin Plot انتظار داریم اثر این دم‌های سنگین
+        در نواحی دور از مرکز بیشتر دیده شود.
+        ویولن می‌تواند در فاصله‌ی بیشتری از مرکز
+        امتداد پیدا کند و رفتار انتهایی برجسته‌تری داشته باشد.
+    </p>
+
+    <p>
+        این ویژگی یکی از مزیت‌های Violin Plot نسبت به Box Plot است؛
+        زیرا Box Plot عمدتاً اطلاعات خلاصه‌شده‌ی Quartileها را نمایش می‌دهد،
+        در حالی که Violin Plot شکل تخمینی توزیع را نیز نشان می‌دهد.
+    </p>
+
+
+    <h3>۳.۵. حالت Heavy Tail + Outliers</h3>
+
+    <p>
+        دیتاست
+        <code>Heavy Tail + Outliers</code>
+        بر اساس
+        <code>df = 8</code>
+        ساخته شده است و سپس پنج مقدار بسیار بزرگ به آن اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        215 &nbsp;&nbsp; 225 &nbsp;&nbsp; 240 &nbsp;&nbsp; 255 &nbsp;&nbsp; 275
+    </div>
+
+    <p>
+        این مقادیر فاصله‌ی زیادی از بخش مرکزی داده دارند.
+        بنابراین انتظار می‌رود بخش بالایی ویولن
+        به سمت مقادیر بزرگ‌تر کشیده شود.
+    </p>
+
+    <p>
+        با این حال، نحوه‌ی دیده شدن Outlierها در Violin Plot
+        به تنظیمات رسم نمودار نیز وابسته است.
+        برخلاف Box Plot، خود شکل ویولن الزاماً
+        Outlierها را به صورت نقاط جداگانه مشخص نمی‌کند.
+    </p>
+
+    <p>
+        بنابراین برای تشخیص دقیق Outlierها،
+        ترکیب Violin Plot با Box Plot می‌تواند اطلاعات کامل‌تری ارائه دهد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. عرض ویولن چه چیزی را نشان می‌دهد؟</h2>
+
+    <p>
+        یکی از مهم‌ترین نکات هنگام خواندن Violin Plot،
+        توجه به
+        <strong>عرض ویولن</strong>
+        است.
+    </p>
+
+    <p>
+        هرچه ویولن در یک مقدار خاص پهن‌تر باشد،
+        KDE تخمین می‌زند که تراکم داده در آن ناحیه بیشتر است.
+        هرچه باریک‌تر باشد،
+        تراکم داده کمتر است.
+    </p>
+
+    <div class="formula">
+        Wider Violin → Higher Density
+        <br><br>
+        Narrower Violin → Lower Density
+    </div>
+
+    <p>
+        بنابراین در یک توزیع Heavy-Tailed،
+        ممکن است بخش مرکزی ویولن بسیار پهن باشد،
+        اما در عین حال ویولن در فاصله‌های دورتر نیز
+        برای مدت بیشتری ادامه پیدا کند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        پهنای ویولن نشان‌دهنده‌ی مقدار داده در محور افقی نیست.
+        پهنا نشان‌دهنده‌ی
+        <strong>چگالی تخمینی</strong>
+        در آن مقدار از متغیر است.
+        به همین دلیل باید شکل کلی ویولن را در طول محور
+        بررسی کرد، نه فقط یک نقطه از آن را.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. مقایسه‌ی پنج دیتاست</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Mild</th>
+                <th>Moderate</th>
+                <th>Strong</th>
+                <th>Extreme</th>
+                <th>+ Outliers</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>شدت Heavy Tail</td>
+                <td>کم</td>
+                <td>متوسط</td>
+                <td>زیاد</td>
+                <td>بسیار زیاد</td>
+                <td>متوسط + Outlier</td>
+            </tr>
+
+            <tr>
+                <td>کشیدگی دم‌ها</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>زیاد</td>
+                <td>بسیار زیاد</td>
+                <td>زیاد</td>
+            </tr>
+
+            <tr>
+                <td>تراکم دور از مرکز</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>زیاد</td>
+                <td>بسیار زیاد</td>
+                <td>افزایش در انتها</td>
+            </tr>
+
+            <tr>
+                <td>طول احتمالی ویولن</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>زیاد</td>
+                <td>بسیار زیاد</td>
+                <td>کشیده‌تر</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        با مقایسه‌ی این پنج ویولن می‌توان مشاهده کرد که
+        با کاهش
+        <code>df</code>،
+        رفتار دم‌ها شدیدتر می‌شود.
+        این تغییر بیشتر در قسمت‌های انتهایی توزیع قابل مشاهده است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. تفاوت Heavy Tail و Outlier در Violin Plot</h2>
+
+    <p>
+        Violin Plot برای مشاهده‌ی تفاوت بین
+        <strong>Heavy Tail</strong>
+        و
+        <strong>Outlier</strong>
+        دید مناسبی ارائه می‌کند،
+        اما باید توجه داشت که این نمودار به تنهایی
+        مرز مشخصی برای Outlier تعریف نمی‌کند.
+    </p>
+
+    <p>
+        در Heavy-Tailed Distribution،
+        مقادیر دور از مرکز بخشی از ساختار طبیعی توزیع هستند.
+        بنابراین کشیده بودن دم ویولن لزوماً به معنی وجود
+        داده‌های اشتباه نیست.
+    </p>
+
+    <p>
+        در دیتاست
+        <code>Heavy Tail + Outliers</code>
+        پنج مقدار مشخص در انتهای توزیع قرار داده شده‌اند.
+        این مقادیر باعث می‌شوند بخش بالایی توزیع
+        به سمت مقادیر بسیار بزرگ‌تر امتداد پیدا کند.
+    </p>
+
+    <ul>
+        <li>
+            <strong>Heavy Tail</strong>
+            → وجود احتمال قابل توجه برای مقادیر دور از مرکز.
+        </li>
+
+        <li>
+            <strong>Violin Width</strong>
+            → چگالی تخمینی داده در هر مقدار.
+        </li>
+
+        <li>
+            <strong>Violin Length</strong>
+            → محدوده‌ای که KDE برای توزیع داده نشان می‌دهد.
+        </li>
+
+        <li>
+            <strong>Outlier</strong>
+            → مشاهده‌ای بسیار دور که در این دیتاست به صورت مصنوعی اضافه شده است.
+        </li>
+    </ul>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. نکته مهم درباره Kurtosis</h2>
+
+    <p>
+        Heavy Tail ارتباط نزدیکی با
+        <strong>Kurtosis</strong>
+        دارد.
+        هرچه دم‌های توزیع سنگین‌تر باشند،
+        احتمال مشاهده‌ی مقادیر بسیار دور از مرکز بیشتر می‌شود.
+    </p>
+
+    <p>
+        در این مجموعه با کاهش
+        <code>df</code>
+        از ۱۵ به ۳،
+        رفتار دم‌ها شدیدتر می‌شود.
+        بنابراین تفاوت اصلی بین این توزیع‌ها
+        باید در نواحی دور از مرکز مشاهده شود.
+    </p>
+
+    <p>
+        Violin Plot برای مشاهده‌ی این تغییر مناسب است،
+        زیرا برخلاف Box Plot فقط Quartileها را نمایش نمی‌دهد
+        و شکل تخمینی توزیع را نیز در اختیار ما قرار می‌دهد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        شکل Violin Plot کاملاً مستقل از روش تخمین KDE نیست.
+        پارامترهایی مانند
+        <strong>Bandwidth</strong>
+        می‌توانند روی میزان صاف یا کشیده دیده شدن دم‌ها اثر بگذارند.
+        بنابراین مقایسه‌ی چند Violin Plot زمانی معنی‌دارتر است
+        که همه‌ی آن‌ها با تنظیمات یکسان رسم شده باشند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>df بالاتر</strong>
+                → دم‌های سبک‌تر و توزیع نزدیک‌تر به رفتار نرمال.
+            </li>
+
+            <li>
+                <strong>df پایین‌تر</strong>
+                → دم‌های سنگین‌تر و احتمال بیشتر برای مقادیر دور از مرکز.
+            </li>
+
+            <li>
+                <strong>Violin Width</strong>
+                → میزان چگالی داده در هر مقدار را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>Violin Shape</strong>
+                → شکل تخمینی توزیع داده را نمایش می‌دهد.
+            </li>
+
+            <li>
+                Heavy Tail می‌تواند باعث کشیده‌تر شدن بخش‌های انتهایی
+                ویولن شود.
+            </li>
+
+            <li>
+                وجود مقدار دور از مرکز الزاماً به معنی Outlier بودن آن نیست؛
+                در یک توزیع Heavy-Tailed چنین مقادیری می‌توانند بخشی طبیعی
+                از توزیع باشند.
+            </li>
+
+            <li>
+                Violin Plot به تنهایی معیار مشخصی برای Outlier ندارد؛
+                برای این کار Box Plot اطلاعات دقیق‌تری ارائه می‌دهد.
+            </li>
+
+            <li>
+                برای تحلیل کامل Heavy Tail بهتر است
+                <strong>Violin Plot + Box Plot + KDE</strong>
+                در کنار یکدیگر بررسی شوند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

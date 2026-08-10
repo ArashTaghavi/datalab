@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار CDF برای داده‌های دارای Outlier
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: CDF چیست؟</h2>
+
+    <p>
+        CDF مخفف عبارت
+        <strong>Cumulative Distribution Function</strong>
+        (تابع توزیع تجمعی) است.
+        این تابع نشان می‌دهد که چه نسبتی از داده‌ها
+        <strong>کوچک‌تر یا مساوی یک مقدار مشخص</strong>
+        هستند.
+    </p>
+
+    <p>
+        به زبان ساده، اگر روی محور X یک مقدار مشخص را انتخاب کنیم،
+        مقدار CDF روی محور Y به ما می‌گوید چه درصدی از داده‌ها
+        تا آن نقطه قرار گرفته‌اند.
+        بنابراین CDF به جای تمرکز روی شکل چگالی،
+        <strong>تجمع داده‌ها</strong>
+        را در طول محور مقادیر نشان می‌دهد.
+    </p>
+
+    <div class="formula">
+        F(x) = P(X ≤ x)
+    </div>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        مقدار CDF همیشه بین ۰ و ۱ قرار دارد.
+        مقدار ۰ یعنی هنوز هیچ داده‌ای به آن مقدار نرسیده است
+        و مقدار ۱ یعنی تمام داده‌ها تا آن نقطه قرار گرفته‌اند.
+    </div>
+
+    <h3>محورهای نمودار CDF</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>محور</th>
+                <th>نام</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Value</td>
+                <td>مقدار واقعی متغیر</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Cumulative Probability</td>
+                <td>نسبت تجمعی داده‌ها تا آن مقدار</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست بر اساس یک توزیع نرمال پایه
+        با میانگین ۱۷۰ و انحراف معیار ۸ ساخته شده‌اند.
+        سپس در برخی از دیتاست‌ها مقادیر پرت
+        (Outlier)
+        به داده‌ها اضافه شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>تغییر</th>
+                <th>تعداد Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>بدون تغییر</td>
+                <td>۰</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>۳ مقدار بزرگ</td>
+                <td>۳</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>۱۰ مقدار بزرگ</td>
+                <td>۱۰</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>مقادیر پرت در دو طرف</td>
+                <td>۱۰</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>یک مقدار بسیار دور</td>
+                <td>۱</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        دیتاست
+        <code>No Outliers</code>
+        به عنوان حالت پایه در نظر گرفته می‌شود و سایر دیتاست‌ها
+        برای بررسی اثر تعداد، جهت و شدت Outlierها با آن مقایسه می‌شوند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. شکل کلی CDF در داده‌های بدون Outlier</h2>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        داده‌ها از یک توزیع نرمال با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        تولید شده‌اند.
+    </p>
+
+    <p>
+        CDF این دیتاست یک منحنی افزایشی و نسبتاً منظم ایجاد می‌کند.
+        در قسمت مرکزی توزیع، تعداد زیادی از داده‌ها قرار گرفته‌اند؛
+        بنابراین CDF در این ناحیه سریع‌تر افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        در دو انتهای توزیع، تعداد داده‌ها کمتر است و منحنی به تدریج
+        به مقادیر ۰ و ۱ نزدیک می‌شود.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        CDF برخلاف هیستوگرام یا KDE مستقیماً ارتفاع چگالی را نشان نمی‌دهد؛
+        بلکه نشان می‌دهد چه مقدار از داده‌ها تا یک نقطه مشخص
+        تجمع پیدا کرده‌اند.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. اثر Outlierهای سمت راست روی CDF</h2>
+
+    <h3>۴.۱. Few Outliers → تغییر کوچک در انتهای CDF</h3>
+
+    <p>
+        در دیتاست
+        <code>Few Outliers</code>
+        سه مقدار
+        <code>205</code>،
+        <code>215</code>
+        و
+        <code>225</code>
+        اضافه شده‌اند.
+    </p>
+
+    <p>
+        از آنجا که تعداد این مقادیر نسبت به کل داده‌ها بسیار کم است،
+        بخش اصلی CDF تقریباً مشابه حالت بدون Outlier باقی می‌ماند.
+    </p>
+
+    <p>
+        تفاوت اصلی در بخش انتهایی منحنی دیده می‌شود؛
+        زیرا چند داده در مقادیر بسیار بزرگ قرار گرفته‌اند.
+        بنابراین CDF برای رسیدن به مقدار ۱،
+        باید تا محدوده‌ی بزرگ‌تری در محور X ادامه پیدا کند.
+    </p>
+
+    <h3>۴.۲. Many Outliers → تغییر محسوس‌تر در CDF</h3>
+
+    <p>
+        در دیتاست
+        <code>Many Outliers</code>
+        ده مقدار بزرگ از ۱۹۵ تا ۲۲۲ قرار داده شده‌اند.
+    </p>
+
+    <p>
+        در این حالت تعداد داده‌های دور از مرکز بیشتر است.
+        بنابراین بخش بالایی CDF نسبت به حالت بدون Outlier
+        در محدوده‌ی وسیع‌تری از محور X گسترش پیدا می‌کند.
+    </p>
+
+    <p>
+        هرچه تعداد بیشتری از داده‌ها در سمت راست قرار بگیرند،
+        تجمع کامل داده‌ها به مقادیر بزرگ‌تری منتقل می‌شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اثر Outlierهای متقارن</h2>
+
+    <p>
+        در دیتاست
+        <code>Symmetric Outliers</code>
+        تعدادی مقدار پرت هم در سمت چپ و هم در سمت راست
+        توزیع اصلی قرار گرفته‌اند.
+    </p>
+
+    <p>
+        مقادیر سمت چپ از
+        <code>135</code>
+        تا
+        <code>155</code>
+        و مقادیر سمت راست از
+        <code>185</code>
+        تا
+        <code>205</code>
+        هستند.
+    </p>
+
+    <p>
+        در CDF، این Outlierها باعث می‌شوند منحنی از سمت چپ
+        در مقادیر کوچک‌تر شروع به افزایش کند و در سمت راست نیز
+        برای رسیدن به مقدار ۱ تا مقادیر بزرگ‌تری ادامه داشته باشد.
+    </p>
+
+    <p>
+        بنابراین برخلاف Outlierهای صرفاً سمت راست،
+        تغییر در هر دو انتهای محور X مشاهده می‌شود.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        وجود Outlier در CDF الزاماً به معنی تغییر شدید در بخش مرکزی
+        منحنی نیست.
+        اگر تعداد Outlierها کم باشد، اثر اصلی آن‌ها معمولاً
+        در انتهای توزیع دیده می‌شود.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. اثر یک Outlier بسیار شدید</h2>
+
+    <p>
+        در دیتاست
+        <code>One Extreme Outlier</code>
+        تنها یک مقدار به صورت بسیار شدید تغییر کرده و به
+        <code>300</code>
+        رسیده است.
+    </p>
+
+    <p>
+        چون فقط یک مشاهده تغییر کرده است،
+        بخش عمده‌ی CDF همچنان تقریباً مشابه دیتاست پایه باقی می‌ماند.
+    </p>
+
+    <p>
+        اما برای رسیدن CDF به مقدار ۱،
+        منحنی مجبور است تا مقدار ۳۰۰ روی محور X ادامه پیدا کند.
+        به همین دلیل یک
+        <strong>دنباله‌ی بسیار طولانی در انتهای سمت راست</strong>
+        ایجاد می‌شود.
+    </p>
+
+    <p>
+        این مثال نشان می‌دهد که حتی یک Outlier بسیار شدید می‌تواند
+        دامنه‌ی مقادیر مشاهده‌شده را به شکل قابل توجهی افزایش دهد،
+        بدون آن‌که الزاماً ساختار اصلی بخش مرکزی داده را تغییر دهد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. مقایسه‌ی پنج دیتاست</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>اثر اصلی روی CDF</th>
+                <th>محل مشاهده اثر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>شکل پایه و منظم</td>
+                <td>کل توزیع</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>گسترش محدود انتهای راست</td>
+                <td>Tail راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>گسترش محسوس‌تر انتهای راست</td>
+                <td>Tail راست</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>گسترش در هر دو طرف</td>
+                <td>هر دو Tail</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>دنباله بسیار طولانی</td>
+                <td>انتهای راست</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. نکته مهم: CDF و تشخیص Outlier</h2>
+
+    <p>
+        CDF ابزار مستقیمی برای تشخیص Outlier نیست،
+        اما می‌تواند نشان دهد که داده‌ها در چه محدوده‌ای
+        تجمع پیدا کرده‌اند و چه مقدار از داده‌ها در بخش‌های انتهایی
+        توزیع قرار گرفته‌اند.
+    </p>
+
+    <p>
+        اگر مقدار زیادی از محور X در انتهای توزیع وجود داشته باشد
+        ولی افزایش CDF در آن محدوده بسیار کم باشد،
+        می‌توان نتیجه گرفت که تعداد کمی از داده‌ها در آن بخش قرار دارند.
+    </p>
+
+    <p>
+        این ویژگی به‌خصوص هنگام مقایسه‌ی چند دیتاست مفید است؛
+        زیرا می‌توان مشاهده کرد که اضافه شدن Outlierها
+        چگونه محدوده‌ی تجمع داده‌ها را تغییر می‌دهد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>CDF</strong>
+                نشان می‌دهد چه نسبتی از داده‌ها کوچک‌تر یا مساوی
+                یک مقدار مشخص هستند.
+            </li>
+
+            <li>
+                <strong>No Outliers</strong>
+                شکل پایه و منظم CDF را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>Few Outliers</strong>
+                معمولاً اثر محدودی دارد و بیشتر در انتهای توزیع دیده می‌شود.
+            </li>
+
+            <li>
+                <strong>Many Outliers</strong>
+                باعث گسترش محسوس‌تر بخش انتهایی CDF می‌شود.
+            </li>
+
+            <li>
+                <strong>Symmetric Outliers</strong>
+                باعث گسترش توزیع در هر دو سمت می‌شوند.
+            </li>
+
+            <li>
+                <strong>One Extreme Outlier</strong>
+                می‌تواند دامنه‌ی محور X را به شدت افزایش دهد،
+                در حالی که بخش مرکزی CDF تقریباً بدون تغییر باقی بماند.
+            </li>
+
+            <li>
+                در CDF، مقدار Y همیشه بین
+                <strong>۰ و ۱</strong>
+                قرار دارد و در نهایت به ۱ می‌رسد.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

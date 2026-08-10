@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار CDF برای توزیع‌های Heavy Tail
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: CDF چیست؟</h2>
+
+    <p>
+        CDF مخفف عبارت
+        <strong>Cumulative Distribution Function</strong>
+        (تابع توزیع تجمعی) است.
+        CDF به ما نشان می‌دهد که چه مقدار از داده‌ها
+        <strong>کمتر یا مساوی یک مقدار مشخص</strong>
+        هستند.
+    </p>
+
+    <p>
+        به زبان ساده، اگر روی محور افقی یک مقدار مشخص
+        <code>x</code>
+        را انتخاب کنیم، مقدار CDF در آن نقطه نشان می‌دهد
+        چه درصدی از داده‌ها در سمت چپ آن مقدار قرار گرفته‌اند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        مقدار CDF همیشه بین ۰ و ۱ قرار دارد.
+        اگر مقدار CDF در نقطه‌ای برابر با
+        <code>0.8</code>
+        باشد، یعنی تقریباً ۸۰٪ داده‌ها
+        کوچک‌تر یا مساوی آن مقدار هستند.
+    </div>
+
+    <h3>اجزای اصلی نمودار CDF</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش</th>
+                <th>معنی</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Value</td>
+                <td>مقدار واقعی متغیر</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Cumulative Probability</td>
+                <td>نسبت تجمعی داده‌های کوچک‌تر یا مساوی X</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y = 0</strong></td>
+                <td>شروع توزیع</td>
+                <td>تقریباً هیچ داده‌ای در سمت چپ X قرار ندارد</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y = 1</strong></td>
+                <td>انتهای توزیع</td>
+                <td>تقریباً تمام داده‌ها در سمت چپ X قرار دارند</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با استفاده از
+        <strong>Student's t-distribution</strong>
+        تولید شده‌اند.
+        این توزیع به دلیل داشتن دم‌های سنگین‌تر نسبت به توزیع نرمال،
+        برای بررسی رفتار داده‌های
+        <strong>Heavy Tail</strong>
+        مناسب است.
+    </p>
+
+    <p>
+        پارامتر مهم این توزیع
+        <strong>درجه آزادی (Degrees of Freedom یا df)</strong>
+        است.
+        هرچه مقدار <code>df</code> کوچک‌تر شود،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>df</th>
+                <th>شدت Heavy Tail</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Heavy Tail</td>
+                <td>15</td>
+                <td>کم</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Heavy Tail</td>
+                <td>8</td>
+                <td>متوسط</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Strong Heavy Tail</td>
+                <td>5</td>
+                <td>زیاد</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Heavy Tail</td>
+                <td>3</td>
+                <td>بسیار زیاد</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Heavy Tail + Outliers</td>
+                <td>8</td>
+                <td>متوسط + Outliers</td>
+                <td>1000</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        چهار دیتاست اول برای بررسی اثر مستقیم کاهش
+        <code>df</code>
+        روی Heavy Tail طراحی شده‌اند.
+        دیتاست پنجم همان ایده را با اضافه کردن چند مقدار بسیار دور
+        از مرکز بررسی می‌کند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. رابطه‌ی Heavy Tail با شکل CDF</h2>
+
+    <p>
+        برخلاف KDE، نمودار CDF مستقیماً با «ارتفاع قله» یا
+        «پهنای منحنی» توزیع سروکار ندارد.
+        CDF به صورت تجمعی افزایش پیدا می‌کند و بنابراین
+        رفتار دم‌های توزیع را باید از طریق
+        <strong>نحوه نزدیک شدن منحنی به ۰ و ۱</strong>
+        بررسی کرد.
+    </p>
+
+    <h3>۳.۱. Heavy Tail ضعیف → نزدیک شدن سریع‌تر به ۰ و ۱</h3>
+
+    <p>
+        در دیتاست
+        <code>Mild Heavy Tail</code>
+        با
+        <code>df = 15</code>،
+        دم‌های توزیع نسبتاً سبک‌تر هستند.
+    </p>
+
+    <p>
+        بنابراین بیشتر داده‌ها در محدوده‌ی مرکزی قرار می‌گیرند
+        و احتمال مشاهده‌ی مقادیر بسیار دور از میانگین کمتر است.
+        در نتیجه CDF در بخش‌های انتهایی محور X
+        سریع‌تر به مقادیر نزدیک به ۰ و ۱ می‌رسد.
+    </p>
+
+    <p>
+        یعنی بخش بزرگی از جرم احتمال در محدوده‌ی مرکزی توزیع
+        قرار دارد و تعداد داده‌های بسیار دور از مرکز کمتر است.
+    </p>
+
+    <h3>۳.۲. Heavy Tail متوسط → کشیده‌تر شدن ناحیه‌ی انتقال</h3>
+
+    <p>
+        با کاهش درجه آزادی به
+        <code>df = 8</code>،
+        احتمال مشاهده‌ی مقادیر دورتر از مرکز افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        در CDF این موضوع باعث می‌شود افزایش تجمعی احتمال
+        در محدوده‌ی وسیع‌تری اتفاق بیفتد.
+        به بیان دیگر، برای رسیدن به مقادیر بسیار نزدیک به
+        <code>0</code>
+        یا
+        <code>1</code>
+        باید دامنه‌ی بزرگ‌تری از محور X را طی کنیم.
+    </p>
+
+    <h3>۳.۳. Heavy Tail قوی → دم‌های طولانی‌تر</h3>
+
+    <p>
+        در
+        <code>df = 5</code>،
+        دم‌ها سنگین‌تر شده‌اند.
+        بنابراین احتمال وجود مقادیر بسیار دور از مرکز
+        نسبت به حالت‌های قبلی بیشتر است.
+    </p>
+
+    <p>
+        در نمودار CDF، این موضوع باعث می‌شود منحنی در قسمت‌های
+        انتهایی محور X دیرتر به مقادیر
+        <code>0</code>
+        و
+        <code>1</code>
+        نزدیک شود.
+    </p>
+
+    <p>
+        بنابراین محدوده‌ای که CDF در آن از احتمال‌های پایین
+        به احتمال‌های بالا منتقل می‌شود،
+        گسترده‌تر می‌شود.
+    </p>
+
+    <h3>۳.۴. Heavy Tail شدید → باقی ماندن احتمال در دو انتهای توزیع</h3>
+
+    <p>
+        در
+        <code>df = 3</code>،
+        دم‌های توزیع بسیار سنگین هستند.
+    </p>
+
+    <p>
+        در این حالت احتمال مشاهده‌ی مقادیر بسیار دور از
+        مقدار مرکزی قابل توجه‌تر است.
+        بنابراین CDF حتی در مقادیر نسبتاً دور از مرکز نیز
+        ممکن است هنوز کاملاً به ۰ یا ۱ نرسیده باشد.
+    </p>
+
+    <p>
+        این رفتار نشان می‌دهد که بخشی از احتمال در
+        <strong>دم‌های بسیار دور توزیع</strong>
+        باقی مانده است.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. اثر Outlierها روی CDF</h2>
+
+    <p>
+        دیتاست
+        <code>Heavy Tail + Outliers</code>
+        علاوه بر Heavy Tail، شامل پنج مقدار بسیار بزرگ است:
+    </p>
+
+    <div class="formula">
+        215 &nbsp;&nbsp; 225 &nbsp;&nbsp; 240 &nbsp;&nbsp; 255 &nbsp;&nbsp; 275
+    </div>
+
+    <p>
+        این مقادیر در انتهای راست توزیع قرار گرفته‌اند.
+        بنابراین اثر اصلی آن‌ها در بخش پایانی CDF مشاهده می‌شود.
+    </p>
+
+    <p>
+        از آن‌جایی که CDF تجمعی است، هر مقدار جدید باعث
+        افزایش CDF می‌شود؛ اما چند Outlier به‌تنهایی
+        یک جهش بسیار بزرگ در CDF ایجاد نمی‌کنند،
+        زیرا تعداد آن‌ها نسبت به کل نمونه‌ها کم است.
+    </p>
+
+    <p>
+        اثر مهم‌تر این است که این مقادیر باعث می‌شوند
+        <strong>دم راست توزیع تا مقادیر بسیار بزرگ‌تری ادامه پیدا کند</strong>.
+    </p>
+
+    <p>
+        در نتیجه CDF ممکن است تا رسیدن به مقادیر بسیار بزرگ‌تر
+        همچنان به مقدار ۱ نزدیک نشود و سپس در انتهای توزیع
+        به ۱ برسد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        CDF برای تشخیص Outlier به اندازه‌ی Box Plot یا
+        بررسی مستقیم مقادیر انتهایی حساس نیست.
+        Outlierهای بسیار دور معمولاً به صورت
+        <strong>کشیده شدن انتهای منحنی</strong>
+        دیده می‌شوند، نه به صورت یک پرش بزرگ.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. مقایسه‌ی CDF در Heavy Tailهای مختلف</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Heavy Tail ضعیف</th>
+                <th>Heavy Tail قوی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>درجه آزادی</td>
+                <td>بزرگ‌تر</td>
+                <td>کوچک‌تر</td>
+            </tr>
+
+            <tr>
+                <td>احتمال مقادیر دور از مرکز</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>طول دم‌ها</td>
+                <td>کوتاه‌تر</td>
+                <td>طولانی‌تر</td>
+            </tr>
+
+            <tr>
+                <td>رسیدن CDF به ۰</td>
+                <td>سریع‌تر</td>
+                <td>کندتر</td>
+            </tr>
+
+            <tr>
+                <td>رسیدن CDF به ۱</td>
+                <td>سریع‌تر</td>
+                <td>کندتر</td>
+            </tr>
+
+            <tr>
+                <td>گستره‌ی مقادیر</td>
+                <td>محدودتر</td>
+                <td>گسترده‌تر</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. نکته مهم درباره‌ی تفسیر CDF</h2>
+
+    <p>
+        مهم‌ترین نکته این است که CDF مستقیماً نمی‌گوید
+        «داده‌ها چقدر پراکنده‌اند».
+        بلکه نشان می‌دهد احتمال تجمعی تا هر مقدار
+        چگونه افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        برای تحلیل Heavy Tail باید به رفتار CDF در
+        <strong>دو انتهای توزیع</strong>
+        توجه کرد.
+        اگر منحنی برای رسیدن به مقادیر نزدیک به
+        <code>0</code>
+        و
+        <code>1</code>
+        به دامنه‌ی بزرگ‌تری از X نیاز داشته باشد،
+        می‌تواند نشانه‌ای از وجود دم‌های سنگین‌تر باشد.
+    </p>
+
+    <div class="note">
+        <strong>نکته کلیدی:</strong>
+        در یک توزیع متقارن Heavy Tail، رفتار دم چپ و دم راست
+        می‌تواند مشابه باشد.
+        بنابراین اگر Heavy Tail افزایش پیدا کند،
+        هر دو طرف توزیع گسترده‌تر می‌شوند؛
+        نه فقط سمت راست.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Student's t-distribution</strong>
+                برای تولید داده‌هایی با دم‌های سنگین‌تر از نرمال
+                استفاده شده است.
+            </li>
+
+            <li>
+                کاهش
+                <strong>df</strong>
+                باعث افزایش شدت Heavy Tail می‌شود.
+            </li>
+
+            <li>
+                هرچه Heavy Tail شدیدتر باشد،
+                احتمال مشاهده‌ی مقادیر بسیار دور از مرکز بیشتر است.
+            </li>
+
+            <li>
+                در CDF، Heavy Tail شدیدتر معمولاً باعث می‌شود
+                منحنی در دو انتهای محور X دیرتر به
+                <strong>۰ و ۱</strong>
+                نزدیک شود.
+            </li>
+
+            <li>
+                Outlierهای بسیار دور می‌توانند انتهای CDF را
+                تا مقادیر بسیار بزرگ‌تر یا کوچک‌تر امتداد دهند.
+            </li>
+
+            <li>
+                CDF برای بررسی رفتار تجمعی داده مناسب است،
+                اما برای مشاهده‌ی مستقیم Outlierها،
+                Box Plot معمولاً ابزار واضح‌تری است.
+            </li>
+
+            <li>
+                مهم‌ترین چیزی که در این مثال باید از CDF یاد بگیریم:
+                <strong>
+                    Heavy Tail یعنی احتمال بیشتری برای مشاهده‌ی
+                    مقادیر دور از مرکز، و این موضوع در CDF به شکل
+                    کشیده‌تر شدن رفتار دو انتهای منحنی دیده می‌شود.
+                </strong>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

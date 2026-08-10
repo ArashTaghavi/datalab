@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Box Plot برای توزیع‌های دارای Outlier
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Box Plot چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Box Plot</strong>
+        یا
+        <strong>Box-and-Whisker Plot</strong>
+        یکی از ابزارهای مهم برای خلاصه‌سازی و مقایسه‌ی توزیع داده‌های عددی است.
+        این نمودار بدون نمایش تک‌تک داده‌ها، اطلاعات مهمی درباره‌ی
+        <strong>مرکز، پراکندگی و مقادیر غیرعادی</strong>
+        داده ارائه می‌دهد.
+    </p>
+
+    <p>
+        Box Plot بر اساس پنج مقدار اصلی ساخته می‌شود:
+        <strong>Minimum، Q1، Median، Q3 و Maximum</strong>.
+        علاوه بر این، در Box Plot معمولاً داده‌هایی که خارج از محدوده‌ی
+        استاندارد قرار گرفته‌اند به صورت
+        <strong>Outlier</strong>
+        نمایش داده می‌شوند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        در Box Plot، طول Box نشان‌دهنده‌ی پراکندگی
+        <strong>۵۰٪ میانی داده‌ها</strong>
+        است.
+        این بخش با فاصله‌ی بین Q1 و Q3 مشخص می‌شود و به آن
+        <strong>IQR (Interquartile Range)</strong>
+        گفته می‌شود.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. اجزای اصلی Box Plot</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>نام</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td><strong>Q1</strong></td>
+                <td>First Quartile</td>
+                <td>۲۵٪ داده‌ها کمتر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Median</strong></td>
+                <td>50th Percentile</td>
+                <td>۵۰٪ داده‌ها کمتر و ۵۰٪ بیشتر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Q3</strong></td>
+                <td>Third Quartile</td>
+                <td>۷۵٪ داده‌ها کمتر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>IQR</strong></td>
+                <td>Interquartile Range</td>
+                <td>پراکندگی ۵۰٪ میانی داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Whiskers</strong></td>
+                <td>Lower / Upper Whisker</td>
+                <td>محدوده‌ی داده‌های غیر-Outlier</td>
+            </tr>
+
+            <tr>
+                <td><strong>Outlier</strong></td>
+                <td>Unusual Observation</td>
+                <td>داده‌ای که خارج از محدوده‌ی Whisker قرار گرفته است</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="formula">
+        IQR = Q3 - Q1
+    </div>
+
+    <p>
+        محدوده‌ی معمول برای تشخیص Outlier به صورت زیر محاسبه می‌شود:
+    </p>
+
+    <div class="formula">
+        Lower Bound = Q1 - 1.5 × IQR
+        <br>
+        Upper Bound = Q3 + 1.5 × IQR
+    </div>
+
+    <p>
+        بنابراین هر داده‌ای که کمتر از
+        <code>Lower Bound</code>
+        یا بیشتر از
+        <code>Upper Bound</code>
+        باشد، به عنوان Outlier در نظر گرفته می‌شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، تمام دیتاست‌ها بر اساس یک توزیع پایه‌ی نرمال
+        با میانگین ۱۷۰ و انحراف معیار ۸ ساخته شده‌اند.
+        سپس در هر دیتاست، تعداد یا نوع خاصی از Outlierها به داده اضافه شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>تعداد Outlier</th>
+                <th>نوع تغییر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>No Outliers</td>
+                <td>۰</td>
+                <td>داده‌ی پایه بدون Outlier</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>۳</td>
+                <td>چند مقدار بزرگ در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>۱۰</td>
+                <td>تعداد زیادی مقدار بزرگ در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>۱۰</td>
+                <td>Outlier در هر دو طرف توزیع</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>۱</td>
+                <td>یک مقدار بسیار دور از مرکز</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین این مجموعه داده برای بررسی این موضوع مناسب است که
+        <strong>تعداد، جهت و شدت Outlierها چگونه روی Box Plot اثر می‌گذارند.</strong>
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. حالت بدون Outlier</h2>
+
+    <h3>۴.۱. No Outliers</h3>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        هیچ مقدار مصنوعی خارج از توزیع پایه اضافه نشده است.
+        داده‌ها از توزیع نرمال با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        تولید شده‌اند.
+    </p>
+
+    <p>
+        در Box Plot این حالت، نقاط جداگانه‌ای خارج از Whiskerها مشاهده نمی‌شود.
+        Box محدوده‌ی ۵۰٪ میانی داده‌ها را نشان می‌دهد و Median تقریباً
+        در مرکز توزیع قرار دارد.
+    </p>
+
+    <p>
+        این دیتاست را می‌توان به عنوان
+        <strong>Baseline</strong>
+        برای مقایسه‌ی سایر حالت‌ها در نظر گرفت.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اضافه شدن تعداد کمی Outlier</h2>
+
+    <h3>۵.۱. Few Outliers</h3>
+
+    <p>
+        در این حالت سه مقدار بزرگ به انتهای سمت راست داده اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        205 &nbsp;&nbsp; 215 &nbsp;&nbsp; 225
+    </div>
+
+    <p>
+        این مقادیر نسبت به بخش اصلی داده فاصله‌ی زیادی دارند و بخشی از آن‌ها
+        می‌توانند خارج از Upper Whisker قرار بگیرند.
+    </p>
+
+    <p>
+        نکته مهم این است که وجود چند Outlier لزوماً باعث تغییر شدید
+        <strong>Median، Q1 و Q3</strong>
+        نمی‌شود؛ زیرا این مقادیر مستقیماً از داده‌های میانی توزیع به دست نمی‌آیند.
+    </p>
+
+    <p>
+        بنابراین Box اصلی ممکن است تقریباً مشابه حالت
+        <code>No Outliers</code>
+        باقی بماند، در حالی که چند نقطه‌ی جداگانه در سمت راست ظاهر می‌شوند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. افزایش تعداد Outlierها</h2>
+
+    <h3>۶.۱. Many Outliers</h3>
+
+    <p>
+        در این دیتاست تعداد Outlierهای سمت راست به ۱۰ مقدار افزایش یافته است.
+        مقادیر از ۱۹۵ شروع شده و تا ۲۲۲ ادامه پیدا می‌کنند.
+    </p>
+
+    <p>
+        در مقایسه با حالت قبلی، تعداد نقاط خارج از Upper Whisker بیشتر می‌شود.
+        بنابراین Box Plot به شکل واضح‌تری وجود یک
+        <strong>Right-Side Outlier Pattern</strong>
+        را نشان می‌دهد.
+    </p>
+
+    <p>
+        با این حال باید بین دو مفهوم تفاوت قائل شویم:
+    </p>
+
+    <ul>
+        <li>
+            <strong>تعداد Outlierها</strong>
+            نشان می‌دهد چند مشاهده خارج از محدوده‌ی 1.5 × IQR قرار گرفته‌اند.
+        </li>
+
+        <li>
+            <strong>مقدار IQR</strong>
+            میزان پراکندگی ۵۰٪ میانی داده‌ها را نشان می‌دهد.
+        </li>
+    </ul>
+
+    <p>
+        بنابراین زیاد شدن تعداد نقاط خارج از Box به معنی زیاد شدن مستقیم
+        IQR نیست.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. Outlierهای متقارن</h2>
+
+    <h3>۷.۱. Symmetric Outliers</h3>
+
+    <p>
+        در این حالت Outlierها در هر دو طرف توزیع قرار گرفته‌اند.
+        پنج مقدار پایین‌تر از مرکز و پنج مقدار بالاتر از مرکز اضافه شده‌اند.
+    </p>
+
+    <p>
+        مقادیر سمت پایین عبارت‌اند از:
+    </p>
+
+    <div class="formula">
+        135 &nbsp;&nbsp; 140 &nbsp;&nbsp; 145 &nbsp;&nbsp; 150 &nbsp;&nbsp; 155
+    </div>
+
+    <p>
+        و مقادیر سمت بالا:
+    </p>
+
+    <div class="formula">
+        185 &nbsp;&nbsp; 190 &nbsp;&nbsp; 195 &nbsp;&nbsp; 200 &nbsp;&nbsp; 205
+    </div>
+
+    <p>
+        نتیجه این است که Box Plot در هر دو طرف نقاط خارج از Whiskerها
+        نشان می‌دهد.
+    </p>
+
+    <p>
+        این حالت برای درک تفاوت بین
+        <strong>Outlier یک‌طرفه</strong>
+        و
+        <strong>Outlier دوطرفه</strong>
+        بسیار مفید است.
+    </p>
+
+    <p>
+        همچنین مشاهده‌ی Outlier در هر دو طرف به تنهایی به معنی
+        <strong>Skewed بودن</strong>
+        داده نیست.
+        جهت توزیع باید با شکل کلی داده و موقعیت مرکز آن بررسی شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. یک Outlier بسیار شدید</h2>
+
+    <h3>۸.۱. One Extreme Outlier</h3>
+
+    <p>
+        در این حالت فقط یک مقدار تغییر داده شده و مقدار آن برابر با:
+    </p>
+
+    <div class="formula">
+        300
+    </div>
+
+    <p>
+        قرار گرفته است.
+    </p>
+
+    <p>
+        این مقدار فاصله‌ی بسیار زیادی از بخش اصلی داده دارد و به احتمال زیاد
+        به صورت یک نقطه‌ی کاملاً جدا از Upper Whisker دیده می‌شود.
+    </p>
+
+    <p>
+        این مثال یک نکته مهم را نشان می‌دهد:
+        <strong>تعداد Outlier به تنهایی شدت آن را مشخص نمی‌کند.</strong>
+        حتی یک مشاهده می‌تواند آن‌قدر از مرکز فاصله داشته باشد که اثر بصری
+        بسیار بیشتری نسبت به چند Outlier نزدیک‌تر داشته باشد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. مقایسه‌ی پنج حالت</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>No Outliers</th>
+                <th>Few Outliers</th>
+                <th>Many Outliers</th>
+                <th>Symmetric Outliers</th>
+                <th>One Extreme</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Outlier</td>
+                <td>ندارد</td>
+                <td>چند عدد</td>
+                <td>تعداد زیاد</td>
+                <td>دو طرف</td>
+                <td>یک عدد</td>
+            </tr>
+
+            <tr>
+                <td>جهت</td>
+                <td>—</td>
+                <td>راست</td>
+                <td>راست</td>
+                <td>دوطرفه</td>
+                <td>راست</td>
+            </tr>
+
+            <tr>
+                <td>شدت</td>
+                <td>—</td>
+                <td>متوسط</td>
+                <td>متوسط</td>
+                <td>متوسط</td>
+                <td>بسیار شدید</td>
+            </tr>
+
+            <tr>
+                <td>Whisker راست</td>
+                <td>طبیعی</td>
+                <td>محدود</td>
+                <td>محدود</td>
+                <td>طبیعی</td>
+                <td>محدود</td>
+            </tr>
+
+            <tr>
+                <td>نقاط جداگانه</td>
+                <td>ندارد</td>
+                <td>چند نقطه</td>
+                <td>نقاط متعدد</td>
+                <td>در دو طرف</td>
+                <td>یک نقطه بسیار دور</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. Box Plot چگونه Outlier را تشخیص می‌دهد؟</h2>
+
+    <p>
+        مکانیزم اصلی تشخیص Outlier در این تحلیل بر اساس
+        <strong>IQR</strong>
+        است.
+    </p>
+
+    <div class="formula">
+        IQR = Q3 - Q1
+    </div>
+
+    <p>
+        سپس محدوده‌ی قابل قبول برای داده‌ها به صورت زیر تعیین می‌شود:
+    </p>
+
+    <div class="formula">
+        Q1 - 1.5 × IQR
+        &nbsp;&nbsp;&nbsp;≤&nbsp;&nbsp;&nbsp;
+        Normal Range
+        &nbsp;&nbsp;&nbsp;≤&nbsp;&nbsp;&nbsp;
+        Q3 + 1.5 × IQR
+    </div>
+
+    <p>
+        Whiskerها تا نزدیک‌ترین داده‌ای که هنوز داخل این محدوده قرار دارد
+        ادامه پیدا می‌کنند.
+        داده‌هایی که خارج از این محدوده باشند، به صورت نقاط جداگانه
+        نمایش داده می‌شوند.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Outlier در Box Plot به معنی «داده‌ی اشتباه» نیست.
+        یک Outlier ممکن است کاملاً معتبر باشد.
+        Box Plot فقط نشان می‌دهد که آن مشاهده نسبت به
+        الگوی مرکزی داده، غیرمعمول است.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. تأثیر Outlier روی مرکز و پراکندگی</h2>
+
+    <p>
+        یکی از دلایل مهم استفاده از Box Plot این است که
+        <strong>Median و Quartileها نسبت به Outlierها مقاوم‌تر هستند.</strong>
+    </p>
+
+    <p>
+        در مقابل، معیارهایی مانند
+        <strong>Mean و Standard Deviation</strong>
+        می‌توانند تحت تأثیر Outlierهای شدید قرار بگیرند.
+    </p>
+
+    <p>
+        به همین دلیل اگر یک دیتاست دارای مقادیر بسیار دور از مرکز باشد،
+        Box Plot می‌تواند تصویر مناسبی از ساختار مرکزی داده ارائه کند،
+        بدون اینکه یک مقدار بسیار شدید تمام نمودار را تحت تأثیر قرار دهد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 12 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۲. آیا Box Plot به تنهایی شکل توزیع را نشان می‌دهد؟</h2>
+
+    <p>
+        خیر.
+    </p>
+
+    <p>
+        Box Plot اطلاعات بسیار خوبی درباره‌ی
+        <strong>مرکز، IQR، Whiskerها و Outlierها</strong>
+        ارائه می‌دهد، اما اطلاعات کاملی درباره‌ی شکل توزیع ندارد.
+    </p>
+
+    <p>
+        برای مثال، Box Plot به تنهایی نمی‌تواند به خوبی نشان دهد که داده‌ها
+        یک قله دارند یا چند قله، یا دقیقاً چه شکلی در اطراف Median توزیع شده‌اند.
+    </p>
+
+    <p>
+        بنابراین برای تحلیل کامل یک متغیر بهتر است Box Plot را در کنار
+        نمودارهایی مانند
+        <strong>KDE، Histogram، Violin Plot و CDF</strong>
+        بررسی کنیم.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 13 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۳. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Box</strong>
+                محدوده‌ی ۵۰٪ میانی داده‌ها را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>Median</strong>
+                مرکز توزیع را در داخل Box نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>IQR</strong>
+                میزان پراکندگی ۵۰٪ میانی داده‌ها است.
+            </li>
+
+            <li>
+                <strong>Whisker</strong>
+                محدوده‌ی داده‌های غیر-Outlier را نشان می‌دهد.
+            </li>
+
+            <li>
+                نقاط خارج از Whisker به عنوان
+                <strong>Outlier</strong>
+                نمایش داده می‌شوند.
+            </li>
+
+            <li>
+                چند Outlier می‌توانند در یک سمت توزیع قرار بگیرند و
+                الگوی یک‌طرفه ایجاد کنند.
+            </li>
+
+            <li>
+                Outlierها می‌توانند در هر دو طرف توزیع قرار بگیرند و
+                لزوماً به معنی Skewness نیستند.
+            </li>
+
+            <li>
+                حتی یک Outlier بسیار شدید می‌تواند فاصله‌ی زیادی از
+                Whisker ایجاد کند.
+            </li>
+
+            <li>
+                Median و Quartileها معمولاً نسبت به Outlierها
+                مقاوم‌تر از Mean و Standard Deviation هستند.
+            </li>
+
+            <li>
+                Box Plot برای بررسی سریع
+                <strong>مرکز، Spread و Outlier</strong>
+                بسیار مناسب است، اما برای مشاهده‌ی شکل کامل توزیع بهتر است
+                در کنار نمودارهای دیگر استفاده شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

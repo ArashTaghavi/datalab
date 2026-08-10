@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار QQ Plot برای توزیع‌های دارای Outlier
+    </h1>
+
+    <h2>۱. مقدمه: QQ Plot چیست؟</h2>
+
+    <p>
+        QQ Plot مخفف عبارت
+        <strong>Quantile-Quantile Plot</strong>
+        است.
+        این نمودار برای مقایسه‌ی توزیع داده‌های واقعی با یک توزیع مرجع
+        استفاده می‌شود.
+        در تحلیل‌های آماری، یکی از مهم‌ترین کاربردهای QQ Plot،
+        بررسی این است که آیا داده‌ها تقریباً از یک
+        <strong>توزیع نرمال</strong>
+        پیروی می‌کنند یا خیر.
+    </p>
+
+    <p>
+        در QQ Plot، کوانتایل‌های داده‌ی واقعی در برابر کوانتایل‌های
+        توزیع مرجع رسم می‌شوند.
+        اگر توزیع داده‌ها با توزیع مرجع سازگار باشد،
+        نقاط تقریباً روی یک خط مستقیم قرار می‌گیرند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        QQ Plot مستقیماً مقدار تک‌تک داده‌ها را با هم مقایسه نمی‌کند؛
+        بلکه <strong>کوانتایل‌ها</strong> را با یکدیگر مقایسه می‌کند.
+        به همین دلیل این نمودار برای تشخیص تفاوت در شکل توزیع،
+        چولگی و رفتار Tailها بسیار مفید است.
+    </div>
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، تمام دیتاست‌ها از یک توزیع نرمال پایه ساخته شده‌اند
+        و سپس در برخی از آن‌ها Outlier اضافه شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>تعداد Outlier</th>
+                <th>نوع Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>۰</td>
+                <td>بدون Outlier</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>۳</td>
+                <td>Outlier در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>۱۰</td>
+                <td>Outlier در سمت راست</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>۱۰</td>
+                <td>Outlier در دو طرف</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>۱</td>
+                <td>یک Outlier بسیار شدید در سمت راست</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین در این مجموعه، شکل توزیع اصلی تقریباً ثابت است
+        و چیزی که تغییر می‌کند
+        <strong>وجود، تعداد و شدت Outlierها</strong>
+        است.
+        این موضوع باعث می‌شود QQ Plot ابزار مناسبی برای مشاهده‌ی
+        تأثیر Outlierها روی بخش‌های مختلف توزیع باشد.
+    </p>
+
+    <h2>۳. QQ Plot چگونه خوانده می‌شود؟</h2>
+
+    <p>
+        در نمودار QQ Plot معمولاً محور افقی نشان‌دهنده‌ی
+        <strong>Theoretical Quantiles</strong>
+        و محور عمودی نشان‌دهنده‌ی
+        <strong>Sample Quantiles</strong>
+        است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>محور / بخش</th>
+                <th>معنی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Theoretical Quantiles</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Sample Quantiles</td>
+            </tr>
+
+            <tr>
+                <td><strong>خط مستقیم</strong></td>
+                <td>الگوی مورد انتظار برای توزیع مرجع</td>
+            </tr>
+
+            <tr>
+                <td><strong>نقاط نزدیک خط</strong></td>
+                <td>سازگاری بیشتر با توزیع مرجع</td>
+            </tr>
+
+            <tr>
+                <td><strong>انحراف نقاط از خط</strong></td>
+                <td>تفاوت بین داده و توزیع مرجع</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۴. دیتاست بدون Outlier</h2>
+
+    <h3>۴.۱. No Outliers</h3>
+
+    <p>
+        در دیتاست
+        <code>No Outliers</code>
+        داده‌ها مستقیماً از یک توزیع نرمال با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        تولید شده‌اند.
+    </p>
+
+    <p>
+        بنابراین انتظار داریم کوانتایل‌های داده‌ی واقعی
+        رفتار مشابهی با کوانتایل‌های توزیع نرمال مرجع داشته باشند.
+    </p>
+
+    <p>
+        در نتیجه، نقاط QQ Plot در بخش مرکزی و همچنین در Tailها
+        باید تقریباً روی یک خط مستقیم قرار بگیرند.
+    </p>
+
+    <div class="note">
+        <strong>نتیجه:</strong>
+        وقتی نقاط تقریباً روی خط قرار دارند،
+        شواهدی از ناسازگاری شدید داده با توزیع نرمال دیده نمی‌شود.
+    </div>
+
+    <h2>۵. اثر Outlierهای کم</h2>
+
+    <h3>۵.۱. Few Outliers</h3>
+
+    <p>
+        در این دیتاست فقط سه مقدار غیرعادی در سمت راست اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        205 &nbsp;&nbsp; 215 &nbsp;&nbsp; 225
+    </div>
+
+    <p>
+        از آن‌جایی که فقط تعداد کمی از داده‌ها تغییر کرده‌اند،
+        بخش مرکزی QQ Plot همچنان رفتار بسیار مشابهی با حالت
+        بدون Outlier خواهد داشت.
+    </p>
+
+    <p>
+        تفاوت اصلی در
+        <strong>سمت راست نمودار</strong>
+        ظاهر می‌شود.
+        نقاط مربوط به کوانتایل‌های بالاتر از خط مرجع فاصله می‌گیرند.
+    </p>
+
+    <p>
+        بنابراین QQ Plot می‌تواند نشان دهد که بخش مرکزی توزیع
+        تقریباً نرمال باقی مانده است، اما Tail سمت راست
+        تحت تأثیر مقادیر غیرعادی قرار گرفته است.
+    </p>
+
+    <h2>۶. افزایش تعداد Outlierها</h2>
+
+    <h3>۶.۱. Many Outliers</h3>
+
+    <p>
+        در این حالت تعداد بیشتری مقدار بزرگ در سمت راست قرار گرفته‌اند:
+    </p>
+
+    <div class="formula">
+        195, 198, 201, 204, 207,
+        210, 213, 216, 219, 222
+    </div>
+
+    <p>
+        در مقایسه با حالت قبلی، بخش بزرگ‌تری از Tail سمت راست
+        تحت تأثیر این مقادیر قرار گرفته است.
+    </p>
+
+    <p>
+        بنابراین انحراف نقاط از خط مرجع در قسمت انتهایی
+        واضح‌تر می‌شود.
+    </p>
+
+    <p>
+        نکته مهم این است که این تغییر الزاماً به معنی آن نیست که
+        کل توزیع غیرنرمال شده است.
+        ممکن است بخش مرکزی داده همچنان تقریباً خطی باقی بماند،
+        در حالی که Tailها انحراف قابل توجهی نشان دهند.
+    </p>
+
+    <h2>۷. Outlierهای متقارن</h2>
+
+    <h3>۷.۱. Symmetric Outliers</h3>
+
+    <p>
+        در این دیتاست Outlierها در هر دو طرف توزیع قرار گرفته‌اند.
+        مقادیر پایین شامل:
+    </p>
+
+    <div class="formula">
+        135, 140, 145, 150, 155
+    </div>
+
+    <p>
+        و مقادیر بالاتر شامل:
+    </p>
+
+    <div class="formula">
+        185, 190, 195, 200, 205
+    </div>
+
+    <p>
+        در این حالت، QQ Plot در هر دو Tail تحت تأثیر قرار می‌گیرد.
+    </p>
+
+    <p>
+        بنابراین ممکن است نقاط در سمت چپ و راست از خط مرجع فاصله بگیرند،
+        در حالی که بخش مرکزی همچنان نسبتاً منظم باقی بماند.
+    </p>
+
+    <p>
+        این حالت با Outlierهای فقط سمت راست تفاوت مهمی دارد:
+        <strong>انحراف از خط در هر دو Tail دیده می‌شود.</strong>
+    </p>
+
+    <h2>۸. یک Outlier بسیار شدید</h2>
+
+    <h3>۸.۱. One Extreme Outlier</h3>
+
+    <p>
+        در این دیتاست تنها یک مقدار غیرعادی وجود دارد:
+    </p>
+
+    <div class="formula">
+        300
+    </div>
+
+    <p>
+        با وجود این‌که فقط یک داده تغییر کرده است،
+        مقدار ۳۰۰ فاصله‌ی بسیار زیادی از مرکز توزیع دارد.
+    </p>
+
+    <p>
+        بنابراین نقطه‌ی مربوط به بالاترین کوانتایل می‌تواند
+        فاصله‌ی بسیار زیادی از خط مرجع پیدا کند.
+    </p>
+
+    <p>
+        این مثال یکی از نکات مهم QQ Plot را نشان می‌دهد:
+        <strong>
+            تعداد Outlier به‌تنهایی تعیین‌کننده‌ی شدت اثر آن نیست.
+        </strong>
+        حتی یک مقدار بسیار دور می‌تواند در Tail نمودار
+        کاملاً قابل مشاهده باشد.
+    </p>
+
+    <h2>۹. مقایسه‌ی پنج دیتاست</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>بخش مرکزی</th>
+                <th>Tail چپ</th>
+                <th>Tail راست</th>
+                <th>اثر اصلی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Outliers</td>
+                <td>نزدیک خط</td>
+                <td>نزدیک خط</td>
+                <td>نزدیک خط</td>
+                <td>تقریباً نرمال</td>
+            </tr>
+
+            <tr>
+                <td>Few Outliers</td>
+                <td>تقریباً نزدیک خط</td>
+                <td>نزدیک خط</td>
+                <td>انحراف</td>
+                <td>اثر محدود در Tail راست</td>
+            </tr>
+
+            <tr>
+                <td>Many Outliers</td>
+                <td>نسبتاً نزدیک خط</td>
+                <td>نزدیک خط</td>
+                <td>انحراف بیشتر</td>
+                <td>Tail راست سنگین‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Symmetric Outliers</td>
+                <td>نزدیک خط</td>
+                <td>انحراف</td>
+                <td>انحراف</td>
+                <td>تغییر در هر دو Tail</td>
+            </tr>
+
+            <tr>
+                <td>One Extreme Outlier</td>
+                <td>نسبتاً نزدیک خط</td>
+                <td>نزدیک خط</td>
+                <td>انحراف شدید</td>
+                <td>اثر شدید یک مقدار</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۱۰. QQ Plot و تشخیص Outlier</h2>
+
+    <p>
+        QQ Plot می‌تواند برای شناسایی Outlierها مفید باشد،
+        اما هدف اصلی آن
+        <strong>مقایسه‌ی کوانتایل‌های داده با یک توزیع مرجع</strong>
+        است، نه تشخیص مستقیم Outlier.
+    </p>
+
+    <p>
+        وقتی تعداد زیادی از نقاط روی خط قرار دارند و تنها چند نقطه
+        در انتهای نمودار از خط فاصله می‌گیرند،
+        می‌توان احتمال وجود مقادیر غیرعادی در Tailها را بررسی کرد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        هر نقطه‌ای که از خط QQ فاصله دارد الزاماً Outlier نیست.
+        انحراف از خط می‌تواند ناشی از چولگی، Heavy Tail،
+        تفاوت در توزیع یا سایر ویژگی‌های داده نیز باشد.
+        بنابراین QQ Plot باید در کنار ابزارهایی مانند
+        Box Plot، IQR و سایر روش‌های آماری تفسیر شود.
+    </div>
+
+    <h2>۱۱. تفاوت تعداد Outlier و شدت Outlier</h2>
+
+    <p>
+        مقایسه‌ی
+        <code>Many Outliers</code>
+        و
+        <code>One Extreme Outlier</code>
+        نکته‌ی مهمی را نشان می‌دهد.
+    </p>
+
+    <p>
+        در حالت اول تعداد Outlierها بیشتر است، اما مقادیر آن‌ها
+        در محدوده‌ی نسبتاً مشخصی قرار دارند.
+        در حالت دوم فقط یک مقدار وجود دارد، اما مقدار آن بسیار دورتر است.
+    </p>
+
+    <p>
+        بنابراین هنگام تحلیل QQ Plot باید همزمان به
+        <strong>تعداد نقاط منحرف</strong>
+        و
+        <strong>فاصله‌ی آن‌ها از خط مرجع</strong>
+        توجه کرد.
+    </p>
+
+    <div class="formula">
+        Number of Outliers ≠ Severity of Outliers
+    </div>
+
+    <h2>۱۲. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>QQ Plot</strong>
+                کوانتایل‌های داده‌ی واقعی را با کوانتایل‌های یک توزیع مرجع
+                مقایسه می‌کند.
+            </li>
+
+            <li>
+                اگر نقاط تقریباً روی یک خط مستقیم باشند،
+                داده‌ها با توزیع مرجع سازگاری بیشتری دارند.
+            </li>
+
+            <li>
+                در دیتاست
+                <strong>No Outliers</strong>
+                انتظار داریم نقاط در سراسر نمودار،
+                مخصوصاً بخش مرکزی، رفتار خطی مناسبی داشته باشند.
+            </li>
+
+            <li>
+                Outlierهای سمت راست باعث انحراف بیشتر نقاط
+                در Tail راست می‌شوند.
+            </li>
+
+            <li>
+                Outlierهای متقارن می‌توانند باعث انحراف در هر دو Tail شوند.
+            </li>
+
+            <li>
+                حتی یک Outlier بسیار شدید می‌تواند
+                در انتهای QQ Plot انحراف قابل توجهی ایجاد کند.
+            </li>
+
+            <li>
+                بخش مرکزی QQ Plot معمولاً اطلاعات خوبی درباره‌ی
+                ساختار اصلی توزیع ارائه می‌دهد، در حالی که Tailها
+                برای بررسی مقادیر بسیار بزرگ یا کوچک اهمیت بیشتری دارند.
+            </li>
+
+            <li>
+                فاصله از خط QQ به‌تنهایی اثبات نمی‌کند که یک مقدار Outlier است؛
+                باید با سایر روش‌های آماری نیز بررسی شود.
+            </li>
+
+            <li>
+                <strong>تعداد Outlierها</strong>
+                و
+                <strong>شدت Outlierها</strong>
+                دو مفهوم متفاوت هستند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

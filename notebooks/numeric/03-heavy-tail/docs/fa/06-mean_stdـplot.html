@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Mean ± Standard Deviation
+        برای توزیع‌های Heavy-Tailed
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: نمودار Mean ± Standard Deviation چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Mean ± Standard Deviation</strong>
+        برای نمایش هم‌زمان
+        <strong>مرکز توزیع</strong>
+        و
+        <strong>میزان پراکندگی داده‌ها</strong>
+        استفاده می‌شود.
+    </p>
+
+    <p>
+        در این نمودار، نقطه‌ی اصلی نشان‌دهنده‌ی
+        <strong>Mean</strong>
+        یا میانگین داده‌ها است و میله‌ی عمودی اطراف آن،
+        محدوده‌ی
+        <strong>Mean − SD</strong>
+        تا
+        <strong>Mean + SD</strong>
+        را نشان می‌دهد.
+    </p>
+
+    <p>
+        بنابراین با نگاه کردن به نمودار می‌توان بررسی کرد که
+        میانگین دیتاست‌ها در چه محدوده‌ای قرار دارد و
+        پراکندگی آن‌ها نسبت به میانگین چقدر است.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        در این نمودار، طول میله‌ی خطا مستقیماً به مقدار
+        Standard Deviation وابسته است.
+        هرچه SD بزرگ‌تر باشد، فاصله‌ی
+        Mean − SD
+        و
+        Mean + SD
+        از میانگین بیشتر خواهد شد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با
+        <strong>Heavy Tail</strong>
+        در شدت‌های مختلف بررسی شده‌اند.
+        این داده‌ها با استفاده از توزیع
+        <strong>Student's t-distribution</strong>
+        با درجات آزادی متفاوت تولید شده‌اند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Degrees of Freedom</th>
+                <th>مقیاس</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Heavy Tail</td>
+                <td>15</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Heavy Tail</td>
+                <td>8</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Strong Heavy Tail</td>
+                <td>5</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Heavy Tail</td>
+                <td>3</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+
+            <tr>
+                <td>Heavy Tail + Outliers</td>
+                <td>8</td>
+                <td>8</td>
+                <td>1000</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        میانگین مرکزی تمام این داده‌ها تقریباً حول
+        <strong>170</strong>
+        قرار دارد، اما با کاهش Degrees of Freedom،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. رابطه‌ی Heavy Tail با Mean و Standard Deviation</h2>
+
+    <p>
+        در توزیع‌های Heavy-Tailed، بخش مهمی از تحلیل مربوط به این است که
+        مقادیر دور از مرکز می‌توانند تأثیر قابل‌توجهی روی
+        <strong>Mean</strong>
+        و به‌خصوص
+        <strong>Standard Deviation</strong>
+        داشته باشند.
+    </p>
+
+    <p>
+        برخلاف یک توزیع نرمال، در توزیع Heavy-Tailed احتمال مشاهده‌ی
+        مقادیر بسیار دور از میانگین بیشتر است.
+        این مقادیر دور، باعث افزایش پراکندگی اندازه‌گیری‌شده توسط SD می‌شوند.
+    </p>
+
+    <h3>۳.۱. Mild Heavy Tail → پراکندگی کمتر</h3>
+
+    <p>
+        در حالت
+        <code>df = 15</code>
+        دم‌های توزیع نسبتاً سبک‌تر هستند.
+        بنابراین مقادیر بسیار دور از مرکز کمتر دیده می‌شوند.
+    </p>
+
+    <p>
+        در نتیجه، Standard Deviation معمولاً در محدوده‌ی
+        متعادل‌تری قرار می‌گیرد و فاصله‌ی
+        <strong>Mean − SD</strong>
+        تا
+        <strong>Mean + SD</strong>
+        نیز محدودتر است.
+    </p>
+
+    <p>
+        نقطه‌ی Mean مرکز داده‌ها را نشان می‌دهد و میله‌ی خطا
+        میزان پراکندگی اطراف این مرکز را نمایش می‌دهد.
+    </p>
+
+    <h3>۳.۲. Moderate Heavy Tail → افزایش SD</h3>
+
+    <p>
+        با کاهش Degrees of Freedom به
+        <code>df = 8</code>،
+        دم‌های توزیع سنگین‌تر می‌شوند.
+    </p>
+
+    <p>
+        در نتیجه احتمال مشاهده‌ی مقادیر دور از میانگین افزایش پیدا می‌کند.
+        این مقادیر روی محاسبه‌ی SD اثر می‌گذارند و باعث می‌شوند
+        فاصله‌ی
+        <strong>Mean ± SD</strong>
+        بزرگ‌تر شود.
+    </p>
+
+    <h3>۳.۳. Strong Heavy Tail → پراکندگی شدیدتر</h3>
+
+    <p>
+        در
+        <code>df = 5</code>
+        دم‌ها سنگین‌تر شده‌اند و داده‌ها مقادیر افراطی بیشتری
+        نسبت به حالت‌های قبلی دارند.
+    </p>
+
+    <p>
+        در چنین شرایطی، SD می‌تواند به‌طور محسوسی افزایش پیدا کند.
+        بنابراین میله‌ی خطای اطراف Mean نیز بلندتر خواهد شد.
+    </p>
+
+    <p>
+        نکته‌ی مهم این است که Mean ممکن است همچنان نزدیک به 170 باقی بماند،
+        اما SD به دلیل وجود مقادیر دور از مرکز افزایش پیدا کند.
+    </p>
+
+    <h3>۳.۴. Extreme Heavy Tail → تأثیر شدید دم‌ها</h3>
+
+    <p>
+        در
+        <code>df = 3</code>
+        دم‌ها بسیار سنگین‌تر هستند.
+        بنابراین مشاهده‌ی مقادیر بسیار دور از مرکز محتمل‌تر است.
+    </p>
+
+    <p>
+        در این حالت، Standard Deviation می‌تواند بسیار بزرگ‌تر شود
+        و در نتیجه محدوده‌ی
+        <strong>Mean ± SD</strong>
+        بسیار گسترده‌تر از حالت Mild باشد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Standard Deviation به مقادیر دور از میانگین حساس است.
+        بنابراین در توزیع‌های Heavy-Tailed،
+        افزایش طول میله‌ی خطا می‌تواند ناشی از وجود
+        مقادیر بسیار دور در دم‌های توزیع باشد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. اثر Outlierها روی Mean ± SD</h2>
+
+    <p>
+        دیتاست
+        <code>Heavy Tail + Outliers</code>
+        علاوه بر Heavy Tail،
+        شامل چند مقدار بسیار بزرگ در انتهای داده‌ها است:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>نوع</th>
+                <th>مقادیر اضافه‌شده</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Outliers</td>
+                <td>215, 225, 240, 255, 275</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        این مقادیر فاصله‌ی زیادی از مرکز حدود 170 دارند.
+        به همین دلیل اثر آن‌ها روی Standard Deviation بسیار بیشتر
+        از یک تغییر معمولی در داده‌های مرکزی است.
+    </p>
+
+    <p>
+        در نتیجه انتظار داریم میله‌ی خطای
+        <strong>Heavy Tail + Outliers</strong>
+        نسبت به دیتاست
+        <strong>Moderate Heavy Tail</strong>
+        گسترده‌تر شود.
+    </p>
+
+    <p>
+        Mean نیز می‌تواند تحت تأثیر این مقادیر قرار بگیرد،
+        زیرا میانگین از تمام مقادیر استفاده می‌کند.
+        بنابراین ممکن است نقطه‌ی Mean نیز از مقدار مرکزی
+        دیتاست فاصله بگیرد.
+    </p>
+
+    <h3>۴.۱. چرا SD به Outlier حساس است؟</h3>
+
+    <p>
+        در محاسبه‌ی واریانس، فاصله‌ی هر مقدار از میانگین
+        به توان دو می‌رسد.
+        بنابراین یک مقدار بسیار دور می‌تواند تأثیر بسیار زیادی
+        روی واریانس و در نتیجه Standard Deviation داشته باشد.
+    </p>
+
+    <div class="formula">
+        Variance = Average of Squared Deviations
+    </div>
+
+    <p>
+        به همین دلیل، حتی تعداد کمی Outlier می‌توانند
+        طول میله‌ی خطای Mean ± SD را به‌طور محسوسی افزایش دهند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. چگونه نمودار را تفسیر کنیم؟</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش نمودار</th>
+                <th>معنی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>نقطه</strong></td>
+                <td>Mean یا میانگین</td>
+            </tr>
+
+            <tr>
+                <td><strong>بالای میله</strong></td>
+                <td>Mean + SD</td>
+            </tr>
+
+            <tr>
+                <td><strong>پایین میله</strong></td>
+                <td>Mean − SD</td>
+            </tr>
+
+            <tr>
+                <td><strong>طول میله</strong></td>
+                <td>نشان‌دهنده‌ی میزان SD</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        بنابراین در نمودار
+        <strong>Mean ± SD</strong>،
+        اولین چیزی که باید بررسی شود موقعیت نقطه‌ی Mean
+        و سپس طول میله‌ی خطا است.
+    </p>
+
+    <p>
+        اگر دو دیتاست Mean مشابهی داشته باشند اما یکی میله‌ی بسیار
+        بلندتری داشته باشد، یعنی مرکز آن‌ها تقریباً مشابه است،
+        اما میزان پراکندگی داده‌ها متفاوت است.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. جمع‌بندی مقایسه‌ی دیتاست‌ها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Heavy Tail</th>
+                <th>SD مورد انتظار</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Heavy Tail</td>
+                <td>کم</td>
+                <td>کمتر</td>
+                <td>پراکندگی محدودتر</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Heavy Tail</td>
+                <td>متوسط</td>
+                <td>بیشتر</td>
+                <td>دم‌های سنگین‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Heavy Tail</td>
+                <td>زیاد</td>
+                <td>زیادتر</td>
+                <td>مقادیر دور بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Heavy Tail</td>
+                <td>بسیار زیاد</td>
+                <td>بسیار زیاد</td>
+                <td>تأثیر شدید دم‌ها</td>
+            </tr>
+
+            <tr>
+                <td>Heavy Tail + Outliers</td>
+                <td>زیاد + Outlier</td>
+                <td>بسیار زیاد</td>
+                <td>پراکندگی شدید</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Mean</strong>
+                موقعیت مرکزی داده‌ها را نشان می‌دهد.
+            </li>
+
+            <li>
+                <strong>Standard Deviation</strong>
+                میزان پراکندگی داده‌ها حول Mean را نشان می‌دهد.
+            </li>
+
+            <li>
+                هرچه Heavy Tail شدیدتر شود،
+                احتمال مشاهده‌ی مقادیر دور از مرکز افزایش پیدا می‌کند.
+            </li>
+
+            <li>
+                مقادیر دور از مرکز می‌توانند باعث افزایش
+                قابل‌توجه Standard Deviation شوند.
+            </li>
+
+            <li>
+                <strong>Outlierها</strong>
+                می‌توانند هم Mean و هم SD را تحت تأثیر قرار دهند،
+                اما اثر آن‌ها روی SD معمولاً بسیار محسوس است.
+            </li>
+
+            <li>
+                در نتیجه، طول میله‌ی
+                <strong>Mean ± SD</strong>
+                می‌تواند به‌عنوان یک نشانه از افزایش پراکندگی
+                در داده‌های Heavy-Tailed دیده شود.
+            </li>
+
+            <li>
+                با این حال،
+                <strong>Mean ± SD</strong>
+                به‌تنهایی شکل توزیع یا Heavy Tail بودن آن را نشان نمی‌دهد؛
+                برای این کار باید نمودارهایی مانند
+                <strong>KDE، Box Plot، Violin Plot و QQ Plot</strong>
+                نیز بررسی شوند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>
