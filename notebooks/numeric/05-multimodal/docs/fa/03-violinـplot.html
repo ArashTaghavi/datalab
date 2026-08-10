@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+
+```
+<h1>
+    تحلیل و مقایسه نمودار Violin Plot برای توزیع‌های تک‌مدی و چندمدی
+</h1>
+
+<!-- ===================================================== -->
+<!-- 1 -->
+<!-- ===================================================== -->
+
+<h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+<p>
+    نمودار <strong>Violin Plot</strong> یکی از نمودارهای آماری برای نمایش
+    <strong>توزیع داده‌های عددی</strong> است.
+    این نمودار ترکیبی از اطلاعات
+    <strong>Box Plot</strong>
+    و
+    <strong>KDE (Kernel Density Estimation)</strong>
+    را در یک نمایش واحد ارائه می‌دهد.
+</p>
+
+<p>
+    بخش پهن و باریک ویولن، شکل تخمینی توزیع داده را نشان می‌دهد.
+    بنابراین برخلاف Box Plot که بیشتر روی
+    <strong>Median، Quartiles و Outliers</strong>
+    تمرکز دارد، Violin Plot می‌تواند نشان دهد داده‌ها
+    در چه نواحی‌ای بیشتر یا کمتر متمرکز شده‌اند.
+</p>
+
+<div class="note">
+    <strong>نکته مهم:</strong>
+    پهنای ویولن در هر مقدار، بیانگر چگالی تخمینی داده‌ها در آن مقدار است.
+    بنابراین قسمت‌های پهن‌تر نشان‌دهنده تراکم بیشتر داده و قسمت‌های
+    باریک‌تر نشان‌دهنده تراکم کمتر داده هستند.
+</div>
+
+<!-- ===================================================== -->
+<!-- 2 -->
+<!-- ===================================================== -->
+
+<h2>۲. داده‌های مورد بررسی</h2>
+
+<p>
+    در این تحلیل، پنج دیتاست با ساختارهای مختلف توزیعی ایجاد شده‌اند:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>تعداد نمونه</th>
+            <th>ساختار توزیع</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Unimodal</td>
+            <td>۱۰۰</td>
+            <td>یک قله</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Balanced</td>
+            <td>۱۰۰</td>
+            <td>دو قله با وزن تقریباً برابر</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Imbalanced</td>
+            <td>۱۰۰</td>
+            <td>دو قله با وزن متفاوت</td>
+        </tr>
+
+        <tr>
+            <td>Trimodal</td>
+            <td>۱۰۰</td>
+            <td>سه قله</td>
+        </tr>
+
+        <tr>
+            <td>Overlapping Modes</td>
+            <td>۱۰۰</td>
+            <td>دو مد با هم‌پوشانی زیاد</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    هدف اصلی این دیتاست‌ها بررسی این است که
+    <strong>تعداد، وزن و میزان فاصله‌ی مدها</strong>
+    چگونه در Violin Plot قابل مشاهده هستند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 3 -->
+<!-- ===================================================== -->
+
+<h2>۳. حالت تک‌مدی (Unimodal)</h2>
+
+<p>
+    دیتاست <code>Unimodal</code> از یک توزیع نرمال با
+    <code>loc = 170</code>
+    و
+    <code>scale = 8</code>
+    ساخته شده است.
+</p>
+
+<p>
+    در این حالت داده‌ها حول یک ناحیه‌ی مرکزی متمرکز هستند و
+    یک مد اصلی دارند.
+    بنابراین Violin Plot معمولاً یک قسمت پهن در اطراف مرکز
+    و باریک شدن تدریجی در دو طرف نشان می‌دهد.
+</p>
+
+<p>
+    شکل ویولن در این حالت تقریباً متقارن است و یک
+    <strong>قله‌ی اصلی</strong>
+    دارد.
+</p>
+
+<h3>۳.۱. چیزی که در نمودار مشاهده می‌کنیم</h3>
+
+<ul>
+    <li>یک ناحیه‌ی اصلی با چگالی بالا.</li>
+    <li>پهن‌ترین قسمت ویولن در اطراف مرکز توزیع.</li>
+    <li>باریک شدن ویولن در فاصله گرفتن از مرکز.</li>
+    <li>تقارن نسبی در دو طرف مرکز.</li>
+</ul>
+
+<div class="note">
+    <strong>نتیجه:</strong>
+    یک Violin Plot تک‌مدی معمولاً یک شکل واحد و پیوسته دارد
+    و بیشترین پهنا در اطراف مد اصلی دیده می‌شود.
+</div>
+
+<!-- ===================================================== -->
+<!-- 4 -->
+<!-- ===================================================== -->
+
+<h2>۴. توزیع Bimodal - Balanced</h2>
+
+<p>
+    در دیتاست
+    <code>Bimodal - Balanced</code>
+    دو توزیع نرمال با میانگین‌های
+    <code>155</code>
+    و
+    <code>185</code>
+    ترکیب شده‌اند.
+</p>
+
+<p>
+    هر دو گروه شامل ۵۰ نمونه هستند؛ بنابراین سهم هر دو مد
+    تقریباً برابر است.
+</p>
+
+<p>
+    در Violin Plot این ساختار می‌تواند به صورت
+    <strong>دو ناحیه‌ی پهن و مشخص</strong>
+    ظاهر شود که هرکدام یک مد را نشان می‌دهند.
+</p>
+
+<h3>۴.۱. چیزی که در نمودار مشاهده می‌کنیم</h3>
+
+<ul>
+    <li>دو ناحیه با چگالی بالا.</li>
+    <li>دو قله با اهمیت تقریباً یکسان.</li>
+    <li>یک ناحیه‌ی کم‌تراکم‌تر بین دو مد.</li>
+    <li>فاصله‌ی مشخص بین دو گروه.</li>
+</ul>
+
+<p>
+    این یکی از کاربردهای مهم Violin Plot است؛
+    زیرا Box Plot ممکن است وجود دو گروه را به‌وضوح نشان ندهد،
+    اما شکل KDE در Violin Plot می‌تواند این ساختار را آشکار کند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 5 -->
+<!-- ===================================================== -->
+
+<h2>۵. توزیع Bimodal - Imbalanced</h2>
+
+<p>
+    در این دیتاست دو گروه وجود دارند:
+    گروه اول شامل ۷۵ نمونه با میانگین
+    <code>160</code>
+    و گروه دوم شامل ۲۵ نمونه با میانگین
+    <code>190</code>
+    است.
+</p>
+
+<p>
+    بنابراین دو مد وجود دارند، اما سهم دو گروه برابر نیست.
+    گروه اول سه برابر گروه دوم داده دارد.
+</p>
+
+<p>
+    در Violin Plot انتظار داریم مد اول
+    <strong>پهن‌تر و غالب‌تر</strong>
+    دیده شود، در حالی که مد دوم ناحیه‌ی کوچک‌تر و کم‌تراکم‌تری ایجاد کند.
+</p>
+
+<h3>۵.۱. تفاوت با Bimodal Balanced</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>Bimodal Balanced</th>
+            <th>Bimodal Imbalanced</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>تعداد مد</td>
+            <td>۲</td>
+            <td>۲</td>
+        </tr>
+
+        <tr>
+            <td>وزن مدها</td>
+            <td>تقریباً برابر</td>
+            <td>نابرابر</td>
+        </tr>
+
+        <tr>
+            <td>مد اول</td>
+            <td>مشابه</td>
+            <td>غالب‌تر</td>
+        </tr>
+
+        <tr>
+            <td>مد دوم</td>
+            <td>مشابه</td>
+            <td>ضعیف‌تر</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="note">
+    <strong>نکته:</strong>
+    پهنای ویولن فقط فاصله‌ی بین دو مد را نشان نمی‌دهد؛
+    بلکه چگالی داده در هر ناحیه را نیز منعکس می‌کند.
+    بنابراین در حالت Imbalanced، مد مربوط به گروه بزرگ‌تر
+    معمولاً سهم بیشتری در شکل ویولن دارد.
+</div>
+
+<!-- ===================================================== -->
+<!-- 6 -->
+<!-- ===================================================== -->
+
+<h2>۶. توزیع Trimodal</h2>
+
+<p>
+    دیتاست <code>Trimodal</code> از سه گروه تشکیل شده است:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>گروه</th>
+            <th>میانگین</th>
+            <th>تعداد نمونه</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Group 1</td>
+            <td>۱۵۰</td>
+            <td>۳۵</td>
+        </tr>
+
+        <tr>
+            <td>Group 2</td>
+            <td>۱۷۰</td>
+            <td>۳۵</td>
+        </tr>
+
+        <tr>
+            <td>Group 3</td>
+            <td>۱۹۰</td>
+            <td>۳۰</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    بنابراین توزیع دارای سه مد اصلی است.
+    در Violin Plot این موضوع می‌تواند به شکل
+    <strong>سه ناحیه‌ی پهن</strong>
+    در اطراف مقادیر ۱۵۰، ۱۷۰ و ۱۹۰ دیده شود.
+</p>
+
+<p>
+    از آن‌جایی که سه گروه نسبتاً نزدیک به هم هستند،
+    ناحیه‌ی بین مدها نیز اهمیت دارد.
+    اگر فاصله‌ی بین گروه‌ها نسبت به پراکندگی هر گروه کافی باشد،
+    سه قله به‌وضوح قابل مشاهده خواهند بود.
+</p>
+
+<!-- ===================================================== -->
+<!-- 7 -->
+<!-- ===================================================== -->
+
+<h2>۷. Overlapping Modes</h2>
+
+<p>
+    دیتاست <code>Overlapping Modes</code> از دو گروه با میانگین‌های
+    <code>160</code>
+    و
+    <code>175</code>
+    ساخته شده است؛
+    اما هر دو گروه دارای
+    <code>scale = 8</code>
+    هستند.
+</p>
+
+<p>
+    فاصله‌ی بین دو میانگین نسبت به پراکندگی گروه‌ها زیاد نیست.
+    در نتیجه دو توزیع روی یکدیگر
+    <strong>هم‌پوشانی قابل توجهی</strong>
+    دارند.
+</p>
+
+<p>
+    در Violin Plot ممکن است دو قله به‌وضوح از یکدیگر جدا نباشند
+    و به جای دو مد کاملاً مشخص،
+    یک شکل پهن یا دارای یک فرورفتگی کم‌عمق دیده شود.
+</p>
+
+<h3>۷.۱. نکته مهم</h3>
+
+<div class="warning">
+    <strong>هم‌پوشانی مدها:</strong>
+    وجود دو گروه در داده الزاماً به این معنی نیست که
+    Violin Plot همیشه دو قله‌ی واضح نشان خواهد داد.
+    اگر پراکندگی گروه‌ها زیاد باشد و میانگین آن‌ها به هم نزدیک باشد،
+    چگالی دو گروه روی هم قرار می‌گیرد و ممکن است مدها
+    در نمودار به‌صورت یک ناحیه‌ی واحد دیده شوند.
+</div>
+
+<!-- ===================================================== -->
+<!-- 8 -->
+<!-- ===================================================== -->
+
+<h2>۸. مقایسه‌ی پنج توزیع</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>تعداد مد</th>
+            <th>ساختار</th>
+            <th>چیزی که Violin Plot نشان می‌دهد</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Unimodal</td>
+            <td>۱</td>
+            <td>تک‌مدی</td>
+            <td>یک قله‌ی اصلی</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Balanced</td>
+            <td>۲</td>
+            <td>دو گروه متعادل</td>
+            <td>دو قله‌ی نسبتاً مشابه</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Imbalanced</td>
+            <td>۲</td>
+            <td>دو گروه نامتعادل</td>
+            <td>یک مد غالب و یک مد ضعیف‌تر</td>
+        </tr>
+
+        <tr>
+            <td>Trimodal</td>
+            <td>۳</td>
+            <td>سه گروه</td>
+            <td>سه ناحیه‌ی چگال</td>
+        </tr>
+
+        <tr>
+            <td>Overlapping Modes</td>
+            <td>۲</td>
+            <td>دو گروه هم‌پوشان</td>
+            <td>مدهای کمتر قابل تفکیک</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- 9 -->
+<!-- ===================================================== -->
+
+<h2>۹. Violin Plot در مقایسه با Box Plot</h2>
+
+<p>
+    هر دو نمودار برای تحلیل توزیع داده مفید هستند، اما اطلاعات متفاوتی
+    را برجسته می‌کنند.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>Box Plot</th>
+            <th>Violin Plot</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Median</td>
+            <td>واضح</td>
+            <td>معمولاً قابل نمایش</td>
+        </tr>
+
+        <tr>
+            <td>Quartiles</td>
+            <td>واضح</td>
+            <td>کمتر برجسته</td>
+        </tr>
+
+        <tr>
+            <td>IQR</td>
+            <td>واضح</td>
+            <td>به‌صورت مستقیم محور اصلی نیست</td>
+        </tr>
+
+        <tr>
+            <td>Outliers</td>
+            <td>واضح</td>
+            <td>بسته به تنظیمات نمودار</td>
+        </tr>
+
+        <tr>
+            <td>شکل توزیع</td>
+            <td>محدود</td>
+            <td><strong>بسیار بهتر</strong></td>
+        </tr>
+
+        <tr>
+            <td>چندمدی بودن</td>
+            <td>ضعیف</td>
+            <td><strong>قابل مشاهده</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- 10 -->
+<!-- ===================================================== -->
+
+<h2>۱۰. جمع‌بندی نهایی</h2>
+
+<div class="summary">
+
+    <ul>
+
+        <li>
+            <strong>Unimodal</strong>
+            → یک ناحیه‌ی اصلی با چگالی بالا.
+        </li>
+
+        <li>
+            <strong>Bimodal Balanced</strong>
+            → دو مد با اهمیت تقریباً برابر.
+        </li>
+
+        <li>
+            <strong>Bimodal Imbalanced</strong>
+            → دو مد با وزن متفاوت.
+        </li>
+
+        <li>
+            <strong>Trimodal</strong>
+            → سه ناحیه‌ی چگال که بیانگر سه مد هستند.
+        </li>
+
+        <li>
+            <strong>Overlapping Modes</strong>
+            → دو گروه وجود دارند، اما به دلیل هم‌پوشانی،
+            تفکیک مدها دشوارتر است.
+        </li>
+
+        <li>
+            Violin Plot نسبت به Box Plot اطلاعات بیشتری
+            درباره‌ی <strong>شکل توزیع و چندمدی بودن</strong>
+            ارائه می‌دهد.
+        </li>
+
+        <li>
+            پهنای ویولن نشان‌دهنده‌ی
+            <strong>چگالی تخمینی داده‌ها</strong>
+            در هر مقدار است.
+        </li>
+
+    </ul>
+
+</div>
+```
+
+</div>
+
+</body>
+</html>

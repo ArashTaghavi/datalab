@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>
+    تحلیل و مقایسه نمودار CDF برای توزیع‌های تک‌مدی و چندمدی
+</h1>
+
+<!-- ===================================================== -->
+<!-- 1 -->
+<!-- ===================================================== -->
+
+<h2>۱. مقدمه: CDF چیست؟</h2>
+
+<p>
+    CDF مخفف عبارت
+    <strong>Cumulative Distribution Function</strong>
+    یا
+    <strong>تابع توزیع تجمعی</strong>
+    است.
+    این تابع به ما نشان می‌دهد که چه مقدار از داده‌ها
+    <strong>کوچک‌تر یا مساوی یک مقدار مشخص</strong>
+    هستند.
+</p>
+
+<p>
+    برخلاف KDE که شکل و تراکم توزیع را نمایش می‌دهد،
+    CDF مقدار احتمال تجمعی را از سمت چپ به راست دنبال می‌کند.
+    بنابراین نمودار CDF همیشه از مقدار نزدیک به
+    <code>0</code>
+    شروع شده و در نهایت به
+    <code>1</code>
+    نزدیک می‌شود.
+</p>
+
+<div class="note">
+    <strong>نکته مهم:</strong>
+    اگر در یک نقطه از محور X مقدار CDF برابر با
+    <code>0.70</code>
+    باشد، یعنی تقریباً ۷۰٪ داده‌ها مقدارشان
+    کوچک‌تر یا مساوی آن نقطه است.
+</div>
+
+<!-- ===================================================== -->
+<!-- 2 -->
+<!-- ===================================================== -->
+
+<h2>۲. اجزای اصلی نمودار CDF</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>جزء نمودار</th>
+            <th>معنی</th>
+            <th>تفسیر</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td><strong>X</strong></td>
+            <td>Value</td>
+            <td>مقدار واقعی متغیر</td>
+        </tr>
+
+        <tr>
+            <td><strong>Y</strong></td>
+            <td>Cumulative Probability</td>
+            <td>درصد تجمعی داده‌ها</td>
+        </tr>
+
+        <tr>
+            <td><strong>Y = 0</strong></td>
+            <td>0%</td>
+            <td>تقریباً هیچ داده‌ای تا این مقدار وجود ندارد</td>
+        </tr>
+
+        <tr>
+            <td><strong>Y = 0.5</strong></td>
+            <td>50%</td>
+            <td>نقطه نزدیک به Median</td>
+        </tr>
+
+        <tr>
+            <td><strong>Y = 1</strong></td>
+            <td>100%</td>
+            <td>تمام داده‌ها تا این مقدار قرار گرفته‌اند</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    برخلاف KDE، در CDF ارتفاع منحنی نشان‌دهنده‌ی
+    <strong>چگالی</strong>
+    نیست.
+    ارتفاع هر نقطه نشان می‌دهد چه نسبتی از داده‌ها
+    تا آن مقدار جمع شده‌اند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 3 -->
+<!-- ===================================================== -->
+
+<h2>۳. داده‌های مورد بررسی</h2>
+
+<p>
+    در این تحلیل پنج دیتاست با ساختارهای مختلف توزیعی بررسی می‌شوند:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>تعداد نمونه</th>
+            <th>ساختار توزیع</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Unimodal</td>
+            <td>۱۰۰</td>
+            <td>یک مد</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Balanced</td>
+            <td>۱۰۰</td>
+            <td>دو مد با وزن برابر</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Imbalanced</td>
+            <td>۱۰۰</td>
+            <td>دو مد با وزن متفاوت</td>
+        </tr>
+
+        <tr>
+            <td>Trimodal</td>
+            <td>۱۰۰</td>
+            <td>سه مد</td>
+        </tr>
+
+        <tr>
+            <td>Overlapping Modes</td>
+            <td>۱۰۰</td>
+            <td>دو مد با هم‌پوشانی</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    هدف این مقایسه بررسی این است که
+    <strong>تعداد مدها، وزن گروه‌ها و میزان هم‌پوشانی</strong>
+    چگونه روی شکل CDF تأثیر می‌گذارند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 4 -->
+<!-- ===================================================== -->
+
+<h2>۴. حالت Unimodal</h2>
+
+<p>
+    دیتاست <code>Unimodal</code> از یک توزیع نرمال با
+    <code>loc = 170</code>
+    و
+    <code>scale = 8</code>
+    ساخته شده است.
+</p>
+
+<p>
+    در این حالت داده‌ها حول یک مرکز اصلی متمرکز هستند.
+    بنابراین CDF معمولاً یک منحنی
+    <strong>S شکل و نسبتاً منظم</strong>
+    ایجاد می‌کند.
+</p>
+
+<p>
+    در ناحیه‌ای که داده‌ها تراکم بیشتری دارند،
+    CDF با سرعت بیشتری افزایش پیدا می‌کند.
+    در قسمت‌هایی که داده کمتر است،
+    منحنی آرام‌تر حرکت می‌کند.
+</p>
+
+<h3>۴.۱. چیزی که در نمودار مشاهده می‌کنیم</h3>
+
+<ul>
+    <li>یک افزایش اصلی در اطراف مرکز توزیع.</li>
+    <li>عبور منحنی از نزدیکی <code>0.5</code> در اطراف Median.</li>
+    <li>افزایش آرام‌تر در نواحی کم‌تراکم.</li>
+    <li>رسیدن تدریجی CDF به ۱.</li>
+</ul>
+
+<div class="note">
+    <strong>نتیجه:</strong>
+    در یک توزیع تک‌مدی، CDF معمولاً یک روند صعودی
+    نسبتاً یکنواخت دارد و یک ناحیه‌ی اصلی با شیب بیشتر دیده می‌شود.
+</div>
+
+<!-- ===================================================== -->
+<!-- 5 -->
+<!-- ===================================================== -->
+
+<h2>۵. توزیع Bimodal - Balanced</h2>
+
+<p>
+    دیتاست
+    <code>Bimodal - Balanced</code>
+    از دو گروه ۵۰تایی تشکیل شده است:
+    یک گروه با میانگین
+    <code>155</code>
+    و گروه دیگر با میانگین
+    <code>185</code>.
+</p>
+
+<p>
+    چون تعداد نمونه‌های دو گروه برابر است،
+    هر گروه تقریباً نیمی از احتمال کل را تشکیل می‌دهد.
+</p>
+
+<p>
+    در CDF این ساختار می‌تواند به صورت
+    <strong>دو ناحیه‌ی افزایش سریع</strong>
+    دیده شود که توسط یک ناحیه‌ی با شیب کمتر از هم جدا شده‌اند.
+</p>
+
+<h3>۵.۱. رفتار CDF</h3>
+
+<ul>
+    <li>
+        در اطراف مد اول، CDF سریع‌تر افزایش پیدا می‌کند.
+    </li>
+
+    <li>
+        پس از عبور از گروه اول، افزایش CDF موقتاً کندتر می‌شود.
+    </li>
+
+    <li>
+        در اطراف مد دوم، دوباره شیب CDF افزایش پیدا می‌کند.
+    </li>
+
+    <li>
+        در پایان، CDF به ۱ نزدیک می‌شود.
+    </li>
+</ul>
+
+<p>
+    بنابراین اگر KDE دو قله‌ی جداگانه نشان دهد،
+    CDF همان ساختار را به شکل
+    <strong>دو بخش با شیب بیشتر</strong>
+    منعکس می‌کند.
+</p>
+
+<!-- ===================================================== -->
+<!-- 6 -->
+<!-- ===================================================== -->
+
+<h2>۶. توزیع Bimodal - Imbalanced</h2>
+
+<p>
+    در این دیتاست، گروه اول شامل ۷۵ نمونه با میانگین
+    <code>160</code>
+    و گروه دوم شامل ۲۵ نمونه با میانگین
+    <code>190</code>
+    است.
+</p>
+
+<p>
+    بنابراین گروه اول سهم بیشتری از کل داده‌ها دارد.
+    در نتیجه انتظار داریم بخش اول CDF افزایش بیشتری داشته باشد.
+</p>
+
+<h3>۶.۱. رفتار نمودار</h3>
+
+<ul>
+    <li>
+        بخش مربوط به گروه اول افزایش قابل توجهی دارد.
+    </li>
+
+    <li>
+        پس از گروه اول، CDF به سطحی نزدیک به
+        <code>0.75</code>
+        می‌رسد.
+    </li>
+
+    <li>
+        گروه دوم بخش باقی‌مانده‌ی حدود ۲۵٪ را تکمیل می‌کند.
+    </li>
+
+    <li>
+        در نهایت CDF به ۱ می‌رسد.
+    </li>
+</ul>
+
+<div class="note">
+    <strong>نکته مهم:</strong>
+    CDF فقط محل گروه‌ها را نشان نمی‌دهد؛
+    اندازه‌ی نسبی هر گروه نیز در مقدار افزایش CDF منعکس می‌شود.
+    بنابراین در حالت Imbalanced، گروه بزرگ‌تر سهم بیشتری
+    در افزایش عمودی CDF دارد.
+</div>
+
+<!-- ===================================================== -->
+<!-- 7 -->
+<!-- ===================================================== -->
+
+<h2>۷. توزیع Trimodal</h2>
+
+<p>
+    دیتاست <code>Trimodal</code> شامل سه گروه با میانگین‌های
+    <code>150</code>،
+    <code>170</code>
+    و
+    <code>190</code>
+    است.
+</p>
+
+<p>
+    تعداد نمونه‌ها به ترتیب ۳۵، ۳۵ و ۳۰ است.
+    بنابراین هر سه گروه سهم قابل توجهی از احتمال کل دارند.
+</p>
+
+<p>
+    در CDF انتظار داریم سه ناحیه‌ی اصلی با
+    <strong>افزایش سریع‌تر</strong>
+    مشاهده شود.
+</p>
+
+<h3>۷.۱. رفتار CDF</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>گروه</th>
+            <th>میانگین</th>
+            <th>سهم تقریبی از داده‌ها</th>
+            <th>اثر روی CDF</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Group 1</td>
+            <td>۱۵۰</td>
+            <td>۳۵٪</td>
+            <td>افزایش اول</td>
+        </tr>
+
+        <tr>
+            <td>Group 2</td>
+            <td>۱۷۰</td>
+            <td>۳۵٪</td>
+            <td>افزایش دوم</td>
+        </tr>
+
+        <tr>
+            <td>Group 3</td>
+            <td>۱۹۰</td>
+            <td>۳۰٪</td>
+            <td>افزایش سوم</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    بنابراین CDF این توزیع می‌تواند ساختار سه‌مرحله‌ای داشته باشد:
+    افزایش مربوط به گروه اول، سپس گروه دوم و در نهایت گروه سوم.
+</p>
+
+<!-- ===================================================== -->
+<!-- 8 -->
+<!-- ===================================================== -->
+
+<h2>۸. Overlapping Modes</h2>
+
+<p>
+    دیتاست <code>Overlapping Modes</code> از دو توزیع با میانگین‌های
+    <code>160</code>
+    و
+    <code>175</code>
+    تشکیل شده است.
+    هر دو گروه دارای
+    <code>scale = 8</code>
+    هستند.
+</p>
+
+<p>
+    فاصله‌ی میانگین‌ها نسبت به پراکندگی دو گروه کم است.
+    بنابراین بخش قابل توجهی از داده‌های دو گروه با یکدیگر
+    هم‌پوشانی دارند.
+</p>
+
+<p>
+    در CDF این هم‌پوشانی باعث می‌شود دو ناحیه‌ی افزایش
+    به‌سادگی از یکدیگر جدا نباشند.
+    منحنی معمولاً روند صعودی نرم‌تر و پیوسته‌تری خواهد داشت.
+</p>
+
+<div class="warning">
+    <strong>نکته مهم:</strong>
+    CDF برای تشخیص چندمدی بودن به اندازه‌ی KDE مناسب نیست.
+    ممکن است یک توزیع دو مد داشته باشد، اما CDF آن
+    همچنان شبیه یک منحنی صعودی نسبتاً ساده دیده شود.
+    برای مشاهده‌ی مستقیم شکل مدها، KDE یا Violin Plot
+    ابزار مناسب‌تری هستند.
+</div>
+
+<!-- ===================================================== -->
+<!-- 9 -->
+<!-- ===================================================== -->
+
+<h2>۹. مقایسه‌ی پنج توزیع</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>دیتاست</th>
+            <th>ساختار</th>
+            <th>رفتار مورد انتظار در CDF</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Unimodal</td>
+            <td>یک مد</td>
+            <td>یک افزایش اصلی و نسبتاً منظم</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Balanced</td>
+            <td>دو مد متعادل</td>
+            <td>دو ناحیه با شیب بیشتر</td>
+        </tr>
+
+        <tr>
+            <td>Bimodal - Imbalanced</td>
+            <td>دو مد نامتعادل</td>
+            <td>افزایش بزرگ‌تر برای گروه غالب</td>
+        </tr>
+
+        <tr>
+            <td>Trimodal</td>
+            <td>سه مد</td>
+            <td>سه ناحیه با شیب بیشتر</td>
+        </tr>
+
+        <tr>
+            <td>Overlapping Modes</td>
+            <td>دو مد هم‌پوشان</td>
+            <td>افزایش نرم‌تر و کمتر قابل تفکیک</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- 10 -->
+<!-- ===================================================== -->
+
+<h2>۱۰. رابطه‌ی CDF با Median و Percentiles</h2>
+
+<p>
+    یکی از مهم‌ترین کاربردهای CDF، پیدا کردن
+    <strong>Percentile</strong>
+    ها است.
+</p>
+
+<p>
+    برای مثال اگر بخواهیم Median را پیدا کنیم،
+    مقدار Xای را پیدا می‌کنیم که CDF آن تقریباً
+    <code>0.5</code>
+    باشد.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>مقدار CDF</th>
+            <th>مفهوم</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>0.25</td>
+            <td>Q1 / صدک ۲۵</td>
+        </tr>
+
+        <tr>
+            <td>0.50</td>
+            <td>Median / صدک ۵۰</td>
+        </tr>
+
+        <tr>
+            <td>0.75</td>
+            <td>Q3 / صدک ۷۵</td>
+        </tr>
+
+        <tr>
+            <td>0.90</td>
+            <td>صدک ۹۰</td>
+        </tr>
+
+        <tr>
+            <td>0.95</td>
+            <td>صدک ۹۵</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    بنابراین CDF یک ابزار بسیار مناسب برای پاسخ به سؤال‌هایی
+    مانند «چه درصدی از داده‌ها کمتر از یک مقدار مشخص هستند؟»
+    یا «مقدار مربوط به صدک ۹۵ چیست؟» است.
+</p>
+
+<!-- ===================================================== -->
+<!-- 11 -->
+<!-- ===================================================== -->
+
+<h2>۱۱. CDF در مقایسه با KDE و Violin Plot</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>KDE</th>
+            <th>Violin Plot</th>
+            <th>CDF</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>نمایش چگالی</td>
+            <td><strong>بله</strong></td>
+            <td><strong>بله</strong></td>
+            <td>خیر</td>
+        </tr>
+
+        <tr>
+            <td>نمایش مدها</td>
+            <td><strong>عالی</strong></td>
+            <td><strong>عالی</strong></td>
+            <td>محدود</td>
+        </tr>
+
+        <tr>
+            <td>احتمال تجمعی</td>
+            <td>خیر</td>
+            <td>خیر</td>
+            <td><strong>بله</strong></td>
+        </tr>
+
+        <tr>
+            <td>Percentile</td>
+            <td>غیرمستقیم</td>
+            <td>غیرمستقیم</td>
+            <td><strong>بسیار مناسب</strong></td>
+        </tr>
+
+        <tr>
+            <td>مقایسه‌ی توزیع‌ها</td>
+            <td>خوب</td>
+            <td>خوب</td>
+            <td><strong>بسیار خوب</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- 12 -->
+<!-- ===================================================== -->
+
+<h2>۱۲. جمع‌بندی نهایی</h2>
+
+<div class="summary">
+
+    <ul>
+
+        <li>
+            <strong>CDF</strong>
+            نشان می‌دهد چه نسبتی از داده‌ها
+            کوچک‌تر یا مساوی یک مقدار مشخص هستند.
+        </li>
+
+        <li>
+            مقدار CDF همیشه بین
+            <strong>۰ و ۱</strong>
+            قرار دارد.
+        </li>
+
+        <li>
+            در
+            <strong>Unimodal</strong>
+            معمولاً یک ناحیه‌ی اصلی با افزایش سریع‌تر دیده می‌شود.
+        </li>
+
+        <li>
+            در
+            <strong>Bimodal Balanced</strong>
+            دو ناحیه‌ی اصلی افزایش وجود دارد.
+        </li>
+
+        <li>
+            در
+            <strong>Bimodal Imbalanced</strong>
+            گروه بزرگ‌تر افزایش بیشتری در CDF ایجاد می‌کند.
+        </li>
+
+        <li>
+            در
+            <strong>Trimodal</strong>
+            سه ناحیه‌ی افزایش مرتبط با سه گروه مشاهده می‌شود.
+        </li>
+
+        <li>
+            در
+            <strong>Overlapping Modes</strong>
+            تفکیک مدها در CDF دشوارتر است.
+        </li>
+
+        <li>
+            CDF برای تحلیل
+            <strong>Percentile، Median و Probability</strong>
+            بسیار مناسب است.
+        </li>
+
+        <li>
+            برای مشاهده‌ی مستقیم شکل و تعداد مدها،
+            <strong>KDE و Violin Plot</strong>
+            معمولاً اطلاعات بصری بیشتری ارائه می‌دهند.
+        </li>
+
+    </ul>
+
+</div>
+```
+
+</div>
+
+
+</body>
+</html>

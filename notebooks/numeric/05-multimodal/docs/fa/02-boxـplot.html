@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه Box Plot برای توزیع‌های تک‌قله‌ای و چندقله‌ای
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Box Plot چیست؟</h2>
+
+    <p>
+        <strong>Box Plot</strong>
+        یا نمودار جعبه‌ای یکی از ابزارهای مهم برای خلاصه‌سازی
+        و مقایسه‌ی توزیع داده‌های عددی است.
+        این نمودار به‌جای نمایش تک‌تک مقادیر، اطلاعات اصلی توزیع را
+        در قالب چند مقدار آماری نمایش می‌دهد.
+    </p>
+
+    <p>
+        مهم‌ترین بخش‌های Box Plot عبارت‌اند از:
+        <strong>Q1</strong>،
+        <strong>Median</strong>،
+        <strong>Q3</strong>،
+        <strong>IQR</strong>
+        و
+        <strong>Whiskers</strong>.
+        همچنین مقادیر غیرعادی ممکن است به‌صورت
+        <strong>Outlier</strong>
+        در خارج از Whiskerها نمایش داده شوند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش</th>
+                <th>نام</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Q1</strong></td>
+                <td>First Quartile</td>
+                <td>۲۵٪ داده‌ها پایین‌تر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Median</strong></td>
+                <td>Median</td>
+                <td>۵۰٪ داده‌ها پایین‌تر و ۵۰٪ بالاتر هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Q3</strong></td>
+                <td>Third Quartile</td>
+                <td>۷۵٪ داده‌ها پایین‌تر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>IQR</strong></td>
+                <td>Interquartile Range</td>
+                <td>فاصله بین Q1 و Q3</td>
+            </tr>
+
+            <tr>
+                <td><strong>Whiskers</strong></td>
+                <td>Whiskers</td>
+                <td>محدوده‌ی داده‌های غیرپرت</td>
+            </tr>
+
+            <tr>
+                <td><strong>Outlier</strong></td>
+                <td>Outlier</td>
+                <td>مقدار غیرعادی خارج از محدوده‌ی Whisker</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Box Plot شکل دقیق Distribution را نشان نمی‌دهد.
+        برای مثال ممکن است یک Box Plot برای یک توزیع تک‌قله‌ای
+        و یک توزیع دو‌قله‌ای بسیار شبیه باشد.
+        بنابراین برای بررسی تعداد قله‌ها، Box Plot باید در کنار
+        نمودارهایی مانند KDE یا Histogram استفاده شود.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با ساختارهای مختلف Distribution
+        مورد بررسی قرار گرفته‌اند.
+        هدف این است که ببینیم تغییر شکل Distribution از تک‌قله‌ای
+        به چندقله‌ای چگونه در Box Plot دیده می‌شود.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>ساختار</th>
+                <th>تعداد نمونه</th>
+                <th>پارامترهای اصلی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Unimodal</td>
+                <td>تک‌قله‌ای</td>
+                <td>1000</td>
+                <td>Mean = 170, SD = 8</td>
+            </tr>
+
+            <tr>
+                <td>Bimodal - Balanced</td>
+                <td>دو قله‌ی متعادل</td>
+                <td>1000</td>
+                <td>155 و 185</td>
+            </tr>
+
+            <tr>
+                <td>Bimodal - Imbalanced</td>
+                <td>دو قله‌ی نامتعادل</td>
+                <td>1000</td>
+                <td>160 و 190</td>
+            </tr>
+
+            <tr>
+                <td>Trimodal</td>
+                <td>سه قله‌ای</td>
+                <td>1000</td>
+                <td>150، 170 و 190</td>
+            </tr>
+
+            <tr>
+                <td>Overlapping Modes</td>
+                <td>دو قله‌ی هم‌پوشان</td>
+                <td>1000</td>
+                <td>160 و 175</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. Box Plot در توزیع Unimodal</h2>
+
+    <p>
+        دیتاست
+        <code>Unimodal</code>
+        از یک توزیع نرمال با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        ساخته شده است.
+    </p>
+
+    <p>
+        در این حالت، داده‌ها عمدتاً در اطراف ۱۷۰ متمرکز هستند
+        و Distribution دارای یک قله‌ی اصلی است.
+    </p>
+
+    <h3>۳.۱. شکل مورد انتظار Box Plot</h3>
+
+    <p>
+        انتظار داریم Median در نزدیکی مرکز داده قرار داشته باشد
+        و Q1 و Q3 نیز در دو طرف آن قرار بگیرند.
+        به دلیل تقارن تقریبی توزیع نرمال،
+        فاصله‌ی Median از Q1 و Q3 معمولاً نسبتاً مشابه خواهد بود.
+    </p>
+
+    <p>
+        همچنین Whiskerهای دو طرف نیز در یک توزیع نرمال تقریباً متقارن،
+        طول مشابهی خواهند داشت.
+    </p>
+
+    <p>
+        بنابراین Box Plot این دیتاست معمولاً ظاهری نسبتاً
+        <strong>متقارن</strong>
+        خواهد داشت.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. Box Plot در Bimodal - Balanced</h2>
+
+    <p>
+        این دیتاست از دو گروه با اندازه‌ی برابر تشکیل شده است:
+    </p>
+
+    <div class="formula">
+        50 samples → N(155, 5)
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+        50 samples → N(185, 5)
+    </div>
+
+    <p>
+        بنابراین دو گروه تقریباً به یک اندازه در Distribution
+        حضور دارند.
+    </p>
+
+    <h3>۴.۱. اثر دو گروه روی Box Plot</h3>
+
+    <p>
+        به دلیل فاصله‌ی نسبتاً زیاد بین دو گروه،
+        دامنه‌ی کلی داده‌ها افزایش پیدا می‌کند.
+        در نتیجه Box و Whiskerها بخش وسیع‌تری از محور عددی را پوشش می‌دهند.
+    </p>
+
+    <p>
+        Median تقریباً در ناحیه‌ی میانی دو گروه قرار می‌گیرد.
+        اما نکته‌ی مهم این است که Median لزوماً در نقطه‌ای قرار نمی‌گیرد
+        که بیشترین تراکم داده وجود دارد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Box Plot در اینجا نمی‌تواند به‌تنهایی نشان دهد که Distribution
+        دارای دو قله است.
+        ممکن است Box Plot فقط یک Box نسبتاً بزرگ نشان دهد،
+        در حالی که KDE یا Histogram دو قله‌ی کاملاً مشخص را نشان می‌دهد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. Box Plot در Bimodal - Imbalanced</h2>
+
+    <p>
+        این دیتاست از دو گروه با اندازه‌های متفاوت تشکیل شده است:
+    </p>
+
+    <div class="formula">
+        75 samples → N(160, 5)
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+        25 samples → N(190, 5)
+    </div>
+
+    <p>
+        بنابراین گروه اول سه برابر گروه دوم نمونه دارد.
+    </p>
+
+    <h3>۵.۱. اثر عدم تعادل روی Box Plot</h3>
+
+    <p>
+        به دلیل تعداد بیشتر نمونه‌های گروه اول،
+        بخش بزرگی از ۵۰٪ میانی داده‌ها می‌تواند تحت تأثیر
+        این گروه قرار بگیرد.
+    </p>
+
+    <p>
+        در نتیجه Median و Quartileها الزاماً در وسط فاصله‌ی
+        بین دو گروه قرار نمی‌گیرند.
+        موقعیت آن‌ها به تعداد نمونه‌های هر گروه و مقدار واقعی داده‌ها بستگی دارد.
+    </p>
+
+    <p>
+        این موضوع یک نکته‌ی مهم درباره‌ی Box Plot را نشان می‌دهد:
+        <strong>
+            اندازه و موقعیت Box به توزیع تجمعی داده‌ها وابسته است،
+            نه صرفاً به فاصله‌ی بین قله‌های Distribution.
+        </strong>
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. Box Plot در Trimodal</h2>
+
+    <p>
+        دیتاست
+        <code>Trimodal</code>
+        از سه گروه تشکیل شده است:
+    </p>
+
+    <div class="formula">
+        35 samples → N(150, 4)
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+        35 samples → N(170, 4)
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+        30 samples → N(190, 4)
+    </div>
+
+    <p>
+        سه گروه تقریباً اندازه‌ی مشابهی دارند و از یکدیگر فاصله دارند.
+    </p>
+
+    <h3>۶.۱. شکل Box Plot</h3>
+
+    <p>
+        با وجود اینکه Distribution دارای سه قله است،
+        Box Plot همچنان فقط یک Box برای کل داده‌ها ایجاد می‌کند.
+    </p>
+
+    <p>
+        بنابراین فاصله‌ی زیاد بین گروه‌ها می‌تواند باعث افزایش
+        <strong>IQR</strong>
+        و همچنین افزایش طول Whiskerها شود،
+        اما تعداد قله‌ها مستقیماً در Box Plot نمایش داده نمی‌شود.
+    </p>
+
+    <p>
+        این مثال به‌خوبی نشان می‌دهد که Box Plot یک
+        <strong>خلاصه‌ی پنج‌عددی</strong>
+        از Distribution ارائه می‌کند و نه شکل کامل Distribution.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. Box Plot در Overlapping Modes</h2>
+
+    <p>
+        دیتاست
+        <code>Overlapping Modes</code>
+        از دو گروه با میانگین‌های ۱۶۰ و ۱۷۵ تشکیل شده است:
+    </p>
+
+    <div class="formula">
+        50 samples → N(160, 8)
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+        50 samples → N(175, 8)
+    </div>
+
+    <p>
+        در این حالت، SD هر گروه نسبتاً زیاد است و فاصله‌ی بین
+        میانگین‌ها نسبت به پراکندگی داده‌ها کوچک‌تر است.
+        بنابراین دو گروه هم‌پوشانی قابل توجهی دارند.
+    </p>
+
+    <h3>۷.۱. اثر هم‌پوشانی</h3>
+
+    <p>
+        چون داده‌ها روی یکدیگر قرار گرفته‌اند،
+        Distribution کلی می‌تواند شبیه یک توزیع نسبتاً پیوسته و پهن باشد.
+    </p>
+
+    <p>
+        Box Plot نیز معمولاً یک Box واحد را نشان می‌دهد
+        و از روی آن نمی‌توان به‌راحتی تشخیص داد که داده‌ها
+        از دو گروه مختلف ساخته شده‌اند.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        هم‌پوشانی زیاد بین گروه‌ها باعث می‌شود تفاوت ساختاری
+        آن‌ها در خلاصه‌های آماری مانند Quartileها کمتر قابل مشاهده باشد.
+        برای بررسی این ساختار، KDE یا Histogram اطلاعات بیشتری ارائه می‌دهد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. مقایسه‌ی Box Plotها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>ساختار Distribution</th>
+                <th>تقارن تقریبی</th>
+                <th>Spread</th>
+                <th>قابل تشخیص بودن Modeها</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Unimodal</td>
+                <td>۱ قله</td>
+                <td>زیاد</td>
+                <td>متوسط</td>
+                <td>مناسب</td>
+            </tr>
+
+            <tr>
+                <td>Bimodal - Balanced</td>
+                <td>۲ قله</td>
+                <td>تقریباً متقارن</td>
+                <td>زیاد</td>
+                <td>ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Bimodal - Imbalanced</td>
+                <td>۲ قله</td>
+                <td>نامتقارن‌تر</td>
+                <td>زیاد</td>
+                <td>ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Trimodal</td>
+                <td>۳ قله</td>
+                <td>تقریباً متقارن</td>
+                <td>زیاد</td>
+                <td>ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Overlapping Modes</td>
+                <td>۲ قله‌ی هم‌پوشان</td>
+                <td>تقریباً متقارن</td>
+                <td>متوسط تا زیاد</td>
+                <td>بسیار ضعیف</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. رابطه‌ی Box Plot با تعداد Modeها</h2>
+
+    <p>
+        یکی از مهم‌ترین نکات این مثال این است که
+        <strong>تعداد Modeهای Distribution مستقیماً در Box Plot نمایش داده نمی‌شود.</strong>
+    </p>
+
+    <p>
+        یک Distribution می‌تواند:
+    </p>
+
+    <ul>
+        <li>یک Mode داشته باشد.</li>
+        <li>دو Mode داشته باشد.</li>
+        <li>سه Mode داشته باشد.</li>
+        <li>حتی تعداد بیشتری Mode داشته باشد.</li>
+    </ul>
+
+    <p>
+        اما Box Plot در همه‌ی این حالت‌ها فقط یک Box برای کل ستون
+        نمایش می‌دهد.
+    </p>
+
+    <p>
+        دلیل آن این است که Box Plot بر اساس
+        <strong>Quartileها</strong>
+        ساخته می‌شود، نه بر اساس شکل تابع چگالی.
+    </p>
+
+    <div class="warning">
+        <strong>نتیجه مهم:</strong>
+        اگر هدف تحلیلگر تشخیص
+        <strong>Multimodality</strong>
+        باشد، Box Plot ابزار مناسبی برای این کار نیست.
+        بهتر است Box Plot در کنار KDE یا Histogram استفاده شود.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 10 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۰. Box Plot چه چیزی را بهتر نشان می‌دهد؟</h2>
+
+    <p>
+        با وجود محدودیت بالا، Box Plot برای مقایسه‌ی
+        <strong>مرکز و پراکندگی</strong>
+        بسیار مفید است.
+    </p>
+
+    <p>
+        در این مجموعه می‌توان با Box Plot موارد زیر را مقایسه کرد:
+    </p>
+
+    <ul>
+        <li>موقعیت Median</li>
+        <li>مقدار IQR</li>
+        <li>پراکندگی ۵۰٪ میانی داده‌ها</li>
+        <li>طول Whiskerها</li>
+        <li>تقارن یا عدم تقارن تقریبی</li>
+        <li>وجود مقادیر بسیار دور از بخش اصلی داده</li>
+    </ul>
+
+    <p>
+        اما برای فهمیدن اینکه این پراکندگی چگونه در Distribution
+        سازمان‌دهی شده است، باید نمودارهای توزیعی مانند KDE یا Histogram
+        نیز بررسی شوند.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 11 -->
+    <!-- ===================================================== -->
+
+    <h2>۱۱. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Unimodal</strong>
+                → معمولاً Box Plot متقارن‌تری دارد و مرکز Distribution
+                به‌خوبی در اطراف Median خلاصه می‌شود.
+            </li>
+
+            <li>
+                <strong>Bimodal - Balanced</strong>
+                → دو گروه متعادل دارد، اما Box Plot تعداد دو Mode
+                را مستقیماً نشان نمی‌دهد.
+            </li>
+
+            <li>
+                <strong>Bimodal - Imbalanced</strong>
+                → گروه غالب می‌تواند روی موقعیت Median و Quartileها
+                اثر بیشتری داشته باشد.
+            </li>
+
+            <li>
+                <strong>Trimodal</strong>
+                → با وجود سه قله، Box Plot همچنان یک Box واحد برای کل داده‌ها
+                نمایش می‌دهد.
+            </li>
+
+            <li>
+                <strong>Overlapping Modes</strong>
+                → به دلیل هم‌پوشانی زیاد، ساختار چندگروهی حتی در Distribution
+                نیز دشوارتر دیده می‌شود و Box Plot اطلاعات محدودی درباره‌ی
+                این ساختار ارائه می‌دهد.
+            </li>
+
+            <li>
+                <strong>Box Plot</strong>
+                برای مقایسه‌ی Median، IQR، Spread و Outlierها بسیار مناسب است،
+                اما برای تشخیص تعداد Modeها مناسب نیست.
+            </li>
+
+            <li>
+                برای تحلیل کامل Distribution چندقله‌ای،
+                <strong>Box Plot + KDE / Histogram</strong>
+                ترکیب بسیار مناسب‌تری است.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>
