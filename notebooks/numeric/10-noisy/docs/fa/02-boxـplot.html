@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+    <link href="../../../styles.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Box Plot برای داده‌های دارای نویز
+    </h1>
+
+    <h2>۱. مقدمه: Box Plot چیست؟</h2>
+
+    <p>
+        نمودار <strong>Box Plot</strong> برای بررسی و مقایسه‌ی
+        <strong>مرکز، پراکندگی و مقادیر غیرعادی</strong> در چند مجموعه داده
+        استفاده می‌شود.
+    </p>
+
+    <p>
+        برخلاف Distribution Plot که شکل کلی توزیع را نمایش می‌دهد،
+        Box Plot اطلاعات توزیع را به صورت فشرده و بر اساس
+        <strong>Quartile</strong>ها نمایش می‌دهد.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش</th>
+                <th>مفهوم</th>
+                <th>توضیح</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Median</strong></td>
+                <td>Q2</td>
+                <td>مقدار میانی داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Q1</strong></td>
+                <td>25th Percentile</td>
+                <td>۲۵٪ داده‌ها پایین‌تر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>Q3</strong></td>
+                <td>75th Percentile</td>
+                <td>۷۵٪ داده‌ها پایین‌تر از این مقدار هستند</td>
+            </tr>
+
+            <tr>
+                <td><strong>IQR</strong></td>
+                <td>Q3 - Q1</td>
+                <td>میزان پراکندگی ۵۰٪ مرکزی داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Whiskers</strong></td>
+                <td>Lower / Upper Whisker</td>
+                <td>محدوده‌ی اصلی داده‌ها بدون Outlier</td>
+            </tr>
+
+            <tr>
+                <td><strong>Points</strong></td>
+                <td>Outliers</td>
+                <td>مقادیر خارج از محدوده‌ی Whisker</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این دیتاست، ابتدا یک توزیع نرمال با
+        <code>loc = 170</code>،
+        <code>scale = 8</code>
+        و
+        <strong>۱۰۰۰ نمونه</strong>
+        تولید شده است.
+    </p>
+
+    <p>
+        سپس نویز نرمال با شدت‌های مختلف به همین داده‌ها اضافه شده است.
+        بنابراین تعداد نمونه‌ها و توزیع پایه در همه‌ی حالت‌ها یکسان است
+        و تنها شدت نویز تغییر می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Noise SD</th>
+                <th>Samples</th>
+                <th>ویژگی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>0</td>
+                <td>1000</td>
+                <td>داده‌ی پایه</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>1</td>
+                <td>1000</td>
+                <td>نویز کم</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>4</td>
+                <td>1000</td>
+                <td>نویز متوسط</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>8</td>
+                <td>1000</td>
+                <td>نویز زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>16</td>
+                <td>1000</td>
+                <td>نویز بسیار زیاد</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۳. اثر نویز روی Box Plot</h2>
+
+    <p>
+        مهم‌ترین اثری که با افزایش نویز در Box Plot مشاهده می‌شود،
+        <strong>افزایش ارتفاع Box و طول Whiskerها</strong> است.
+    </p>
+
+    <p>
+        دلیل این اتفاق این است که نویز باعث می‌شود مقادیر از مرکز
+        توزیع فاصله‌ی بیشتری بگیرند.
+        بنابراین فاصله‌ی بین Q1 و Q3 افزایش پیدا می‌کند.
+    </p>
+
+    <h3>۳.۱. No Noise</h3>
+
+    <p>
+        در حالت <code>No Noise</code> هیچ نویزی به داده‌ی پایه اضافه نشده است.
+        بنابراین Box Plot مربوط به پراکندگی اصلی توزیع را نمایش می‌دهد.
+    </p>
+
+    <p>
+        Box نسبتاً فشرده است و فاصله‌ی Q1 تا Q3 نشان‌دهنده‌ی
+        پراکندگی طبیعی داده‌های پایه است.
+    </p>
+
+    <h3>۳.۲. Mild Noise</h3>
+
+    <p>
+        در <code>Mild Noise</code> نویزی با
+        <code>SD = 1</code>
+        اضافه شده است.
+    </p>
+
+    <p>
+        این مقدار نسبت به پراکندگی اصلی داده کوچک است؛
+        بنابراین Box Plot فقط مقدار کمی نسبت به حالت بدون نویز تغییر می‌کند.
+    </p>
+
+    <p>
+        IQR کمی افزایش پیدا می‌کند و Whiskerها نیز ممکن است
+        کمی طولانی‌تر شوند.
+    </p>
+
+    <h3>۳.۳. Moderate Noise</h3>
+
+    <p>
+        در حالت <code>Moderate Noise</code> مقدار SD نویز برابر با
+        <code>4</code> است.
+    </p>
+
+    <p>
+        در این حالت اثر نویز روی Box Plot واضح‌تر می‌شود.
+        فاصله‌ی Q1 و Q3 افزایش پیدا کرده و Box بزرگ‌تر می‌شود.
+    </p>
+
+    <p>
+        همچنین دامنه‌ی مقادیر داخل Whiskerها افزایش پیدا می‌کند.
+    </p>
+
+    <h3>۳.۴. Strong Noise</h3>
+
+    <p>
+        در <code>Strong Noise</code> مقدار SD نویز برابر با
+        <code>8</code> است؛ یعنی نویز تقریباً هم‌اندازه‌ی
+        SD توزیع پایه است.
+    </p>
+
+    <p>
+        در نتیجه پراکندگی نهایی داده به شکل محسوسی افزایش پیدا می‌کند.
+        این موضوع در Box Plot به صورت
+        <strong>Box بزرگ‌تر و Whiskerهای بلندتر</strong>
+        دیده می‌شود.
+    </p>
+
+    <h3>۳.۵. Extreme Noise</h3>
+
+    <p>
+        در <code>Extreme Noise</code> مقدار SD نویز برابر با
+        <code>16</code> است.
+    </p>
+
+    <p>
+        این مقدار دو برابر SD توزیع پایه است و بنابراین نویز
+        تأثیر بسیار زیادی بر مقادیر نهایی دارد.
+    </p>
+
+    <p>
+        انتظار می‌رود این حالت بزرگ‌ترین IQR و گسترده‌ترین
+        محدوده‌ی Whisker را داشته باشد.
+    </p>
+
+    <h2>۴. رابطه‌ی Noise و IQR</h2>
+
+    <p>
+        IQR از رابطه‌ی زیر به دست می‌آید:
+    </p>
+
+    <div class="formula">
+        IQR = Q3 - Q1
+    </div>
+
+    <p>
+        IQR نشان‌دهنده‌ی محدوده‌ی ۵۰٪ مرکزی داده‌ها است.
+        وقتی نویز افزایش پیدا می‌کند، داده‌ها بیشتر پراکنده می‌شوند
+        و در نتیجه فاصله‌ی Q1 و Q3 نیز افزایش پیدا می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Noise Level</th>
+                <th>Box Size</th>
+                <th>IQR</th>
+                <th>Whisker Length</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>کوچک‌تر</td>
+                <td>پایه</td>
+                <td>پایه</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>کمی بزرگ‌تر</td>
+                <td>کمی بیشتر</td>
+                <td>کمی بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>بزرگ‌تر</td>
+                <td>بیشتر</td>
+                <td>بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>بزرگ</td>
+                <td>زیاد</td>
+                <td>زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>بسیار بزرگ</td>
+                <td>بسیار زیاد</td>
+                <td>بسیار زیاد</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۵. آیا نویز باعث Outlier می‌شود؟</h2>
+
+    <p>
+        در این دیتاست نویز به صورت نرمال تولید شده است و
+        Outlier به صورت دستی به داده اضافه نشده است.
+    </p>
+
+    <p>
+        با این حال، در حالت‌های دارای نویز شدید ممکن است بعضی از
+        مقادیر به اندازه‌ای از مرکز فاصله بگیرند که طبق قانون
+        <strong>1.5 × IQR</strong>
+        به عنوان Outlier شناسایی شوند.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        مشاهده‌ی Outlier در Box Plot لزوماً به معنی وجود خطای داده نیست.
+        یک مقدار دورافتاده می‌تواند نتیجه‌ی طبیعی پراکندگی یک توزیع باشد.
+    </div>
+
+    <h2>۶. اثر نویز روی Median</h2>
+
+    <p>
+        از آنجا که نویز با میانگین صفر تولید شده است،
+        انتظار نداریم که نویز باعث جابه‌جایی سیستماتیک مرکز توزیع شود.
+    </p>
+
+    <p>
+        بنابراین Median در حالت‌های مختلف باید در محدوده‌ی نسبتاً
+        مشابهی باقی بماند؛ هرچند به دلیل تصادفی بودن نمونه‌ها
+        مقدار دقیق Median می‌تواند کمی تغییر کند.
+    </p>
+
+    <p>
+        تفاوت اصلی بین Box Plotها در این مثال مربوط به
+        <strong>پراکندگی</strong>
+        است، نه تغییر مکان مرکز.
+    </p>
+
+    <h2>۷. Box Plot چه چیزی را بهتر از Distribution Plot نشان می‌دهد؟</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Box Plot</th>
+                <th>Distribution Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Median</td>
+                <td>بسیار واضح</td>
+                <td>مستقیم نمایش داده نمی‌شود</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>بسیار واضح</td>
+                <td>مستقیم قابل مشاهده نیست</td>
+            </tr>
+
+            <tr>
+                <td>Outlier</td>
+                <td>بسیار واضح</td>
+                <td>غیرمستقیم</td>
+            </tr>
+
+            <tr>
+                <td>Spread</td>
+                <td>خوب</td>
+                <td>خوب</td>
+            </tr>
+
+            <tr>
+                <td>شکل دقیق توزیع</td>
+                <td>ضعیف</td>
+                <td>بسیار خوب</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۸. مقایسه‌ی کلی</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>No Noise</th>
+                <th>Moderate Noise</th>
+                <th>Extreme Noise</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Median</td>
+                <td>مرکز توزیع</td>
+                <td>تقریباً مشابه</td>
+                <td>تقریباً مشابه</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>بسیار بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Box</td>
+                <td>فشرده‌تر</td>
+                <td>بزرگ‌تر</td>
+                <td>بسیار بزرگ</td>
+            </tr>
+
+            <tr>
+                <td>Whiskers</td>
+                <td>کوتاه‌تر</td>
+                <td>بلندتر</td>
+                <td>بسیار بلند</td>
+            </tr>
+
+            <tr>
+                <td>Outliers</td>
+                <td>کمتر</td>
+                <td>ممکن است ظاهر شوند</td>
+                <td>احتمال بیشتر</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۹. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                افزایش نویز باعث افزایش پراکندگی داده‌ها می‌شود.
+            </li>
+
+            <li>
+                این افزایش پراکندگی در Box Plot به صورت
+                <strong>بزرگ‌تر شدن Box</strong>
+                و افزایش IQR دیده می‌شود.
+            </li>
+
+            <li>
+                Whiskerها نیز با افزایش نویز معمولاً گسترده‌تر می‌شوند.
+            </li>
+
+            <li>
+                نویز با میانگین صفر، مرکز توزیع را به صورت سیستماتیک
+                جابه‌جا نمی‌کند.
+            </li>
+
+            <li>
+                در نویز شدید ممکن است برخی مقادیر به عنوان Outlier
+                شناسایی شوند.
+            </li>
+
+            <li>
+                Box Plot برای مقایسه‌ی
+                <strong>Median، IQR، Spread و Outlier</strong>
+                بسیار مناسب است.
+            </li>
+
+            <li>
+                برای مشاهده‌ی شکل کامل توزیع و تغییر شکل آن در اثر نویز،
+                بهتر است Box Plot در کنار
+                <strong>Distribution Plot</strong>
+                استفاده شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

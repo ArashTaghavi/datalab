@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import scipy.stats as stats
+import math
 
 from ....contracts.plot import Plot
+
 
 class QQPlot(Plot):
 
@@ -16,16 +18,28 @@ class QQPlot(Plot):
             raise ValueError("The number of columns must match the number of titles.")
 
         # ---------------------------------
+        # Calculate Grid
+        # ---------------------------------
+
+        n = len(self.columns)
+
+        ncols = math.ceil(math.sqrt(n))
+        nrows = math.ceil(n / ncols)
+
+        # ---------------------------------
         # Plot
         # ---------------------------------
-        fig, axes = plt.subplots(2, 2, figsize=(12, 10), dpi=200)
 
-        axes = axes.flatten()
+        fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 5 * nrows), dpi=200)
+
+        axes = [axes] if n == 1 else axes.flatten()
 
         # ---------------------------------
         # QQ Plots
         # ---------------------------------
+
         for ax, column, title in zip(axes, self.columns, self.titles):
+
             values = column.dropna()
 
             stats.probplot(values, dist="norm", plot=ax)
@@ -39,8 +53,16 @@ class QQPlot(Plot):
             ax.grid(True, alpha=0.3)
 
         # ---------------------------------
+        # Hide Empty Axes
+        # ---------------------------------
+
+        for ax in axes[n:]:
+            ax.set_visible(False)
+
+        # ---------------------------------
         # Main Title
         # ---------------------------------
+
         fig.suptitle("Normality Comparison - QQ Plot", fontsize=12)
 
         plt.tight_layout()

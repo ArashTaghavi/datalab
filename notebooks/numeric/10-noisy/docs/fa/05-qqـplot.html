@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+    <link href="../../../styles.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار QQ Plot برای داده‌های دارای نویز
+    </h1>
+
+    <h2>۱. مقدمه: QQ Plot چیست؟</h2>
+
+    <p>
+        نمودار <strong>QQ Plot (Quantile-Quantile Plot)</strong>
+        برای مقایسه‌ی Quantileهای داده‌ی واقعی با Quantileهای یک
+        توزیع مرجع استفاده می‌شود.
+    </p>
+
+    <p>
+        در این تحلیل، توزیع مرجع
+        <strong>Normal Distribution</strong>
+        است؛ بنابراین QQ Plot بررسی می‌کند که داده‌های هر دیتاست
+        تا چه اندازه با یک توزیع نرمال سازگار هستند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش</th>
+                <th>مفهوم</th>
+                <th>توضیح</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Theoretical Quantiles</td>
+                <td>Quantileهای توزیع نرمال مرجع</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Sample Quantiles</td>
+                <td>Quantileهای داده‌ی واقعی</td>
+            </tr>
+
+            <tr>
+                <td><strong>Reference Line</strong></td>
+                <td>Expected Relationship</td>
+                <td>رابطه‌ی مورد انتظار بین داده و توزیع نرمال</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این دیتاست، ابتدا یک توزیع نرمال پایه با
+        <code>loc = 170</code>،
+        <code>scale = 8</code>
+        و
+        <strong>۱۰۰۰ نمونه</strong>
+        تولید شده است.
+    </p>
+
+    <p>
+        سپس نویز نرمال با شدت‌های مختلف به داده‌ی پایه اضافه شده است.
+        بنابراین تعداد نمونه‌ها در تمام دیتاست‌ها برابر با ۱۰۰۰ است
+        و تنها شدت نویز تغییر می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Noise SD</th>
+                <th>Samples</th>
+                <th>ویژگی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>0</td>
+                <td>1000</td>
+                <td>داده‌ی پایه</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>1</td>
+                <td>1000</td>
+                <td>نویز کم</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>4</td>
+                <td>1000</td>
+                <td>نویز متوسط</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>8</td>
+                <td>1000</td>
+                <td>نویز زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>16</td>
+                <td>1000</td>
+                <td>نویز بسیار زیاد</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۳. تفسیر QQ Plot</h2>
+
+    <p>
+        در QQ Plot اگر نقاط داده تقریباً روی خط مرجع قرار بگیرند،
+        نشان می‌دهد که Quantileهای داده با Quantileهای توزیع نرمال
+        سازگاری خوبی دارند.
+    </p>
+
+    <p>
+        فاصله گرفتن نقاط از خط مرجع نشان می‌دهد که Quantileهای واقعی
+        با چیزی که از یک توزیع نرمال انتظار داریم تفاوت دارند.
+    </p>
+
+    <h3>۳.۱. No Noise</h3>
+
+    <p>
+        در حالت <code>No Noise</code>، داده‌ها مستقیماً از یک
+        توزیع نرمال تولید شده‌اند.
+    </p>
+
+    <p>
+        بنابراین انتظار می‌رود نقاط QQ Plot در بخش عمده‌ی نمودار
+        تقریباً روی خط مرجع قرار بگیرند.
+    </p>
+
+    <p>
+        این حالت بهترین مرجع برای مقایسه‌ی اثر نویز روی سایر
+        دیتاست‌ها است.
+    </p>
+
+    <h3>۳.۲. Mild Noise</h3>
+
+    <p>
+        در <code>Mild Noise</code> نویزی با
+        <code>SD = 1</code>
+        اضافه شده است.
+    </p>
+
+    <p>
+        چون نویز نسبت به پراکندگی پایه کوچک است،
+        ساختار کلی داده همچنان بسیار نزدیک به نرمال باقی می‌ماند.
+    </p>
+
+    <p>
+        بنابراین انتظار می‌رود نقاط QQ Plot همچنان نزدیکی زیادی
+        به خط مرجع داشته باشند.
+    </p>
+
+    <h3>۳.۳. Moderate Noise</h3>
+
+    <p>
+        در <code>Moderate Noise</code> مقدار SD نویز برابر با
+        <code>4</code>
+        است.
+    </p>
+
+    <p>
+        اضافه شدن این مقدار نویز باعث افزایش پراکندگی داده می‌شود،
+        اما خود نویز نیز نرمال است.
+    </p>
+
+    <p>
+        بنابراین شکل کلی توزیع همچنان می‌تواند با Normal Distribution
+        سازگار باقی بماند، در حالی که مقیاس توزیع تغییر کرده است.
+    </p>
+
+    <h3>۳.۴. Strong Noise</h3>
+
+    <p>
+        در حالت <code>Strong Noise</code> مقدار SD نویز برابر با
+        <code>8</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت پراکندگی نهایی داده به شکل قابل توجهی افزایش پیدا
+        کرده است.
+    </p>
+
+    <p>
+        با این حال، چون نویز اضافه‌شده نیز نرمال است، انتظار نداریم
+        صرفاً افزایش نویز باعث ایجاد انحراف شدید از خط نرمال شود.
+    </p>
+
+    <p>
+        تغییر اصلی بیشتر در <strong>Scale</strong> توزیع دیده می‌شود
+        تا تغییر در شکل کلی آن.
+    </p>
+
+    <h3>۳.۵. Extreme Noise</h3>
+
+    <p>
+        در <code>Extreme Noise</code> مقدار SD نویز برابر با
+        <code>16</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت نویز نقش بسیار بزرگی در مقدار نهایی داده دارد
+        و پراکندگی توزیع به شکل قابل توجهی افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        با وجود این، چون داده‌ی پایه و نویز هر دو نرمال هستند،
+        جمع آن‌ها همچنان دارای شکل نرمال است.
+    </p>
+
+    <p>
+        بنابراین QQ Plot ممکن است همچنان الگوی نسبتاً خطی نشان دهد،
+        اما شیب خط نسبت به حالت‌های کم‌نویز تغییر می‌کند.
+    </p>
+
+    <h2>۴. نکته‌ی مهم: نویز نرمال و QQ Plot</h2>
+
+    <p>
+        در این دیتاست، نویز از یک توزیع نرمال با میانگین صفر تولید شده است.
+        بنابراین افزایش نویز لزوماً به معنی
+        <strong>غیرنرمال شدن داده</strong>
+        نیست.
+    </p>
+
+    <p>
+        در واقع اگر
+        <code>X</code>
+        و
+        <code>ε</code>
+        هر دو نرمال باشند، مقدار مشاهده‌شده‌ی
+        <code>X + ε</code>
+        نیز نرمال خواهد بود.
+    </p>
+
+    <div class="formula">
+        X ~ Normal(170, 8²)
+        <br>
+        ε ~ Normal(0, σ²)
+        <br><br>
+        X + ε ~ Normal(170, 8² + σ²)
+    </div>
+
+    <p>
+        بنابراین افزایش شدت نویز در این مثال بیشتر باعث تغییر
+        <strong>پراکندگی و Scale</strong>
+        می‌شود، نه تغییر ماهیت توزیع به یک توزیع غیرنرمال.
+    </p>
+
+    <h2>۵. اثر Noise روی شیب QQ Plot</h2>
+
+    <p>
+        یکی از نکات مهمی که می‌توان در QQ Plot مشاهده کرد،
+        تغییر شیب خط با افزایش پراکندگی داده است.
+    </p>
+
+    <p>
+        وقتی Standard Deviation داده افزایش پیدا می‌کند،
+        Sample Quantiles در فاصله‌ی بیشتری از Mean قرار می‌گیرند.
+    </p>
+
+    <p>
+        بنابراین شیب رابطه‌ی بین
+        <strong>Theoretical Quantiles</strong>
+        و
+        <strong>Sample Quantiles</strong>
+        نیز افزایش پیدا می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Noise Level</th>
+                <th>Spread</th>
+                <th>Alignment</th>
+                <th>شیب QQ Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>کمتر</td>
+                <td>تقریباً خطی</td>
+                <td>کمتر</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>کمی بیشتر</td>
+                <td>تقریباً خطی</td>
+                <td>کمی بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>بیشتر</td>
+                <td>تقریباً خطی</td>
+                <td>بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>زیاد</td>
+                <td>تقریباً خطی</td>
+                <td>زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>بسیار زیاد</td>
+                <td>تقریباً خطی</td>
+                <td>بسیار بیشتر</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۶. آیا افزایش نویز باعث انحراف از Normality می‌شود؟</h2>
+
+    <p>
+        در این مثال، پاسخ لزوماً <strong>خیر</strong> است.
+    </p>
+
+    <p>
+        دلیل آن این است که نویز از یک توزیع نرمال تولید شده است.
+        جمع دو متغیر نرمال نیز نرمال خواهد بود.
+    </p>
+
+    <p>
+        بنابراین افزایش نویز باعث افزایش Variance می‌شود،
+        اما به تنهایی شکل توزیع را از Normal به یک توزیع
+        غیرنرمال تبدیل نمی‌کند.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        اگر به جای نویز نرمال از نویزهایی با توزیع غیرنرمال،
+        Heavy-tailed یا دارای Outlier استفاده شود،
+        رفتار QQ Plot می‌تواند کاملاً متفاوت باشد.
+    </div>
+
+    <h2>۷. QQ Plot در مقایسه با Distribution Plot</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>QQ Plot</th>
+                <th>Distribution Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>بررسی Normality</td>
+                <td>بسیار خوب</td>
+                <td>محدود</td>
+            </tr>
+
+            <tr>
+                <td>مقایسه با توزیع مرجع</td>
+                <td>بسیار خوب</td>
+                <td>محدود</td>
+            </tr>
+
+            <tr>
+                <td>مشاهده Spread</td>
+                <td>خوب</td>
+                <td>بسیار خوب</td>
+            </tr>
+
+            <tr>
+                <td>مشاهده Density</td>
+                <td>ضعیف</td>
+                <td>بسیار خوب</td>
+            </tr>
+
+            <tr>
+                <td>بررسی Tailها</td>
+                <td>بسیار خوب</td>
+                <td>خوب</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۸. مقایسه‌ی کلی حالت‌ها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>No Noise</th>
+                <th>Moderate Noise</th>
+                <th>Extreme Noise</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Distribution Shape</td>
+                <td>Normal</td>
+                <td>Normal</td>
+                <td>Normal</td>
+            </tr>
+
+            <tr>
+                <td>Spread</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>بسیار بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>QQ Alignment</td>
+                <td>خوب</td>
+                <td>خوب</td>
+                <td>خوب</td>
+            </tr>
+
+            <tr>
+                <td>Scale</td>
+                <td>پایه</td>
+                <td>بیشتر</td>
+                <td>بسیار بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>اثر اصلی نویز</td>
+                <td>ندارد</td>
+                <td>افزایش Spread</td>
+                <td>افزایش شدید Spread</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۹. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                QQ Plot برای بررسی میزان سازگاری داده با یک
+                <strong>Normal Distribution</strong>
+                استفاده می‌شود.
+            </li>
+
+            <li>
+                تمام دیتاست‌ها دارای
+                <strong>۱۰۰۰ نمونه</strong>
+                هستند.
+            </li>
+
+            <li>
+                افزایش نویز نرمال باعث افزایش
+                <strong>Spread و Variance</strong>
+                می‌شود.
+            </li>
+
+            <li>
+                چون نویز نیز نرمال است، افزایش آن لزوماً باعث
+                غیرنرمال شدن داده‌ها نمی‌شود.
+            </li>
+
+            <li>
+                در QQ Plot، حالت‌های مختلف می‌توانند همچنان
+                الگوی تقریباً خطی داشته باشند.
+            </li>
+
+            <li>
+                تفاوت اصلی بین حالت‌های مختلف بیشتر در
+                <strong>Scale و شیب خط</strong>
+                مشاهده می‌شود.
+            </li>
+
+            <li>
+                برای تشخیص اینکه داده واقعاً از Normality فاصله گرفته،
+                باید به الگوی انحراف نقاط از خط مرجع، مخصوصاً در
+                <strong>Tailها</strong>
+                توجه کرد.
+            </li>
+
+            <li>
+                برای تحلیل کامل اثر نویز، QQ Plot بهتر است در کنار
+                <strong>Distribution، Box Plot، Violin Plot، CDF
+                و Mean ± SD</strong>
+                بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

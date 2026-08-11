@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Mean ± Standard Deviation
+        برای توزیع‌های Right-Skewed
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: نمودار Mean ± Standard Deviation چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Mean ± Standard Deviation</strong>
+        یکی از روش‌های ساده برای نمایش هم‌زمان
+        <strong>مرکز</strong>
+        و
+        <strong>پراکندگی</strong>
+        یک یا چند دیتاست است.
+    </p>
+
+    <p>
+        در این نمودار، نقطه‌ی مرکزی نشان‌دهنده‌ی
+        <strong>Mean</strong>
+        است و خط عمودی اطراف آن، محدوده‌ی
+        <strong>یک انحراف معیار در بالا و پایین میانگین</strong>
+        را نشان می‌دهد.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Mean ± SD یک خلاصه‌ی عددی از توزیع است و شکل کامل توزیع را نشان نمی‌دهد.
+        بنابراین برای توزیع‌های چوله، به‌خصوص Right-Skewed،
+        نباید فقط بر اساس Mean و SD درباره‌ی شکل توزیع قضاوت کرد.
+    </div>
+
+    <h3>اجزای نمودار</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>معنی</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Point</strong></td>
+                <td>Mean</td>
+                <td>مرکز عددی داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Upper Error</strong></td>
+                <td>Mean + SD</td>
+                <td>یک SD بالاتر از میانگین</td>
+            </tr>
+
+            <tr>
+                <td><strong>Lower Error</strong></td>
+                <td>Mean - SD</td>
+                <td>یک SD پایین‌تر از میانگین</td>
+            </tr>
+
+            <tr>
+                <td><strong>Error Bar</strong></td>
+                <td>Mean ± SD</td>
+                <td>نمایش میزان پراکندگی اطراف میانگین</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با
+        <strong>۱۰۰۰ نمونه</strong>
+        ساخته شده‌اند.
+        همه‌ی آن‌ها از یک توزیع نرمال پایه با
+        <code>loc = 170</code>
+        و
+        <code>scale = 8</code>
+        شروع شده‌اند و سپس میزان
+        <strong>Right Skew</strong>
+        در آن‌ها افزایش داده شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>تعداد نمونه</th>
+                <th>نوع توزیع</th>
+                <th>میزان Skew</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>۱۰۰۰</td>
+                <td>Right-Skewed</td>
+                <td>ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>۱۰۰۰</td>
+                <td>Right-Skewed</td>
+                <td>متوسط</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>۱۰۰۰</td>
+                <td>Right-Skewed</td>
+                <td>قوی</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>۱۰۰۰</td>
+                <td>Right-Skewed</td>
+                <td>شدید</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>۱۰۰۰</td>
+                <td>Right-Skewed + Outliers</td>
+                <td>متوسط + پرت</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        در چهار دیتاست اول، شدت Right Skew از مقدار
+        <code>0.3</code>
+        تا
+        <code>2.0</code>
+        افزایش پیدا می‌کند.
+        دیتاست پنجم علاوه بر چولگی راست، دارای چند مقدار پرت بسیار بزرگ است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. رابطه‌ی Mean و SD با Right Skew</h2>
+
+    <p>
+        در یک توزیع متقارن، Mean معمولاً در مرکز توزیع قرار دارد
+        و فاصله‌ی
+        <code>Mean - SD</code>
+        و
+        <code>Mean + SD</code>
+        در دو طرف آن نماینده‌ی مناسبی از پراکندگی هستند.
+    </p>
+
+    <p>
+        اما در یک توزیع
+        <strong>Right-Skewed</strong>،
+        دم توزیع به سمت راست کشیده می‌شود.
+        این مقادیر بزرگ باعث می‌شوند
+        <strong>Mean به سمت راست کشیده شود</strong>
+        و در نتیجه Mean دیگر لزوماً در مرکز بصری داده‌ها قرار نداشته باشد.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        در توزیع‌های Right-Skewed، Mean تحت تأثیر مقادیر بزرگ قرار می‌گیرد.
+        بنابراین افزایش Mean لزوماً به معنی جابه‌جایی کل داده‌ها نیست؛
+        ممکن است بخش بزرگی از داده‌ها در محدوده‌ی قبلی باقی مانده باشند
+        و فقط دم راست باعث افزایش Mean شده باشد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.1 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۱. Mild Right Skew → تغییر جزئی Mean و SD</h3>
+
+    <p>
+        در حالت
+        <code>Mild Right Skew</code>،
+        چولگی نسبتاً ضعیف است.
+        بیشتر داده‌ها همچنان در اطراف محدوده‌ی مرکزی قرار دارند،
+        اما بخش راست توزیع کمی کشیده شده است.
+    </p>
+
+    <p>
+        در این حالت، Mean هنوز تقریباً نماینده‌ی مناسبی از مرکز داده‌هاست،
+        اما نسبت به یک توزیع متقارن، کمی به سمت راست جابه‌جا می‌شود.
+    </p>
+
+    <p>
+        SD نیز میزان پراکندگی ناشی از کشیده شدن دم راست را در خود وارد می‌کند.
+        بنابراین Error Bar نسبت به حالت کاملاً متقارن می‌تواند بزرگ‌تر شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.2 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۲. Moderate Right Skew → افزایش تأثیر دم راست</h3>
+
+    <p>
+        با افزایش شدت چولگی،
+        مقادیر بزرگ بیشتری در سمت راست توزیع قرار می‌گیرند.
+    </p>
+
+    <p>
+        این مقادیر باعث می‌شوند Mean بیشتر به سمت راست کشیده شود.
+        هم‌زمان فاصله‌ی داده‌ها از Mean افزایش پیدا می‌کند
+        و SD نیز می‌تواند افزایش یابد.
+    </p>
+
+    <p>
+        بنابراین در نمودار Mean ± SD،
+        هم نقطه‌ی Mean و هم طول Error Bar می‌توانند تغییر کنند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.3 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۳. Strong Right Skew → Mean دیگر مرکز بصری خوبی نیست</h3>
+
+    <p>
+        در حالت
+        <code>Strong Right Skew</code>،
+        دم راست توزیع بسیار مشخص‌تر می‌شود.
+    </p>
+
+    <p>
+        بخش زیادی از داده‌ها ممکن است همچنان در قسمت مرکزی قرار داشته باشند،
+        اما وجود مقادیر بزرگ در سمت راست باعث می‌شود Mean به سمت راست حرکت کند.
+    </p>
+
+    <p>
+        در نتیجه ممکن است نقطه‌ی Mean در نمودار
+        در جایی قرار بگیرد که با مرکز بصری داده‌ها تفاوت قابل توجهی دارد.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        این یکی از محدودیت‌های مهم نمودار Mean ± SD است:
+        این نمودار اطلاعات مربوط به شکل توزیع، چولگی،
+        وجود چند قله یا ساختار دم‌ها را مستقیماً نشان نمی‌دهد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.4 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۴. Extreme Right Skew → فاصله‌ی زیاد در سمت راست</h3>
+
+    <p>
+        در حالت
+        <code>Extreme Right Skew</code>،
+        کشیدگی سمت راست بسیار شدید است.
+    </p>
+
+    <p>
+        مقادیر بزرگ‌تر سهم بیشتری در محاسبه‌ی Mean دارند.
+        از طرف دیگر، فاصله‌ی این مقادیر از Mean باعث افزایش SD می‌شود.
+    </p>
+
+    <p>
+        بنابراین Error Bar می‌تواند بسیار بزرگ شود و تصویر
+        <strong>Mean ± SD</strong>
+        دیگر نماینده‌ی خوبی برای شکل واقعی داده‌ها نباشد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.5 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۵. Right Skew + Outliers → تأثیر شدید مقادیر پرت</h3>
+
+    <p>
+        در دیتاست
+        <code>Right Skew + Outliers</code>
+        علاوه بر چولگی راست، پنج مقدار بسیار بزرگ
+        با مقادیر
+        <code>210</code>،
+        <code>220</code>،
+        <code>230</code>،
+        <code>245</code>
+        و
+        <code>260</code>
+        اضافه شده‌اند.
+    </p>
+
+    <p>
+        این مقادیر می‌توانند Mean را به سمت راست بکشند
+        و هم‌زمان SD را افزایش دهند.
+    </p>
+
+    <p>
+        بنابراین ممکن است در نمودار، نقطه‌ی Mean به سمت راست منتقل شود
+        و Error Bar نیز به شکل محسوسی بزرگ‌تر شود.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Mean و SD هر دو به مقادیر پرت حساس هستند.
+        بنابراین در حضور Outlier، مقدار Mean و طول Error Bar
+        ممکن است به‌طور قابل توجهی تحت تأثیر چند مشاهده‌ی غیرمعمول قرار بگیرند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. مقایسه‌ی Mean ± SD بین دیتاست‌ها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>Mean</th>
+                <th>SD</th>
+                <th>رفتار مورد انتظار</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>کمی افزایش</td>
+                <td>کمی افزایش</td>
+                <td>چولگی ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>افزایش بیشتر</td>
+                <td>افزایش بیشتر</td>
+                <td>دم راست مشخص</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>افزایش محسوس</td>
+                <td>افزایش محسوس</td>
+                <td>Mean به راست کشیده می‌شود</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>افزایش شدید</td>
+                <td>افزایش شدید</td>
+                <td>دم راست بسیار کشیده</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>افزایش محسوس</td>
+                <td>افزایش محسوس</td>
+                <td>تأثیر هم‌زمان Skew و Outlier</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. تفسیر Error Bar</h2>
+
+    <p>
+        در نمودار
+        <strong>Mean ± SD</strong>،
+        برای هر دیتاست سه مقدار اصلی قابل مشاهده است:
+    </p>
+
+    <div class="formula">
+        Lower = Mean - SD
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        Center = Mean
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        Upper = Mean + SD
+    </div>
+
+    <p>
+        بنابراین طول Error Bar مستقیماً با SD ارتباط دارد.
+        هرچه SD بزرگ‌تر باشد، فاصله‌ی
+        <code>Mean - SD</code>
+        تا
+        <code>Mean + SD</code>
+        بیشتر خواهد بود.
+    </p>
+
+    <p>
+        در Right Skew شدید، این بازه لزوماً در اطراف مرکز بصری داده‌ها
+        متقارن نیست؛ زیرا خود Mean تحت تأثیر دم راست قرار گرفته است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. محدودیت Mean ± SD برای توزیع‌های چوله</h2>
+
+    <p>
+        Mean ± SD یک خلاصه‌ی بسیار فشرده از داده است.
+        این نمودار فقط دو ویژگی را نمایش می‌دهد:
+        <strong>مرکز عددی</strong>
+        و
+        <strong>پراکندگی</strong>.
+    </p>
+
+    <p>
+        اما اطلاعاتی مانند موارد زیر مستقیماً از نمودار قابل مشاهده نیست:
+    </p>
+
+    <ul>
+        <li>جهت و شدت Skewness</li>
+        <li>طول دم‌های توزیع</li>
+        <li>تعداد Modeها</li>
+        <li>وجود Gap یا Cluster</li>
+        <li>وجود Outlierهای متعدد</li>
+    </ul>
+
+    <p>
+        به همین دلیل برای تحلیل یک توزیع Right-Skewed،
+        بهتر است Mean ± SD در کنار نمودارهایی مانند
+        <strong>KDE، Box Plot، Violin Plot، CDF و QQ Plot</strong>
+        استفاده شود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>افزایش Right Skew</strong>
+                → دم راست طولانی‌تر و فاصله‌ی مقادیر بزرگ از مرکز بیشتر می‌شود.
+            </li>
+
+            <li>
+                <strong>Mean</strong>
+                در توزیع Right-Skewed معمولاً به سمت راست کشیده می‌شود.
+            </li>
+
+            <li>
+                <strong>SD</strong>
+                با افزایش پراکندگی و وجود مقادیر دور از Mean افزایش می‌یابد.
+            </li>
+
+            <li>
+                در توزیع‌های شدیداً چوله،
+                Mean الزاماً نشان‌دهنده‌ی مرکز بصری داده‌ها نیست.
+            </li>
+
+            <li>
+                <strong>Outlierها</strong>
+                می‌توانند هم Mean و هم SD را به‌شدت تحت تأثیر قرار دهند.
+            </li>
+
+            <li>
+                Mean ± SD برای نمایش مرکز و پراکندگی مفید است،
+                اما برای فهم شکل کامل یک توزیع چوله کافی نیست.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+ 
+
+</body>
+</html>

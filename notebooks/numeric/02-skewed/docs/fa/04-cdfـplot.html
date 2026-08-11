@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار CDF برای توزیع‌های دارای چولگی راست
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: CDF چیست؟</h2>
+
+    <p>
+        CDF مخفف عبارت
+        <strong>Cumulative Distribution Function</strong>
+        (تابع توزیع تجمعی) است.
+        این تابع نشان می‌دهد که چه بخشی از داده‌ها
+        کوچکتر یا مساوی یک مقدار مشخص هستند.
+    </p>
+
+    <p>
+        برخلاف نمودار KDE که میزان
+        <strong>Density</strong>
+        را در هر مقدار نشان می‌دهد،
+        CDF به‌صورت تجمعی از چپ به راست حرکت می‌کند
+        و مقدار آن از صفر شروع شده و در نهایت به یک
+        یا ۱۰۰٪ نزدیک می‌شود.
+    </p>
+
+    <div class="formula">
+        F(x) = P(X ≤ x)
+    </div>
+
+    <p>
+        بنابراین اگر مقدار CDF در
+        <code>x = 180</code>
+        برابر با
+        <code>0.80</code>
+        باشد، یعنی تقریباً ۸۰٪ داده‌ها
+        کوچکتر یا مساوی ۱۸۰ هستند.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        CDF همیشه صعودی است.
+        مقدار آن نمی‌تواند کاهش پیدا کند،
+        زیرا با حرکت به سمت مقادیر بزرگ‌تر،
+        احتمال تجمعی فقط می‌تواند ثابت بماند یا افزایش پیدا کند.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با
+        <strong>۱۰۰۰ نمونه</strong>
+        ساخته شده‌اند.
+        همه‌ی آن‌ها از یک توزیع نرمال پایه با
+        میانگین ۱۷۰ و انحراف معیار ۸ شروع می‌شوند
+        و سپس درجات مختلفی از چولگی راست روی آن‌ها اعمال می‌شود.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>نوع توزیع</th>
+                <th>پارامتر تغییر</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>چولگی راست خفیف</td>
+                <td>0.3</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>چولگی راست متوسط</td>
+                <td>0.7</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>چولگی راست شدید</td>
+                <td>1.2</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>چولگی راست بسیار شدید</td>
+                <td>2.0</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>چولگی راست + Outliers</td>
+                <td>0.7 + Outliers</td>
+                <td>۱۰۰۰</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        چهار دیتاست اول فقط از نظر شدت چولگی با یکدیگر
+        متفاوت هستند.
+        دیتاست پنجم علاوه بر چولگی راست،
+        شامل پنج مقدار بسیار بزرگ نیز هست:
+    </p>
+
+    <div class="formula">
+        210 &nbsp; | &nbsp; 220 &nbsp; | &nbsp; 230
+        &nbsp; | &nbsp; 245 &nbsp; | &nbsp; 260
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. CDF در توزیع‌های دارای چولگی راست</h2>
+
+    <p>
+        برای درک CDF در داده‌های چوله،
+        باید به شیب و محل تغییرات منحنی توجه کنیم.
+    </p>
+
+    <p>
+        در قسمت‌هایی که داده‌های زیادی در یک محدوده قرار دارند،
+        CDF سریع‌تر افزایش پیدا می‌کند.
+        در قسمت‌هایی که داده‌ها کمتر هستند،
+        منحنی تغییرات آهسته‌تری خواهد داشت.
+    </p>
+
+    <div class="formula">
+        More Data → Faster CDF Increase
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        Fewer Data → Slower CDF Increase
+    </div>
+
+    <p>
+        بنابراین CDF اطلاعات مربوط به تمرکز و پراکندگی داده را
+        به شکل تجمعی نمایش می‌دهد.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.1 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۱. Mild Right Skew → چولگی خفیف</h3>
+
+    <p>
+        در دیتاست
+        <code>Mild Right Skew</code>
+        ضریب تغییر بخش راست برابر
+        <code>0.3</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت، توزیع هنوز نسبتاً نزدیک به حالت متقارن است.
+        بنابراین CDF نیز رفتاری نسبتاً شبیه یک توزیع معمولی دارد.
+    </p>
+
+    <p>
+        بخش عمده‌ی افزایش CDF در محدوده‌ی مرکزی اتفاق می‌افتد
+        و سپس منحنی با نزدیک شدن به مقادیر بزرگ‌تر،
+        به‌آرامی به سمت ۱ حرکت می‌کند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.2 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۲. Moderate Right Skew → چولگی متوسط</h3>
+
+    <p>
+        در
+        <code>Moderate Right Skew</code>
+        ضریب به
+        <code>0.7</code>
+        افزایش پیدا کرده است.
+    </p>
+
+    <p>
+        مقادیر بزرگ‌تر نسبت به حالت قبل بیشتر کشیده شده‌اند.
+        در نتیجه بخشی از احتمال در سمت راست توزیع قرار می‌گیرد.
+    </p>
+
+    <p>
+        در CDF، این موضوع به شکل یک افزایش تدریجی‌تر
+        در قسمت‌های بالاتر محور X دیده می‌شود؛
+        زیرا داده‌هایی در محدوده‌های بزرگ‌تر نیز وجود دارند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.3 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۳. Strong Right Skew → چولگی شدید</h3>
+
+    <p>
+        در دیتاست
+        <code>Strong Right Skew</code>
+        ضریب برابر
+        <code>1.2</code>
+        است.
+    </p>
+
+    <p>
+        با افزایش چولگی، بخش بیشتری از دامنه‌ی مقادیر
+        در سمت راست توزیع امتداد پیدا می‌کند.
+    </p>
+
+    <p>
+        بنابراین CDF بخش قابل توجهی از افزایش خود را
+        در محدوده‌ی مرکزی انجام می‌دهد،
+        اما برای رسیدن به مقدار ۱ باید
+        تا مقادیر بزرگ‌تر در سمت راست ادامه پیدا کند.
+    </p>
+
+    <p>
+        این همان چیزی است که دنباله‌ی راست توزیع را
+        در یک نمایش تجمعی قابل مشاهده می‌کند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.4 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۴. Extreme Right Skew → چولگی بسیار شدید</h3>
+
+    <p>
+        در
+        <code>Extreme Right Skew</code>
+        ضریب تغییر برابر
+        <code>2.0</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت، مقادیر بزرگ‌تر فاصله‌ی بیشتری
+        از بخش اصلی داده‌ها پیدا می‌کنند.
+    </p>
+
+    <p>
+        در نتیجه CDF بخش زیادی از افزایش خود را
+        در محدوده‌ی مرکزی انجام می‌دهد،
+        اما بخش انتهایی منحنی برای رسیدن به ۱
+        تا مقادیر بزرگ‌تری ادامه پیدا می‌کند.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        در CDF نباید چولگی را فقط بر اساس
+        «بلندتر بودن» یا «کوتاه‌تر بودن» منحنی قضاوت کرد.
+        CDF همیشه از صفر به یک حرکت می‌کند.
+        برای تشخیص Skewness باید محل تجمع داده‌ها
+        و نحوه‌ی رسیدن منحنی به ۱ را بررسی کرد.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.5 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۵. Right Skew + Outliers → چولگی راست همراه با Outlier</h3>
+
+    <p>
+        دیتاست
+        <code>Right Skew + Outliers</code>
+        همان چولگی متوسط را دارد،
+        اما پنج مقدار بسیار بزرگ نیز به انتهای داده اضافه شده‌اند.
+    </p>
+
+    <p>
+        این مقادیر در انتهای سمت راست توزیع قرار گرفته‌اند
+        و باعث می‌شوند بخشی از احتمال در مقادیر بسیار بزرگ
+        باقی بماند.
+    </p>
+
+    <p>
+        در CDF، این وضعیت باعث می‌شود منحنی برای رسیدن
+        به مقدار ۱ تا مقادیر بالاتری در محور X ادامه پیدا کند.
+        به بیان دیگر، آخرین بخش CDF می‌تواند یک دنباله‌ی طولانی
+        در سمت راست ایجاد کند.
+    </p>
+
+    <p>
+        این مثال نشان می‌دهد که CDF می‌تواند اثر مقادیر
+        بسیار بزرگ را نیز در موقعیت رسیدن منحنی به ۱
+        آشکار کند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. مقایسه‌ی پنج توزیع در CDF</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>شدت چولگی</th>
+                <th>رفتار CDF</th>
+                <th>دنباله‌ی راست</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>خفیف</td>
+                <td>افزایش نسبتاً متعادل</td>
+                <td>کوتاه‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>متوسط</td>
+                <td>تجمع بیشتر در بخش مرکزی</td>
+                <td>کشیده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>شدید</td>
+                <td>افزایش سریع‌تر در بخش مرکزی</td>
+                <td>بلند</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>بسیار شدید</td>
+                <td>تجمع شدید در بخش اصلی + انتهای طولانی</td>
+                <td>بسیار کشیده</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>متوسط + Outliers</td>
+                <td>ادامه‌ی CDF تا مقادیر بسیار بزرگ</td>
+                <td>بسیار کشیده</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. تفسیر محورهای CDF</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>محور</th>
+                <th>مفهوم</th>
+                <th>تفسیر</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Value</td>
+                <td>مقدار واقعی متغیر</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Cumulative Probability</td>
+                <td>درصد داده‌های کوچک‌تر یا مساوی X</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y = 0</strong></td>
+                <td>شروع توزیع</td>
+                <td>تقریباً هیچ داده‌ای در سمت چپ X قرار ندارد</td>
+            </tr>
+
+            <tr>
+                <td><strong>Y = 1</strong></td>
+                <td>انتهای توزیع</td>
+                <td>تقریباً تمام داده‌ها در سمت چپ X قرار گرفته‌اند</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        برای مثال اگر منحنی در
+        <code>Y = 0.90</code>
+        قرار داشته باشد،
+        یعنی تقریباً ۹۰٪ داده‌ها کوچک‌تر یا مساوی
+        مقدار X مربوطه هستند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. تفاوت CDF با KDE در تشخیص چولگی</h2>
+
+    <p>
+        KDE چگالی داده را در هر مقدار نمایش می‌دهد،
+        در حالی که CDF احتمال تجمعی را نمایش می‌دهد.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>KDE</th>
+                <th>CDF</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Density</td>
+                <td>✓</td>
+                <td>✗</td>
+            </tr>
+
+            <tr>
+                <td>Cumulative Probability</td>
+                <td>✗</td>
+                <td>✓</td>
+            </tr>
+
+            <tr>
+                <td>شکل توزیع</td>
+                <td>✓</td>
+                <td>به‌صورت تجمعی</td>
+            </tr>
+
+            <tr>
+                <td>محدوده محور Y</td>
+                <td>وابسته به چگالی</td>
+                <td>۰ تا ۱</td>
+            </tr>
+
+            <tr>
+                <td>تشخیص دنباله‌ها</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+
+            <tr>
+                <td>مقایسه Percentile</td>
+                <td>محدود</td>
+                <td>✓</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>CDF</strong>
+                نشان می‌دهد چه نسبتی از داده‌ها
+                کوچک‌تر یا مساوی یک مقدار مشخص هستند.
+            </li>
+
+            <li>
+                مقدار CDF همیشه بین
+                <strong>۰ و ۱</strong>
+                قرار دارد.
+            </li>
+
+            <li>
+                CDF همیشه از چپ به راست
+                صعودی یا ثابت است.
+            </li>
+
+            <li>
+                در داده‌های
+                <strong>Right Skew</strong>
+                بخشی از توزیع تا مقادیر بزرگ‌تر
+                در سمت راست امتداد پیدا می‌کند.
+            </li>
+
+            <li>
+                هرچه چولگی راست شدیدتر شود،
+                رسیدن CDF به مقدار ۱
+                می‌تواند تا مقادیر بزرگ‌تری ادامه پیدا کند.
+            </li>
+
+            <li>
+                وجود Outlierهای بزرگ می‌تواند
+                انتهای CDF را به سمت مقادیر بسیار بزرگ‌تر
+                بکشاند.
+            </li>
+
+            <li>
+                CDF برای درک
+                <strong>Percentile</strong>
+                و احتمال تجمعی بسیار مفید است.
+            </li>
+
+            <li>
+                برای تشخیص دقیق شکل توزیع،
+                بهتر است CDF در کنار نمودارهایی مانند
+                <strong>KDE، Box Plot و Violin Plot</strong>
+                بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+ 
+
+</body>
+</html>

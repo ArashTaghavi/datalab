@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Violin Plot برای توزیع‌های دارای چولگی راست
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+    <p>
+        نمودار <strong>Violin Plot</strong> یکی از نمودارهای آماری برای
+        بررسی و مقایسه‌ی توزیع یک متغیر عددی است.
+        این نمودار ترکیبی از اطلاعات
+        <strong>Box Plot</strong>
+        و
+        <strong>KDE (Kernel Density Estimation)</strong>
+        را در یک نمایش واحد ارائه می‌دهد.
+    </p>
+
+    <p>
+        بخش پهن و باریک ویولن، شکل توزیع داده را نشان می‌دهد.
+        هرچه ویولن در یک مقدار پهن‌تر باشد،
+        داده‌های بیشتری در اطراف آن مقدار متمرکز شده‌اند.
+        در مقابل، قسمت‌های باریک‌تر نشان‌دهنده‌ی تراکم کمتر داده هستند.
+    </p>
+
+    <p>
+        بنابراین برخلاف Box Plot که بیشتر روی
+        <strong>Median، Quartiles، IQR و Whiskers</strong>
+        تمرکز دارد، Violin Plot اطلاعات بیشتری درباره‌ی
+        <strong>شکل کامل توزیع</strong>
+        در اختیار ما قرار می‌دهد.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        در Violin Plot، پهنای ویولن نشان‌دهنده‌ی
+        <strong>Density</strong>
+        است، نه تعداد مستقیم داده‌ها.
+        قسمت پهن‌تر یعنی چگالی داده در آن محدوده بیشتر است.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با اندازه‌ی
+        <strong>۱۰۰۰ نمونه</strong>
+        ساخته شده‌اند.
+        همه‌ی آن‌ها از یک توزیع نرمال پایه با میانگین ۱۷۰
+        و انحراف معیار ۸ شروع می‌شوند و سپس درجات مختلفی
+        از چولگی راست روی آن‌ها اعمال می‌شود.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>نوع توزیع</th>
+                <th>Mean پایه</th>
+                <th>SD پایه</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>چولگی راست خفیف</td>
+                <td>۱۷۰</td>
+                <td>۸</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>چولگی راست متوسط</td>
+                <td>۱۷۰</td>
+                <td>۸</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>چولگی راست شدید</td>
+                <td>۱۷۰</td>
+                <td>۸</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>چولگی راست بسیار شدید</td>
+                <td>۱۷۰</td>
+                <td>۸</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>چولگی راست + Outliers</td>
+                <td>۱۷۰</td>
+                <td>۸</td>
+                <td>۱۰۰۰</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        چهار دیتاست اول فقط از نظر میزان چولگی با یکدیگر متفاوت هستند.
+        دیتاست پنجم علاوه بر چولگی راست،
+        دارای چند مقدار بسیار بزرگ در انتهای توزیع نیز هست.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. چولگی راست در Violin Plot</h2>
+
+    <p>
+        چولگی راست
+        (<strong>Right Skew / Positive Skew</strong>)
+        زمانی اتفاق می‌افتد که بخش اصلی داده‌ها در سمت چپ
+        متمرکز باشد و دنباله‌ی توزیع به سمت مقادیر بزرگ‌تر
+        کشیده شود.
+    </p>
+
+    <p>
+        در Violin Plot، این وضعیت معمولاً به شکل یک ویولن
+        با بخش متراکم‌تر در سمت مقادیر پایین‌تر و
+        یک دنباله‌ی کشیده‌تر به سمت مقادیر بالاتر دیده می‌شود.
+    </p>
+
+    <div class="formula">
+        Right Skew → Longer Tail → Higher Values
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.1 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۱. Mild Right Skew → چولگی خفیف</h3>
+
+    <p>
+        در دیتاست
+        <code>Mild Right Skew</code>
+        ضریب اعمال‌شده روی بخش بالاتر از میانگین برابر
+        <code>0.3</code>
+        است.
+    </p>
+
+    <p>
+        بنابراین تغییر شکل توزیع نسبتاً محدود است.
+        بخش اصلی داده‌ها همچنان در اطراف مرکز توزیع قرار دارد،
+        اما سمت راست ویولن کمی کشیده‌تر از سمت چپ می‌شود.
+    </p>
+
+    <p>
+        در این حالت Violin Plot هنوز شباهت زیادی به یک توزیع
+        تقریباً متقارن دارد، اما یک عدم تقارن خفیف در سمت راست
+        قابل مشاهده است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.2 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۲. Moderate Right Skew → چولگی متوسط</h3>
+
+    <p>
+        در دیتاست
+        <code>Moderate Right Skew</code>
+        ضریب چولگی به
+        <code>0.7</code>
+        افزایش پیدا کرده است.
+    </p>
+
+    <p>
+        در نتیجه، مقادیر بزرگ‌تر نسبت به حالت قبلی
+        بیشتر از مرکز فاصله می‌گیرند.
+        این موضوع باعث می‌شود بخش راست ویولن
+        کشیده‌تر و نامتقارن‌تر شود.
+    </p>
+
+    <p>
+        در مقایسه با حالت Mild،
+        تشخیص چولگی راست در نمودار بسیار آسان‌تر خواهد بود.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.3 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۳. Strong Right Skew → چولگی شدید</h3>
+
+    <p>
+        در دیتاست
+        <code>Strong Right Skew</code>
+        ضریب مورد استفاده
+        <code>1.2</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت مقادیر بزرگ‌تر با شدت بیشتری
+        از میانگین فاصله می‌گیرند.
+        بنابراین توزیع دیگر شباهت زیادی به یک توزیع متقارن ندارد.
+    </p>
+
+    <p>
+        در Violin Plot،
+        قسمت اصلی ویولن در محدوده‌ی پایین‌تر قرار می‌گیرد
+        و بخش بالایی به سمت مقادیر بزرگ‌تر کشیده می‌شود.
+    </p>
+
+    <p>
+        این شکل نشان می‌دهد که بخش قابل توجهی از داده‌ها
+        در محدوده‌ی مرکزی متمرکز هستند،
+        اما تعدادی از مقادیر در سمت راست فاصله‌ی بیشتری
+        از مرکز دارند.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.4 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۴. Extreme Right Skew → چولگی بسیار شدید</h3>
+
+    <p>
+        در دیتاست
+        <code>Extreme Right Skew</code>
+        ضریب به
+        <code>2.0</code>
+        افزایش یافته است.
+    </p>
+
+    <p>
+        این حالت بیشترین میزان تغییر را نسبت به توزیع پایه دارد.
+        مقادیر بزرگ‌تر به سمت راست بیشتر کشیده شده‌اند
+        و عدم تقارن توزیع به وضوح قابل مشاهده است.
+    </p>
+
+    <p>
+        انتظار می‌رود ویولن در بخش مرکزی تراکم بیشتری داشته باشد
+        و در سمت راست یک دنباله‌ی بلندتر ایجاد کند.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        کشیده شدن سمت راست Violin Plot به این معنی نیست
+        که همه‌ی داده‌ها در سمت راست قرار دارند.
+        بلکه نشان می‌دهد بخش قابل توجهی از پراکندگی
+        در سمت مقادیر بزرگ‌تر امتداد پیدا کرده است.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 3.5 -->
+    <!-- ===================================================== -->
+
+    <h3>۳.۵. Right Skew + Outliers → چولگی راست همراه با Outlier</h3>
+
+    <p>
+        دیتاست
+        <code>Right Skew + Outliers</code>
+        از همان ساختار چولگی متوسط استفاده می‌کند،
+        اما پنج مقدار بسیار بزرگ به انتهای داده اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        210 &nbsp; | &nbsp; 220 &nbsp; | &nbsp; 230
+        &nbsp; | &nbsp; 245 &nbsp; | &nbsp; 260
+    </div>
+
+    <p>
+        این مقادیر از محدوده‌ی اصلی داده فاصله‌ی زیادی دارند
+        و باعث ایجاد یک دنباله‌ی بسیار کشیده در سمت راست می‌شوند.
+    </p>
+
+    <p>
+        بنابراین در Violin Plot،
+        علاوه بر چولگی موجود در توزیع،
+        اثر مقادیر بسیار بزرگ نیز در انتهای سمت راست دیده می‌شود.
+    </p>
+
+    <p>
+        این حالت برای مقایسه‌ی تفاوت بین
+        <strong>Skewness</strong>
+        و
+        <strong>Outliers</strong>
+        بسیار مفید است.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. مقایسه‌ی پنج توزیع</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>میزان چولگی</th>
+                <th>شکل مورد انتظار Violin</th>
+                <th>دنباله‌ی راست</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>خفیف</td>
+                <td>تقریباً متقارن</td>
+                <td>کمی کشیده</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>متوسط</td>
+                <td>نامتقارن</td>
+                <td>کشیده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>شدید</td>
+                <td>به‌وضوح نامتقارن</td>
+                <td>بلند</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>بسیار شدید</td>
+                <td>کاملاً نامتقارن</td>
+                <td>بسیار کشیده</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>متوسط + Outliers</td>
+                <td>نامتقارن با دنباله‌ی شدید</td>
+                <td>بسیار کشیده</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. Violin Plot چه چیزی را بهتر از Box Plot نشان می‌دهد؟</h2>
+
+    <p>
+        Box Plot اطلاعات توزیع را به چند مقدار خلاصه می‌کند:
+        <strong>Q1، Median، Q3 و IQR</strong>.
+        اما Violin Plot شکل چگالی را نیز نمایش می‌دهد.
+    </p>
+
+    <p>
+        بنابراین در داده‌های چوله، Violin Plot می‌تواند
+        بهتر نشان دهد که تراکم اصلی داده در کدام قسمت قرار دارد
+        و دنباله‌ی توزیع به کدام سمت کشیده شده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Box Plot</th>
+                <th>Violin Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Median</td>
+                <td>✓</td>
+                <td>✓</td>
+            </tr>
+
+            <tr>
+                <td>Quartiles</td>
+                <td>✓</td>
+                <td>معمولاً قابل نمایش</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>✓</td>
+                <td>به‌صورت مستقیم نه</td>
+            </tr>
+
+            <tr>
+                <td>شکل توزیع</td>
+                <td>محدود</td>
+                <td>✓</td>
+            </tr>
+
+            <tr>
+                <td>Density</td>
+                <td>✗</td>
+                <td>✓</td>
+            </tr>
+
+            <tr>
+                <td>تشخیص Skewness</td>
+                <td>نسبتاً خوب</td>
+                <td>✓</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. نکته مهم درباره‌ی Violin Plot و KDE</h2>
+
+    <p>
+        شکل Violin Plot مستقیماً از تخمین چگالی
+        <strong>KDE</strong>
+        ساخته می‌شود.
+        بنابراین پهنای ویولن در هر نقطه نشان‌دهنده‌ی
+        میزان چگالی داده در آن مقدار است.
+    </p>
+
+    <p>
+        به همین دلیل، ظاهر ویولن می‌تواند تا حدی به تنظیمات KDE
+        مانند
+        <code>bandwidth</code>
+        نیز وابسته باشد.
+        بنابراین نباید هر جزئیات کوچک در شکل ویولن را
+        به‌عنوان یک ویژگی قطعی از داده تفسیر کرد.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        برای تشخیص Skewness بهتر است شکل کلی ویولن،
+        محل تمرکز داده‌ها و طول دنباله‌ها بررسی شود؛
+        نه یک نقطه یا تغییر کوچک در عرض ویولن.
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Right Skew</strong>
+                باعث ایجاد عدم تقارن و کشیده شدن توزیع
+                به سمت مقادیر بزرگ‌تر می‌شود.
+            </li>
+
+            <li>
+                با افزایش شدت چولگی،
+                دنباله‌ی سمت راست Violin Plot
+                کشیده‌تر و واضح‌تر می‌شود.
+            </li>
+
+            <li>
+                در حالت
+                <strong>Mild Right Skew</strong>
+                توزیع هنوز نسبتاً نزدیک به حالت متقارن است.
+            </li>
+
+            <li>
+                در حالت‌های
+                <strong>Strong</strong>
+                و
+                <strong>Extreme Right Skew</strong>
+                عدم تقارن به‌وضوح قابل مشاهده است.
+            </li>
+
+            <li>
+                اضافه شدن Outlierهای بزرگ باعث می‌شود
+                دنباله‌ی سمت راست بسیار شدیدتر شود.
+            </li>
+
+            <li>
+                Violin Plot علاوه بر اطلاعات مرکزی،
+                شکل کلی توزیع و چگالی داده را نیز نمایش می‌دهد.
+            </li>
+
+            <li>
+                پهنای ویولن نشان‌دهنده‌ی
+                <strong>Density</strong>
+                است، نه تعداد مستقیم داده‌ها.
+            </li>
+
+            <li>
+                شکل Violin Plot بر اساس KDE ساخته می‌شود،
+                بنابراین تنظیمات KDE می‌توانند روی ظاهر آن اثر بگذارند.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

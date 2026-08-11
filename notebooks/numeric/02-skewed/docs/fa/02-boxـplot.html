@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار KDE</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #f5f7fa;
+        color: #1f2937;
+        font-family:
+            "Vazirmatn",
+            "Tahoma",
+            "Segoe UI",
+            sans-serif;
+        line-height: 2;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-top: 0;
+        margin-bottom: 35px;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+        color: #1d4ed8;
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-top: 30px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        margin: 12px 0;
+        text-align: justify;
+    }
+
+    ul,
+    ol {
+        padding-right: 30px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    strong {
+        color: #111827;
+    }
+
+    code {
+        direction: ltr;
+        display: inline-block;
+        background: #f1f5f9;
+        color: #be123c;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.9em;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-right: 4px solid #2563eb;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    .warning {
+        background: #fffbeb;
+        border-right: 4px solid #f59e0b;
+        padding: 18px 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        background: white;
+    }
+
+    th {
+        background: #1d4ed8;
+        color: white;
+        font-weight: 600;
+    }
+
+    th,
+    td {
+        padding: 12px 14px;
+        border: 1px solid #dbe2ea;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    tr:hover {
+        background: #eff6ff;
+    }
+
+    .formula {
+        direction: ltr;
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+        font-family: "Times New Roman", serif;
+        font-size: 18px;
+    }
+
+    .summary {
+        background: #f0fdf4;
+        border-right: 4px solid #16a34a;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 6px;
+    }
+
+    .english {
+        direction: ltr;
+        text-align: left;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 700px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        h2 {
+            font-size: 19px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px 6px;
+        }
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .container {
+            max-width: none;
+            box-shadow: none;
+            padding: 20px;
+        }
+
+        h2 {
+            break-before: auto;
+        }
+
+        table {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Box Plot برای توزیع‌های چوله به راست
+    </h1>
+
+    <!-- ===================================================== -->
+    <!-- 1 -->
+    <!-- ===================================================== -->
+
+    <h2>۱. مقدمه: Box Plot چیست؟</h2>
+
+    <p>
+        نمودار
+        <strong>Box Plot</strong>
+        یا
+        <strong>نمودار جعبه‌ای</strong>
+        یکی از ابزارهای مهم برای خلاصه‌سازی و بررسی توزیع داده‌های عددی است.
+        این نمودار به‌جای نمایش تک‌تک داده‌ها، چند ویژگی آماری مهم را
+        به‌صورت فشرده نمایش می‌دهد.
+    </p>
+
+    <p>
+        مهم‌ترین اجزای Box Plot شامل
+        <strong>Q1، Median، Q3، IQR، Whiskers</strong>
+        و
+        <strong>Outliers</strong>
+        هستند.
+        با استفاده از این اجزا می‌توان درباره‌ی
+        <strong>مرکز داده، پراکندگی، چولگی و داده‌های پرت</strong>
+        اطلاعات مناسبی به دست آورد.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>جزء</th>
+                <th>نام انگلیسی</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Q1</strong></td>
+                <td>First Quartile</td>
+                <td>صدک ۲۵ام داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Median</strong></td>
+                <td>Median / Q2</td>
+                <td>صدک ۵۰ام داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Q3</strong></td>
+                <td>Third Quartile</td>
+                <td>صدک ۷۵ام داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>IQR</strong></td>
+                <td>Interquartile Range</td>
+                <td>فاصله بین Q1 و Q3</td>
+            </tr>
+
+            <tr>
+                <td><strong>Whiskers</strong></td>
+                <td>Whiskers</td>
+                <td>محدوده معمول داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Points</strong></td>
+                <td>Outliers</td>
+                <td>داده‌های خارج از محدوده معمول</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="formula">
+        IQR = Q3 - Q1
+    </div>
+
+    <p>
+        در روش استاندارد Box Plot، مرزهای شناسایی داده‌های پرت بر اساس
+        <strong>۱.۵ برابر IQR</strong>
+        تعیین می‌شوند:
+    </p>
+
+    <div class="formula">
+        Lower Bound = Q1 - 1.5 × IQR
+        <br>
+        Upper Bound = Q3 + 1.5 × IQR
+    </div>
+
+    <p>
+        بنابراین هر داده‌ای که پایین‌تر از
+        <code>Lower Bound</code>
+        یا بالاتر از
+        <code>Upper Bound</code>
+        قرار بگیرد، به‌عنوان
+        <strong>Outlier</strong>
+        در نظر گرفته می‌شود.
+    </p>
+
+    <div class="note">
+        <strong>نکته مهم:</strong>
+        Box Plot مستقیماً شکل کامل توزیع را نشان نمی‌دهد.
+        برای مثال، برخلاف KDE نمی‌توان از Box Plot تعداد دقیق
+        قله‌های توزیع را مشاهده کرد.
+        قدرت اصلی Box Plot در نمایش
+        <strong>مرکز، پراکندگی، چولگی نسبی و داده‌های پرت</strong>
+        است.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 2 -->
+    <!-- ===================================================== -->
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این تحلیل، پنج دیتاست با هدف بررسی تدریجی
+        <strong>Right Skewness</strong>
+        ایجاد شده‌اند.
+        تمام دیتاست‌ها بر پایه‌ی یک توزیع نرمال با
+        میانگین ۱۷۰ و انحراف معیار ۸ ساخته شده‌اند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>نوع توزیع</th>
+                <th>پارامتر</th>
+                <th>تعداد نمونه</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>چولگی راست خفیف</td>
+                <td>0.3</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>چولگی راست متوسط</td>
+                <td>0.7</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>چولگی راست شدید</td>
+                <td>1.2</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>چولگی راست بسیار شدید</td>
+                <td>2.0</td>
+                <td>۱۰۰۰</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>چولگی راست + داده پرت</td>
+                <td>0.7 + Outliers</td>
+                <td>۱۰۰۰</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        در چهار دیتاست اول، شدت چولگی به‌صورت تدریجی افزایش پیدا می‌کند.
+        دیتاست پنجم علاوه بر چولگی راست، چند مقدار بسیار بزرگ نیز دارد
+        تا اثر Outlier روی Box Plot بررسی شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 3 -->
+    <!-- ===================================================== -->
+
+    <h2>۳. Box Plot در توزیع چوله به راست</h2>
+
+    <p>
+        در یک توزیع
+        <strong>Right-Skewed</strong>
+        یا
+        <strong>Positively Skewed</strong>
+        بخش زیادی از داده‌ها در سمت چپ متمرکز هستند،
+        اما دنباله‌ی توزیع به سمت مقادیر بزرگ‌تر کشیده می‌شود.
+    </p>
+
+    <p>
+        این ویژگی در Box Plot نیز قابل مشاهده است.
+        معمولاً یکی از مهم‌ترین نشانه‌ها این است که
+        فاصله‌ی
+        <strong>Median تا Q3</strong>
+        با فاصله‌ی
+        <strong>Q1 تا Median</strong>
+        برابر نیست و Whisker بالایی نیز تمایل دارد بلندتر باشد.
+    </p>
+
+    <div class="formula">
+        Right Skew → Longer Upper Tail
+    </div>
+
+    <p>
+        بنابراین هرچه چولگی راست بیشتر شود، انتظار داریم
+        بخش بالایی Box Plot نسبت به بخش پایینی کشیده‌تر شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 4 -->
+    <!-- ===================================================== -->
+
+    <h2>۴. مقایسه‌ی شدت‌های مختلف Right Skew</h2>
+
+    <h3>۴.۱. Mild Right Skew → چولگی خفیف</h3>
+
+    <p>
+        در دیتاست
+        <code>Mild Right Skew</code>
+        ضریب اعمال‌شده برابر با
+        <code>0.3</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت، توزیع هنوز نسبتاً متقارن به نظر می‌رسد،
+        اما مقادیر بزرگ‌تر کمی بیشتر به سمت راست کشیده شده‌اند.
+    </p>
+
+    <p>
+        در Box Plot انتظار داریم تفاوت بین دو سمت Median
+        چندان زیاد نباشد، اما بخش بالایی کمی کشیده‌تر شود.
+    </p>
+
+    <h3>۴.۲. Moderate Right Skew → چولگی متوسط</h3>
+
+    <p>
+        در این دیتاست ضریب چولگی به
+        <code>0.7</code>
+        افزایش یافته است.
+    </p>
+
+    <p>
+        در نتیجه، بخش بالایی توزیع بیشتر کشیده می‌شود.
+        فاصله‌ی Median تا Q3 می‌تواند از فاصله‌ی Q1 تا Median
+        بیشتر شود و Whisker بالایی نیز نسبت به حالت قبل
+        برجسته‌تر شود.
+    </p>
+
+    <h3>۴.۳. Strong Right Skew → چولگی شدید</h3>
+
+    <p>
+        در حالت
+        <code>Strong Right Skew</code>
+        ضریب برابر با
+        <code>1.2</code>
+        است.
+    </p>
+
+    <p>
+        اکنون اثر مقادیر بزرگ‌تر بسیار واضح‌تر می‌شود.
+        بخش بالایی Box Plot کشیده‌تر شده و فاصله‌ی
+        Median تا Q3 و همچنین Whisker بالایی می‌تواند
+        نسبت به بخش پایین بیشتر باشد.
+    </p>
+
+    <h3>۴.۴. Extreme Right Skew → چولگی بسیار شدید</h3>
+
+    <p>
+        در این حالت ضریب به
+        <code>2.0</code>
+        رسیده است.
+    </p>
+
+    <p>
+        داده‌های سمت راست تغییر بسیار بیشتری نسبت به
+        داده‌های نزدیک به مرکز پیدا کرده‌اند.
+        بنابراین انتظار داریم عدم تقارن Box Plot
+        بسیار واضح‌تر شود.
+    </p>
+
+    <p>
+        قسمت بالایی نمودار معمولاً فضای بیشتری را نسبت به
+        قسمت پایینی اشغال می‌کند و Whisker بالایی نیز
+        تمایل دارد کشیده‌تر باشد.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 5 -->
+    <!-- ===================================================== -->
+
+    <h2>۵. اثر Outlier در توزیع چوله به راست</h2>
+
+    <p>
+        دیتاست
+        <code>Right Skew + Outliers</code>
+        مشابه حالت
+        <code>Moderate Right Skew</code>
+        ساخته شده است، اما چند مقدار بسیار بزرگ به آن اضافه شده‌اند:
+    </p>
+
+    <div class="formula">
+        210, 220, 230, 245, 260
+    </div>
+
+    <p>
+        این مقادیر در انتهای بالایی داده قرار گرفته‌اند و
+        می‌توانند خارج از محدوده‌ی
+        <code>Q3 + 1.5 × IQR</code>
+        قرار بگیرند.
+    </p>
+
+    <p>
+        در Box Plot، این مقادیر معمولاً به‌صورت
+        <strong>نقاط جدا از Whisker بالایی</strong>
+        نمایش داده می‌شوند.
+    </p>
+
+    <p>
+        این حالت تفاوت مهمی را بین
+        <strong>Tail</strong>
+        و
+        <strong>Outlier</strong>
+        نشان می‌دهد:
+        یک توزیع می‌تواند دنباله‌ی راست طولانی داشته باشد،
+        اما تمام مقادیر آن الزاماً Outlier نیستند.
+    </p>
+
+    <div class="warning">
+        <strong>نکته مهم:</strong>
+        Right Skewness و Outlier یک مفهوم نیستند.
+        چولگی به شکل کلی و عدم تقارن توزیع مربوط است،
+        در حالی که Outlier به مشاهده‌ای مربوط می‌شود که
+        نسبت به ساختار مرکزی داده، غیرعادی و دورافتاده است.
+        یک دیتاست می‌تواند چوله باشد بدون اینکه Outlier مشخصی داشته باشد.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 6 -->
+    <!-- ===================================================== -->
+
+    <h2>۶. رابطه‌ی Median، Quartiles و Whiskers با چولگی</h2>
+
+    <p>
+        برای تحلیل Right Skew در Box Plot، باید به سه ناحیه‌ی اصلی توجه کرد:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>قسمت</th>
+                <th>در Right Skew معمولاً</th>
+                <th>مفهوم</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Q1 → Median</td>
+                <td>کوتاه‌تر</td>
+                <td>تراکم بیشتر داده در سمت پایین‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Median → Q3</td>
+                <td>بلندتر</td>
+                <td>پراکندگی بیشتر به سمت مقادیر بزرگ</td>
+            </tr>
+
+            <tr>
+                <td>Upper Whisker</td>
+                <td>معمولاً بلندتر</td>
+                <td>وجود دنباله‌ی راست</td>
+            </tr>
+
+            <tr>
+                <td>Lower Whisker</td>
+                <td>معمولاً کوتاه‌تر</td>
+                <td>دنباله‌ی کوتاه‌تر در سمت چپ</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        البته این الگو یک قاعده‌ی مطلق نیست.
+        طول Whiskerها به داده‌های واقعی و روش محاسبه‌ی آن‌ها وابسته است
+        و برای تشخیص چولگی بهتر است Box Plot در کنار
+        معیارهای آماری و نمودارهای دیگر بررسی شود.
+    </p>
+
+    <!-- ===================================================== -->
+    <!-- 7 -->
+    <!-- ===================================================== -->
+
+    <h2>۷. مقایسه‌ی پنج دیتاست</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>دیتاست</th>
+                <th>شدت چولگی</th>
+                <th>عدم تقارن Box</th>
+                <th>دنباله‌ی راست</th>
+                <th>Outlier</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mild Right Skew</td>
+                <td>خفیف</td>
+                <td>کم</td>
+                <td>کمی بلندتر</td>
+                <td>الزاماً ندارد</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Right Skew</td>
+                <td>متوسط</td>
+                <td>مشهود</td>
+                <td>بلندتر</td>
+                <td>الزاماً ندارد</td>
+            </tr>
+
+            <tr>
+                <td>Strong Right Skew</td>
+                <td>شدید</td>
+                <td>زیاد</td>
+                <td>کشیده‌تر</td>
+                <td>الزاماً ندارد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Right Skew</td>
+                <td>بسیار شدید</td>
+                <td>بسیار زیاد</td>
+                <td>بسیار کشیده</td>
+                <td>ممکن است</td>
+            </tr>
+
+            <tr>
+                <td>Right Skew + Outliers</td>
+                <td>متوسط</td>
+                <td>مشهود</td>
+                <td>کشیده</td>
+                <td>مشهود</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================================================== -->
+    <!-- 8 -->
+    <!-- ===================================================== -->
+
+    <h2>۸. محدودیت Box Plot در تشخیص چولگی</h2>
+
+    <p>
+        Box Plot اطلاعات بسیار خوبی درباره‌ی
+        <strong>Quartiles، Median، IQR و Outliers</strong>
+        ارائه می‌دهد، اما شکل کامل توزیع را نشان نمی‌دهد.
+    </p>
+
+    <p>
+        برای مثال، دو توزیع متفاوت ممکن است
+        Median، Q1 و Q3 نسبتاً مشابهی داشته باشند،
+        اما شکل واقعی آن‌ها کاملاً متفاوت باشد.
+    </p>
+
+    <p>
+        بنابراین برای بررسی دقیق Right Skew بهتر است Box Plot
+        در کنار نمودارهایی مانند
+        <strong>KDE، Histogram و CDF</strong>
+        و همچنین معیارهایی مانند
+        <strong>Skewness</strong>
+        استفاده شود.
+    </p>
+
+    <div class="note">
+        <strong>نکته:</strong>
+        Box Plot بیشتر یک ابزار خلاصه‌سازی آماری است؛
+        KDE شکل توزیع را بهتر نشان می‌دهد و CDF نحوه‌ی تجمع
+        احتمال را نمایش می‌دهد.
+        ترکیب این نمودارها تصویر کامل‌تری از توزیع ارائه می‌کند.
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 9 -->
+    <!-- ===================================================== -->
+
+    <h2>۹. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                <strong>Right Skew</strong>
+                باعث ایجاد عدم تقارن در Box Plot می‌شود.
+            </li>
+
+            <li>
+                در توزیع چوله به راست، بخش بالایی Box و
+                Whisker بالایی معمولاً کشیده‌تر هستند.
+            </li>
+
+            <li>
+                هرچه شدت چولگی افزایش پیدا کند،
+                عدم تقارن Box Plot نیز معمولاً واضح‌تر می‌شود.
+            </li>
+
+            <li>
+                <strong>Median</strong>
+                نسبت به Mean در برابر مقادیر بسیار بزرگ مقاوم‌تر است.
+            </li>
+
+            <li>
+                وجود چند مقدار بسیار بزرگ می‌تواند باعث ایجاد
+                <strong>Outlier</strong>
+                در بالای Box Plot شود.
+            </li>
+
+            <li>
+                <strong>Right Skewness</strong>
+                با
+                <strong>Outlier</strong>
+                یکسان نیست؛
+                یک توزیع می‌تواند چوله باشد بدون اینکه Outlier داشته باشد.
+            </li>
+
+            <li>
+                برای تحلیل کامل توزیع، بهتر است Box Plot در کنار
+                KDE، CDF، Histogram و معیار Skewness بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

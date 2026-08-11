@@ -1,0 +1,32 @@
+| دیتاست                               | وضعیت                 | دلیل                                                        |
+| ------------------------------------ | --------------------- | ----------------------------------------------------------- |
+| `01-normal_dataset`                  | ✅ نگه دار             | baseline اصلی                                               |
+| `02-right_skewed_dataset`            | ✅ نگه دار             | بررسی Skewness                                              |
+| `03-left_skewed_dataset`             | ✅ نگه دار             | بررسی Skewness                                              |
+| `04-heavy_tail_dataset`              | ✅ نگه دار             | Tail سنگین / Kurtosis                                       |
+| `05-outlier_dataset`                 | ✅ نگه دار             | رفتار Outlier                                               |
+| `06-extreme_outlier_dataset`         | ⚠️ قابل ادغام         | اگر صرفاً شدت outlier را بررسی می‌کند، با 05 هم‌پوشانی دارد |
+| `07-multimodal_distribution_dataset` | ✅ نگه دار             | چندقله‌ای بودن                                              |
+| `08-uniform_dataset`                 | ✅ نگه دار             | توزیع غیرنرمال با شکل متفاوت                                |
+| `09-high_variance_dataset`           | ❌ احتمالاً حذف        | در Normal بررسی شده                                         |
+| `10-low_variance_dataset`            | ❌ احتمالاً حذف        | در Normal بررسی شده                                         |
+| `11-zero_inflated_dataset`           | ✅ نگه دار             | رفتار خاص صفرها                                             |
+| `-12-discrete_integer_dataset`       | ✅ نگه دار             | Discrete بودن                                               |
+| `13-missing_value_dataset`           | ✅ نگه دار             | Missing Values                                              |
+| `14-infinite_dataset`                | ✅ نگه دار             | `±inf`                                                      |
+| `15-negative_value_dataset`          | ⚠️ احتمالاً حذف/ادغام | صرفاً منفی بودن به‌تنهایی Distribution خاصی نیست            |
+| `-16-duplicate_values_dataset`       | ⚠️ نگه دار            | بررسی اثر تکرار                                             |
+| `17-noisy_dataset`                   | ✅ نگه دار             | Noise                                                       |
+| `18-lognormal_dataset`               | ✅ نگه دار             | توزیع راست‌چوله واقعی                                       |
+| `19-exponential_dataset`             | ✅ نگه دار             | Right-skewed واقعی                                          |
+| `20-salary_dataset`                  | ✅ نگه دار             | دیتای شبه‌واقعی                                             |
+| `21-house_price_dataset`             | ✅ نگه دار             | دیتای شبه‌واقعی                                             |
+| `22-customer_spending_dataset`       | ✅ نگه دار             | دیتای شبه‌واقعی                                             |
+| `23-response_time_dataset`           | ✅ نگه دار             | دیتای شبه‌واقعی                                             |
+| `24-sensor_temperature_dataset`      | ✅ نگه دار             | دیتای شبه‌واقعی                                             |
+| `25-binomial_dataset`                | ✅ نگه دار             | Discrete distribution                                       |
+| `26-binary_dataset`                  | ✅ نگه دار             | Binary                                                      |
+| `27-constant_dataset`                | ✅ نگه دار             | Constant feature                                            |
+| `28-small_sample_dataset`            | ✅ نگه دار             | اثر sample size                                             |
+| `29-date_like_numeric_dataset`       | ⚠️ هدف متفاوت         | تشخیص numeric اشتباه                                        |
+| `30-already_transformed_dataset`     | ✅ نگه دار             | بررسی feature transformation                                |
