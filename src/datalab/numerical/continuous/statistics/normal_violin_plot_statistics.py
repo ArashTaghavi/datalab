@@ -38,7 +38,7 @@ class NormalViolinPlotStatistics:
                     "IQR": (np.quantile(values, 0.75) - np.quantile(values, 0.25)),
                     # Shape / Density
                     "Peak Density Value": x[peak_index],
-                    "Peak Densiسty": density[peak_index],
+                    "Peak Density": density[peak_index],
                 }
             )
 

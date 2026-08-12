@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+    <link href="../../../styles.css" rel="stylesheet"/>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه Mean و Standard Deviation برای داده‌های دارای نویز
+    </h1>
+
+    <h2>۱. مقدمه: Mean و Standard Deviation چیستند؟</h2>
+
+    <p>
+        <strong>Mean</strong> مرکز توزیع داده‌ها را نشان می‌دهد و
+        <strong>Standard Deviation (SD)</strong> میزان پراکندگی داده‌ها
+        حول Mean را اندازه‌گیری می‌کند.
+    </p>
+
+    <p>
+        در این دیتاست هدف اصلی بررسی این است که با افزایش شدت نویز،
+        <strong>مرکز</strong> و <strong>پراکندگی</strong> داده‌ها
+        چگونه تغییر می‌کنند.
+    </p>
+
+    
+::contentReference[oaicite:0]{index=0}
+
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        داده‌ی پایه از یک توزیع نرمال با
+        <code>loc = 170</code>،
+        <code>scale = 8</code>
+        و
+        <strong>۱۰۰۰ نمونه</strong>
+        تولید شده است.
+    </p>
+
+    <p>
+        سپس نویز نرمال با شدت‌های مختلف به داده‌ی پایه اضافه شده است.
+        بنابراین در تمام دیتاست‌ها تعداد نمونه‌ها برابر با ۱۰۰۰ است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Noise SD</th>
+                <th>Samples</th>
+                <th>ویژگی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>0</td>
+                <td>1000</td>
+                <td>داده‌ی پایه</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>1</td>
+                <td>1000</td>
+                <td>نویز کم</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>4</td>
+                <td>1000</td>
+                <td>نویز متوسط</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>8</td>
+                <td>1000</td>
+                <td>نویز زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>16</td>
+                <td>1000</td>
+                <td>نویز بسیار زیاد</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۳. Mean</h2>
+
+    <p>
+        Mean نشان‌دهنده‌ی مرکز توزیع داده است.
+        در این دیتاست مقدار Mean مورد انتظار برای داده‌ی پایه
+        برابر با حدود <strong>170</strong> است.
+    </p>
+
+    <p>
+        نویزی که به داده‌ها اضافه شده دارای Mean برابر با صفر است.
+        بنابراین افزایش شدت نویز نباید به صورت سیستماتیک Mean
+        داده‌ی نهایی را تغییر دهد.
+    </p>
+
+    <p>
+        ممکن است Mean نمونه‌ای در هر دیتاست کمی با 170 تفاوت داشته باشد،
+        زیرا داده‌ها به صورت تصادفی تولید شده‌اند.
+    </p>
+
+    <h3>۳.۱. No Noise</h3>
+
+    <p>
+        در حالت <code>No Noise</code>، داده‌ها مستقیماً از توزیع پایه
+        تولید شده‌اند.
+    </p>
+
+    <p>
+        بنابراین Mean نمونه باید در اطراف مقدار 170 قرار داشته باشد.
+    </p>
+
+    <h3>۳.۲. Mild Noise</h3>
+
+    <p>
+        در این حالت نویزی با SD برابر با 1 اضافه شده است.
+        چون Mean نویز صفر است، انتظار نداریم مرکز توزیع تغییر محسوسی کند.
+    </p>
+
+    <h3>۳.۳. Moderate Noise</h3>
+
+    <p>
+        با وجود افزایش SD نویز به 4، Mean مورد انتظار همچنان
+        تقریباً برابر با 170 باقی می‌ماند.
+    </p>
+
+    <h3>۳.۴. Strong Noise</h3>
+
+    <p>
+        در این حالت SD نویز برابر با SD توزیع پایه است.
+        با این حال Mean نظری همچنان حدود 170 باقی می‌ماند.
+    </p>
+
+    <h3>۳.۵. Extreme Noise</h3>
+
+    <p>
+        حتی در حالت Extreme Noise نیز چون نویز Mean صفر دارد،
+        Mean نظری داده‌ی نهایی همچنان 170 است.
+    </p>
+
+    <h2>۴. Standard Deviation</h2>
+
+    <p>
+        برخلاف Mean، افزایش نویز تأثیر مستقیمی روی
+        <strong>Standard Deviation</strong>
+        دارد.
+    </p>
+
+    <p>
+        با افزایش شدت نویز، داده‌ها از مرکز فاصله‌ی بیشتری می‌گیرند
+        و در نتیجه پراکندگی افزایش پیدا می‌کند.
+    </p>
+
+    <p>
+        از آنجا که داده‌ی پایه و نویز هر دو مستقل و نرمال هستند،
+        واریانس مجموع آن‌ها برابر مجموع واریانس‌هایشان است:
+    </p>
+
+    <div class="formula">
+        Var(X + ε) = Var(X) + Var(ε)
+    </div>
+
+    <p>
+        بنابراین SD نهایی تقریباً از رابطه‌ی زیر پیروی می‌کند:
+    </p>
+
+    <div class="formula">
+        SD<sub>final</sub> = √(8² + σ<sub>noise</sub>²)
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Noise</th>
+                <th>Noise SD</th>
+                <th>Expected SD</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>0</td>
+                <td>≈ 8.00</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>1</td>
+                <td>≈ 8.06</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>4</td>
+                <td>≈ 8.94</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>8</td>
+                <td>≈ 11.31</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>16</td>
+                <td>≈ 17.89</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۵. مقایسه Mean و SD</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Noise Level</th>
+                <th>Mean</th>
+                <th>Standard Deviation</th>
+                <th>اثر اصلی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>≈ 170</td>
+                <td>≈ 8</td>
+                <td>داده‌ی پایه</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>≈ 170</td>
+                <td>≈ 8.06</td>
+                <td>افزایش بسیار کم Spread</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>≈ 170</td>
+                <td>≈ 8.94</td>
+                <td>افزایش Spread</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>≈ 170</td>
+                <td>≈ 11.31</td>
+                <td>افزایش قابل توجه Spread</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>≈ 170</td>
+                <td>≈ 17.89</td>
+                <td>افزایش شدید Spread</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۶. نکته‌ی مهم درباره Mean و SD</h2>
+
+    <p>
+        این دیتاست مثال خوبی برای تفاوت بین
+        <strong>Location</strong>
+        و
+        <strong>Spread</strong>
+        است.
+    </p>
+
+    <p>
+        افزایش نویز با Mean صفر، مرکز توزیع را به صورت سیستماتیک
+        جابه‌جا نمی‌کند، اما باعث افزایش Variance و در نتیجه
+        Standard Deviation می‌شود.
+    </p>
+
+    <p>
+        بنابراین اگر در نمودار Mean ± SD مشاهده کنیم که Meanها
+        تقریباً در یک سطح قرار دارند ولی محدوده‌ی SD با افزایش نویز
+        بزرگ‌تر می‌شود، این دقیقاً همان رفتاری است که از این دیتاست
+        انتظار داریم.
+    </p>
+
+    <h2>۷. مقایسه‌ی کلی حالت‌ها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>No Noise</th>
+                <th>Moderate Noise</th>
+                <th>Extreme Noise</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Mean</td>
+                <td>≈ 170</td>
+                <td>≈ 170</td>
+                <td>≈ 170</td>
+            </tr>
+
+            <tr>
+                <td>SD</td>
+                <td>≈ 8</td>
+                <td>≈ 8.94</td>
+                <td>≈ 17.89</td>
+            </tr>
+
+            <tr>
+                <td>Spread</td>
+                <td>کم</td>
+                <td>متوسط</td>
+                <td>زیاد</td>
+            </tr>
+
+            <tr>
+                <td>مرکز توزیع</td>
+                <td>تقریباً ثابت</td>
+                <td>تقریباً ثابت</td>
+                <td>تقریباً ثابت</td>
+            </tr>
+
+            <tr>
+                <td>اثر نویز</td>
+                <td>ندارد</td>
+                <td>افزایش پراکندگی</td>
+                <td>افزایش شدید پراکندگی</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۸. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                Mean مرکز داده‌ها را نشان می‌دهد و در این دیتاست
+                تقریباً در اطراف <strong>170</strong> باقی می‌ماند.
+            </li>
+
+            <li>
+                نویز دارای Mean صفر است؛ بنابراین افزایش نویز
+                جابه‌جایی سیستماتیک Mean ایجاد نمی‌کند.
+            </li>
+
+            <li>
+                افزایش شدت نویز باعث افزایش
+                <strong>Variance و Standard Deviation</strong>
+                می‌شود.
+            </li>
+
+            <li>
+                در حالت Extreme Noise، پراکندگی داده‌ها به شکل
+                قابل توجهی بیشتر از حالت No Noise است.
+            </li>
+
+            <li>
+                بنابراین در این دیتاست، تغییر اصلی ناشی از نویز در
+                <strong>Spread</strong>
+                مشاهده می‌شود، نه در مرکز توزیع.
+            </li>
+
+            <li>
+                برای تحلیل کامل‌تر، Mean ± SD بهتر است در کنار
+                <strong>Distribution، Box Plot، Violin Plot، CDF
+                و QQ Plot</strong>
+                بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>

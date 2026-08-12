@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+<title>تحلیل و مقایسه نمودار Violin</title>
+
+    <link href="../../../styles.css" rel="stylesheet"/>
+
+
+</head>
+
+<body>
+
+ 
+ 
+<div class="container">
+
+    <h1>
+        تحلیل و مقایسه نمودار Violin Plot برای داده‌های دارای نویز
+    </h1>
+
+    <h2>۱. مقدمه: Violin Plot چیست؟</h2>
+
+    <p>
+        نمودار <strong>Violin Plot</strong> برای بررسی و مقایسه‌ی
+        <strong>شکل توزیع، پراکندگی و مرکز داده‌ها</strong> استفاده می‌شود.
+    </p>
+
+    <p>
+        Violin Plot ترکیبی از اطلاعات
+        <strong>Distribution</strong>
+        و
+        <strong>Box Plot</strong>
+        را در یک نمودار نمایش می‌دهد.
+        پهنای قسمت‌های مختلف Violin نشان می‌دهد که داده‌ها
+        در آن محدوده با چه تراکمی قرار گرفته‌اند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>بخش</th>
+                <th>مفهوم</th>
+                <th>توضیح</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><strong>Width</strong></td>
+                <td>Density</td>
+                <td>میزان تراکم داده در هر مقدار</td>
+            </tr>
+
+            <tr>
+                <td><strong>Center</strong></td>
+                <td>Central Region</td>
+                <td>ناحیه‌ی مرکزی توزیع</td>
+            </tr>
+
+            <tr>
+                <td><strong>Shape</strong></td>
+                <td>Distribution Shape</td>
+                <td>شکل کلی توزیع داده‌ها</td>
+            </tr>
+
+            <tr>
+                <td><strong>Spread</strong></td>
+                <td>Variability</td>
+                <td>میزان پراکندگی داده‌ها</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۲. داده‌های مورد بررسی</h2>
+
+    <p>
+        در این دیتاست، ابتدا یک توزیع نرمال با
+        <code>loc = 170</code>،
+        <code>scale = 8</code>
+        و
+        <strong>۱۰۰۰ نمونه</strong>
+        تولید شده است.
+    </p>
+
+    <p>
+        سپس نویز نرمال با شدت‌های مختلف به داده‌ی پایه اضافه شده است.
+        بنابراین در تمام حالت‌ها تعداد نمونه‌ها برابر با ۱۰۰۰ است
+        و ساختار پایه‌ی داده تغییر نکرده است.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Noise SD</th>
+                <th>Samples</th>
+                <th>ویژگی</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>0</td>
+                <td>1000</td>
+                <td>داده‌ی پایه بدون نویز</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>1</td>
+                <td>1000</td>
+                <td>نویز کم</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>4</td>
+                <td>1000</td>
+                <td>نویز متوسط</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>8</td>
+                <td>1000</td>
+                <td>نویز زیاد</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>16</td>
+                <td>1000</td>
+                <td>نویز بسیار زیاد</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۳. اثر نویز روی شکل Violin</h2>
+
+    <p>
+        مهم‌ترین ویژگی قابل مشاهده در این مقایسه،
+        <strong>افزایش عرض و گستردگی Violin</strong>
+        با افزایش شدت نویز است.
+    </p>
+
+    <p>
+        دلیل این موضوع این است که افزایش نویز باعث می‌شود
+        مقادیر بیشتری از مرکز توزیع فاصله بگیرند.
+        در نتیجه Distribution نهایی گسترده‌تر می‌شود.
+    </p>
+
+    <h3>۳.۱. No Noise</h3>
+
+    <p>
+        در حالت <code>No Noise</code>، داده‌ها مستقیماً از توزیع پایه
+        تولید شده‌اند.
+    </p>
+
+    <p>
+        بنابراین Violin شکل توزیع اصلی را نمایش می‌دهد و بیشترین
+        تراکم داده در اطراف مرکز توزیع قرار دارد.
+    </p>
+
+    <p>
+        شکل Violin نسبتاً متمرکز است و Spread آن مربوط به
+        پراکندگی طبیعی توزیع پایه است.
+    </p>
+
+    <h3>۳.۲. Mild Noise</h3>
+
+    <p>
+        در حالت <code>Mild Noise</code> نویزی با
+        <code>SD = 1</code>
+        به داده‌ها اضافه شده است.
+    </p>
+
+    <p>
+        این مقدار نویز نسبت به پراکندگی پایه کوچک است؛
+        بنابراین شکل Violin تنها تغییر محدودی خواهد داشت.
+    </p>
+
+    <p>
+        Distribution کمی گسترده‌تر می‌شود، اما ساختار کلی آن
+        تقریباً مشابه حالت بدون نویز باقی می‌ماند.
+    </p>
+
+    <h3>۳.۳. Moderate Noise</h3>
+
+    <p>
+        در <code>Moderate Noise</code> مقدار SD نویز برابر با
+        <code>4</code>
+        است.
+    </p>
+
+    <p>
+        در این حالت اثر نویز روی Violin واضح‌تر می‌شود.
+        توزیع در محدوده‌ی بزرگ‌تری از مقادیر گسترش پیدا می‌کند.
+    </p>
+
+    <p>
+        بنابراین قسمت میانی Violin پهن‌تر شده و
+        دم‌های آن نیز گسترده‌تر می‌شوند.
+    </p>
+
+    <h3>۳.۴. Strong Noise</h3>
+
+    <p>
+        در حالت <code>Strong Noise</code> مقدار SD نویز برابر با
+        <code>8</code>
+        است.
+    </p>
+
+    <p>
+        این مقدار با SD توزیع پایه برابر است؛ بنابراین نویز
+        تأثیر قابل توجهی روی توزیع نهایی دارد.
+    </p>
+
+    <p>
+        Violin در محدوده‌ی وسیع‌تری گسترش پیدا می‌کند و تفاوت آن
+        با حالت بدون نویز به وضوح قابل مشاهده است.
+    </p>
+
+    <h3>۳.۵. Extreme Noise</h3>
+
+    <p>
+        در <code>Extreme Noise</code> مقدار SD نویز برابر با
+        <code>16</code>
+        است.
+    </p>
+
+    <p>
+        این مقدار دو برابر SD توزیع پایه است؛ بنابراین نویز
+        بخش بسیار بزرگی از پراکندگی نهایی داده‌ها را تشکیل می‌دهد.
+    </p>
+
+    <p>
+        در این حالت انتظار می‌رود Violin بیشترین Spread را داشته باشد
+        و بخش قابل توجهی از مقادیر در فاصله‌ی بیشتری از مرکز قرار بگیرند.
+    </p>
+
+    <h2>۴. رابطه‌ی Noise و Distribution Width</h2>
+
+    <p>
+        عرض Violin در هر مقدار با چگالی داده‌ها در آن محدوده ارتباط دارد.
+        بنابراین وقتی نویز باعث گسترده‌تر شدن Distribution می‌شود،
+        شکل Violin نیز تغییر می‌کند.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Noise Level</th>
+                <th>Spread</th>
+                <th>Violin Width</th>
+                <th>Distribution</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>No Noise</td>
+                <td>کمتر</td>
+                <td>متمرکزتر</td>
+                <td>فشرده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Mild Noise</td>
+                <td>کمی بیشتر</td>
+                <td>کمی گسترده‌تر</td>
+                <td>کمی پهن‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Moderate Noise</td>
+                <td>بیشتر</td>
+                <td>گسترده‌تر</td>
+                <td>پهن‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Strong Noise</td>
+                <td>زیاد</td>
+                <td>بزرگ‌تر</td>
+                <td>گسترده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>Extreme Noise</td>
+                <td>بسیار زیاد</td>
+                <td>بسیار گسترده</td>
+                <td>بسیار پهن</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۵. آیا مرکز توزیع تغییر می‌کند؟</h2>
+
+    <p>
+        نویز استفاده‌شده در این دیتاست از توزیعی با
+        <strong>میانگین صفر</strong>
+        تولید شده است.
+    </p>
+
+    <p>
+        بنابراین انتظار نداریم که افزایش نویز باعث جابه‌جایی
+        سیستماتیک مرکز توزیع شود.
+    </p>
+
+    <p>
+        تفاوت اصلی بین Violinها باید در
+        <strong>Spread و شکل Distribution</strong>
+        مشاهده شود، نه در جابه‌جایی مرکز.
+    </p>
+
+    <p>
+        البته به دلیل تصادفی بودن داده‌ها، Median و Mean نمونه‌ای
+        می‌توانند بین دیتاست‌ها کمی تفاوت داشته باشند.
+    </p>
+
+    <h2>۶. Violin Plot در مقایسه با Box Plot</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>Violin Plot</th>
+                <th>Box Plot</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Median</td>
+                <td>قابل نمایش</td>
+                <td>بسیار واضح</td>
+            </tr>
+
+            <tr>
+                <td>IQR</td>
+                <td>قابل نمایش</td>
+                <td>بسیار واضح</td>
+            </tr>
+
+            <tr>
+                <td>Distribution Shape</td>
+                <td>بسیار خوب</td>
+                <td>ضعیف</td>
+            </tr>
+
+            <tr>
+                <td>Density</td>
+                <td>بسیار خوب</td>
+                <td>نمایش داده نمی‌شود</td>
+            </tr>
+
+            <tr>
+                <td>Outlier</td>
+                <td>بسته به تنظیمات نمودار</td>
+                <td>بسیار واضح</td>
+            </tr>
+
+            <tr>
+                <td>Spread</td>
+                <td>خوب</td>
+                <td>خوب</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۷. مقایسه‌ی کلی حالت‌ها</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ویژگی</th>
+                <th>No Noise</th>
+                <th>Moderate Noise</th>
+                <th>Extreme Noise</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>مرکز توزیع</td>
+                <td>اطراف 170</td>
+                <td>تقریباً مشابه</td>
+                <td>تقریباً مشابه</td>
+            </tr>
+
+            <tr>
+                <td>Spread</td>
+                <td>کمتر</td>
+                <td>بیشتر</td>
+                <td>بسیار بیشتر</td>
+            </tr>
+
+            <tr>
+                <td>عرض Violin</td>
+                <td>متمرکزتر</td>
+                <td>گسترده‌تر</td>
+                <td>بسیار گسترده</td>
+            </tr>
+
+            <tr>
+                <td>دم‌ها</td>
+                <td>کوتاه‌تر</td>
+                <td>بلندتر</td>
+                <td>گسترده‌تر</td>
+            </tr>
+
+            <tr>
+                <td>اثر نویز</td>
+                <td>ندارد</td>
+                <td>قابل مشاهده</td>
+                <td>بسیار شدید</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>۸. جمع‌بندی نهایی</h2>
+
+    <div class="summary">
+
+        <ul>
+
+            <li>
+                Violin Plot شکل Distribution را بهتر از Box Plot نمایش می‌دهد.
+            </li>
+
+            <li>
+                با افزایش شدت نویز، پراکندگی داده‌ها افزایش پیدا می‌کند.
+            </li>
+
+            <li>
+                افزایش پراکندگی باعث می‌شود شکل Violin در محدوده‌ی
+                وسیع‌تری از مقادیر امتداد پیدا کند.
+            </li>
+
+            <li>
+                نویز با میانگین صفر، به صورت سیستماتیک مرکز توزیع را
+                جابه‌جا نمی‌کند.
+            </li>
+
+            <li>
+                تفاوت اصلی بین حالت‌های مختلف در
+                <strong>Spread و Distribution Shape</strong>
+                مشاهده می‌شود.
+            </li>
+
+            <li>
+                Violin Plot برای مقایسه‌ی همزمان
+                <strong>Density، Distribution Shape و Spread</strong>
+                مناسب است.
+            </li>
+
+            <li>
+                برای تحلیل کامل‌تر، بهتر است Violin Plot در کنار
+                <strong>Distribution، Box Plot و Mean ± SD</strong>
+                بررسی شود.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</body>
+</html>
