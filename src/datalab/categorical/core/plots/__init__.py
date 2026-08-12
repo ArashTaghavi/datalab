@@ -10,6 +10,7 @@ from .pie_plot import PiePlot
 from .rare_category_plot import RareCategoryPlot
 from .top_category_plot import TopCategoryPlot
 from .treemap_plot import TreemapPlot
+from .ordered_bar_plot import OrderedBarPlot
 
 __all__ = [
     "CardinalityPlot",
@@ -24,4 +25,5 @@ __all__ = [
     "RareCategoryPlot",
     "TopCategoryPlot",
     "TreemapPlot",
+    "OrderedBarPlot",
 ]

@@ -83,7 +83,7 @@ class ParetoPlot:
         # ---------------------------------
         # Ticks
         # ---------------------------------
-        plt.xticks(rotation=45, fontsize=9)
+        plt.xticks(rotation=90, fontsize=9)
 
         plt.yticks(fontsize=9)
 

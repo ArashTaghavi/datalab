@@ -58,7 +58,7 @@ class CardinalityPlot:
         # ---------------------------------
         # Ticks
         # ---------------------------------
-        plt.xticks(rotation=0, fontsize=9)
+        plt.xticks(rotation=90, fontsize=9)
 
         plt.yticks(fontsize=9)
 

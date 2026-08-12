@@ -48,7 +48,7 @@ class MissingValuePlot:
         # ---------------------------------
         ax.grid(True, axis="y", alpha=0.3)
 
-        plt.xticks(rotation=0, fontsize=9)
+        plt.xticks(rotation=90, fontsize=9)
 
         plt.yticks(fontsize=9)
 

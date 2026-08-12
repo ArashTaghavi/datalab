@@ -3,14 +3,11 @@ import pandas as pd
 import seaborn as sns
 
 
-class RareCategoryPlot:
+class OrderedBarPlot:
 
-    def __init__(
-        self, columns: list[pd.Series], titles: list[str], threshold: float = 0.05
-    ):
+    def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
         self.titles = titles
-        self.threshold = threshold
 
     def draw(self):
 
@@ -26,14 +23,11 @@ class RareCategoryPlot:
 
             values = column.dropna()
 
-            frequencies = values.value_counts(normalize=True)
+            counts = values.value_counts(sort=False)
 
-            rare_categories = frequencies[frequencies < self.threshold]
+            for category, count in counts.items():
 
-            for category, frequency in rare_categories.items():
-                data.append(
-                    {"Category": category, "Frequency": frequency, "Column": title}
-                )
+                data.append({"Category": category, "Count": count, "Column": title})
 
         data = pd.DataFrame(data)
 
@@ -42,18 +36,23 @@ class RareCategoryPlot:
         # ---------------------------------
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
-        if not data.empty:
+        sns.barplot(data=data, x="Category", y="Count", hue="Column", ax=ax)
 
-            sns.barplot(data=data, x="Category", y="Frequency", hue="Column", ax=ax)
+        # ---------------------------------
+        # Value Labels
+        # ---------------------------------
+        for container in ax.containers:
+
+            ax.bar_label(container, fmt="%.0f", fontsize=9, padding=3)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title(f"Rare Categories (Frequency < {self.threshold:.1%})", fontsize=12)
+        ax.set_title("Ordinal Category Distribution", fontsize=12)
 
         ax.set_xlabel("Category", fontsize=10)
 
-        ax.set_ylabel("Frequency", fontsize=10)
+        ax.set_ylabel("Count", fontsize=10)
 
         # ---------------------------------
         # Grid
@@ -64,6 +63,9 @@ class RareCategoryPlot:
 
         plt.yticks(fontsize=9)
 
+        # ---------------------------------
+        # Layout
+        # ---------------------------------
         plt.tight_layout()
 
         plt.show()
