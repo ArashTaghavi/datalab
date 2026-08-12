@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from ....contracts.plot import Plot
-
-
-class MeanStdPlot(Plot):
+class MeanStdPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns

@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-class HistogramPlot:
+
+class LengthPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
@@ -20,10 +21,10 @@ class HistogramPlot:
 
         for column, title in zip(self.columns, self.titles):
 
-            values = column.dropna()
+            values = column.dropna().astype(str)
 
             for value in values:
-                data.append({"Value": value, "Distribution": title})
+                data.append({"Length": len(value), "Column": title})
 
         data = pd.DataFrame(data)
 
@@ -33,23 +34,17 @@ class HistogramPlot:
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
         sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
+            data=data, x="Length", hue="Column", discrete=True, multiple="dodge", ax=ax
         )
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
+        ax.set_title("Category Length Distribution", fontsize=12)
 
-        ax.set_xlabel("Value", fontsize=10)
+        ax.set_xlabel("String Length", fontsize=10)
 
-        ax.set_ylabel("Frequency", fontsize=10)
+        ax.set_ylabel("Count", fontsize=10)
 
         # ---------------------------------
         # Grid

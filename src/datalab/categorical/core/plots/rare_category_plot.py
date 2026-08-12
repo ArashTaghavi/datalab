@@ -2,11 +2,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-class HistogramPlot:
 
-    def __init__(self, columns: list[pd.Series], titles: list[str]):
+class RareCategoryPlot:
+
+    def __init__(
+        self, columns: list[pd.Series], titles: list[str], threshold: float = 0.05
+    ):
         self.columns = columns
         self.titles = titles
+        self.threshold = threshold
 
     def draw(self):
 
@@ -22,8 +26,14 @@ class HistogramPlot:
 
             values = column.dropna()
 
-            for value in values:
-                data.append({"Value": value, "Distribution": title})
+            frequencies = values.value_counts(normalize=True)
+
+            rare_categories = frequencies[frequencies < self.threshold]
+
+            for category, frequency in rare_categories.items():
+                data.append(
+                    {"Category": category, "Frequency": frequency, "Column": title}
+                )
 
         data = pd.DataFrame(data)
 
@@ -32,22 +42,16 @@ class HistogramPlot:
         # ---------------------------------
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
-        sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
-        )
+        if not data.empty:
+
+            sns.barplot(data=data, x="Category", y="Frequency", hue="Column", ax=ax)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
+        ax.set_title(f"Rare Categories (Frequency < {self.threshold:.1%})", fontsize=12)
 
-        ax.set_xlabel("Value", fontsize=10)
+        ax.set_xlabel("Category", fontsize=10)
 
         ax.set_ylabel("Frequency", fontsize=10)
 
@@ -56,7 +60,7 @@ class HistogramPlot:
         # ---------------------------------
         ax.grid(True, axis="y", alpha=0.3)
 
-        plt.xticks(fontsize=9)
+        plt.xticks(rotation=45, fontsize=9)
 
         plt.yticks(fontsize=9)
 

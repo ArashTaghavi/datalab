@@ -2,10 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from ....contracts.plot import Plot
 
-
-class DistributionPlot(Plot):
+class DistributionPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns

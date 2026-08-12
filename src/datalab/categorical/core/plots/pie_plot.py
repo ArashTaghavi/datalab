@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 
-class HistogramPlot:
+
+class PiePlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
@@ -22,44 +22,42 @@ class HistogramPlot:
 
             values = column.dropna()
 
-            for value in values:
-                data.append({"Value": value, "Distribution": title})
+            counts = values.value_counts()
+
+            for category, count in counts.items():
+                data.append({"Category": category, "Count": count, "Column": title})
 
         data = pd.DataFrame(data)
 
         # ---------------------------------
         # Plot
         # ---------------------------------
-        fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
+        fig, axes = plt.subplots(1, len(self.columns), figsize=(14, 7), dpi=200)
 
-        sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
-        )
+        if len(self.columns) == 1:
+            axes = [axes]
+
+        for ax, title in zip(axes, self.titles):
+
+            subset = data[data["Column"] == title]
+
+            ax.pie(
+                subset["Count"],
+                labels=subset["Category"],
+                autopct="%1.1f%%",
+                startangle=90,
+            )
+
+            ax.set_title(title, fontsize=12)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
-
-        ax.set_xlabel("Value", fontsize=10)
-
-        ax.set_ylabel("Frequency", fontsize=10)
+        fig.suptitle("Category Proportion Distribution", fontsize=12)
 
         # ---------------------------------
-        # Grid
+        # Layout
         # ---------------------------------
-        ax.grid(True, axis="y", alpha=0.3)
-
-        plt.xticks(fontsize=9)
-
-        plt.yticks(fontsize=9)
-
         plt.tight_layout()
 
         plt.show()

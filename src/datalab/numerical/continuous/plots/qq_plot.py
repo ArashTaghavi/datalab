@@ -3,10 +3,8 @@ import pandas as pd
 import scipy.stats as stats
 import math
 
-from ....contracts.plot import Plot
 
-
-class QQPlot(Plot):
+class QQPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns

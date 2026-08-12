@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-class HistogramPlot:
+
+class CardinalityPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
@@ -20,10 +21,9 @@ class HistogramPlot:
 
         for column, title in zip(self.columns, self.titles):
 
-            values = column.dropna()
+            cardinality = column.dropna().nunique()
 
-            for value in values:
-                data.append({"Value": value, "Distribution": title})
+            data.append({"Column": title, "Cardinality": cardinality})
 
         data = pd.DataFrame(data)
 
@@ -32,34 +32,39 @@ class HistogramPlot:
         # ---------------------------------
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
-        sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
-        )
+        sns.barplot(data=data, x="Column", y="Cardinality", color="steelblue", ax=ax)
+
+        # ---------------------------------
+        # Value Labels
+        # ---------------------------------
+        for container in ax.containers:
+
+            ax.bar_label(container, fmt="%.0f", fontsize=9, padding=3)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
+        ax.set_title("Categorical Cardinality Comparison", fontsize=12)
 
-        ax.set_xlabel("Value", fontsize=10)
+        ax.set_xlabel("Column", fontsize=10)
 
-        ax.set_ylabel("Frequency", fontsize=10)
+        ax.set_ylabel("Number of Unique Values", fontsize=10)
 
         # ---------------------------------
         # Grid
         # ---------------------------------
         ax.grid(True, axis="y", alpha=0.3)
 
-        plt.xticks(fontsize=9)
+        # ---------------------------------
+        # Ticks
+        # ---------------------------------
+        plt.xticks(rotation=0, fontsize=9)
 
         plt.yticks(fontsize=9)
 
+        # ---------------------------------
+        # Layout
+        # ---------------------------------
         plt.tight_layout()
 
         plt.show()

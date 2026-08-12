@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-class HistogramPlot:
+
+class FrequencyPlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
@@ -22,8 +23,12 @@ class HistogramPlot:
 
             values = column.dropna()
 
-            for value in values:
-                data.append({"Value": value, "Distribution": title})
+            frequencies = values.value_counts(normalize=True)
+
+            for category, frequency in frequencies.items():
+                data.append(
+                    {"Category": category, "Frequency": frequency, "Column": title}
+                )
 
         data = pd.DataFrame(data)
 
@@ -32,22 +37,14 @@ class HistogramPlot:
         # ---------------------------------
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
-        sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
-        )
+        sns.barplot(data=data, x="Category", y="Frequency", hue="Column", ax=ax)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
+        ax.set_title("Category Frequency Distribution", fontsize=12)
 
-        ax.set_xlabel("Value", fontsize=10)
+        ax.set_xlabel("Category", fontsize=10)
 
         ax.set_ylabel("Frequency", fontsize=10)
 
@@ -56,7 +53,7 @@ class HistogramPlot:
         # ---------------------------------
         ax.grid(True, axis="y", alpha=0.3)
 
-        plt.xticks(fontsize=9)
+        plt.xticks(rotation=45, fontsize=9)
 
         plt.yticks(fontsize=9)
 

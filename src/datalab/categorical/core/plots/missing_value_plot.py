@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-class HistogramPlot:
+
+class MissingValuePlot:
 
     def __init__(self, columns: list[pd.Series], titles: list[str]):
         self.columns = columns
@@ -20,10 +21,9 @@ class HistogramPlot:
 
         for column, title in zip(self.columns, self.titles):
 
-            values = column.dropna()
+            missing_count = column.isna().sum()
 
-            for value in values:
-                data.append({"Value": value, "Distribution": title})
+            data.append({"Column": title, "Missing Values": missing_count})
 
         data = pd.DataFrame(data)
 
@@ -32,31 +32,23 @@ class HistogramPlot:
         # ---------------------------------
         fig, ax = plt.subplots(figsize=(14, 7), dpi=200)
 
-        sns.histplot(
-            data=data,
-            x="Value",
-            hue="Distribution",
-            multiple="dodge",
-            discrete=True,
-            shrink=0.8,
-            ax=ax,
-        )
+        sns.barplot(data=data, x="Column", y="Missing Values", color="steelblue", ax=ax)
 
         # ---------------------------------
         # Labels
         # ---------------------------------
-        ax.set_title("Distribution Comparison - Histogram", fontsize=12)
+        ax.set_title("Missing Values Comparison", fontsize=12)
 
-        ax.set_xlabel("Value", fontsize=10)
+        ax.set_xlabel("Column", fontsize=10)
 
-        ax.set_ylabel("Frequency", fontsize=10)
+        ax.set_ylabel("Missing Values", fontsize=10)
 
         # ---------------------------------
         # Grid
         # ---------------------------------
         ax.grid(True, axis="y", alpha=0.3)
 
-        plt.xticks(fontsize=9)
+        plt.xticks(rotation=0, fontsize=9)
 
         plt.yticks(fontsize=9)
 
