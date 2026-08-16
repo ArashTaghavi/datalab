@@ -6,7 +6,7 @@ from .statistics import (
     NormalQQPlotStatistics,
     NormalMeanStdStatistics,
 )
-from .plots import DistributionPlot, BoxPlot, ViolinPlot, CDFPlot, QQPlot, MeanStdPlot
+from .plots.comparative import DistributionPlot, BoxPlot, ViolinPlot, CDFPlot, QQPlot, MeanStdPlot
 
 
 class NumericalContinuous:
